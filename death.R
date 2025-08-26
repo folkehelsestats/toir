@@ -11,9 +11,11 @@ pacpac <- function(p) {
 pkgs <- c("rio", "data.table")
 pacpac(pkgs)
 
+filNorge <- "Narkotikadødsfall 2019-2024.xlsx"
 fil <- "Narkotikadødsfall per fylke 2019-2024.xlsx"
 fpath <- "o:/Prosjekt/Rusdata/PWID/DÅR"
 
+dxn <- rio::import(file.path(fpath, filNorge))
 dx <- rio::import(file.path(fpath, fil))
 setDT(dx)
 oldN <- names(dx)[-c(1,2)]
