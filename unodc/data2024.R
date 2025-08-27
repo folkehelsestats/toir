@@ -1,5 +1,7 @@
 
 source(file.path(here::here(), "setup.R"))
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
+source(file.path(here::here(), "unodc","fun-prevalence.R"))
 
 ## Data 2024
 ## --------------
@@ -9,13 +11,16 @@ mainpath <- "O:\\Prosjekt\\Rusdata"
 DT <- readRDS(file.path(mainpath, "Rusundersøkelsen", "Rusus 2024","rus2024.rds"))
 dt <- as.data.table(DT)
 
-## Andre narkotske stoffer
+## Columnames for andre narkotiske stoffer
 grep("Ans", names(dt), value = T)
 
 ## Denominator
 ## ------------
-dt[Can1 %in% 1:2, canpop := 1]
-dt[Ans1 %in% 1:2, narkpop := 1]
+dt[, canpop := fcase(Can1 %in% 1:2, 1,
+                     default = 0)]
+
+dt[, narkpop := fcase(Ans1 %in% 1:2, 1,
+                      default = 0)]
 
 ## Lifetime  prevalence
 ## ---------------------
@@ -48,3 +53,12 @@ dt[Ans3_7 == 1, lyp_lsd := 1]
 ## -------------------------
 
 dt[Can10 == 1, lmp_cannabis := 1]
+
+## Age groups
+## -------------
+
+dt <- group_age_standard(dt, var = "Alder", type = "unodc",
+                         new_var = "agecat")
+
+cal_prev(dt, "ltp_cannabis", "canpop")
+

@@ -1,6 +1,8 @@
 ## Rusundersøkelse 2023
 ## --------------------
 source(file.path(here::here(), "setup.R"))
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
+
 ## readClipboard()
 odrive <- "O:\\Prosjekt\\Rusdata"
 rusdrive <- "Rusundersøkelsen\\Rusus historiske data\\ORG\\alkohol_rusundersokelsen"
@@ -57,6 +59,17 @@ cal_prev <- function(dt, no, de){
 }
 
 cal_prev(dt, "ltp_cannabis", "canpop")
+
+dt <- group_age_standard(dt, var = "Alder",
+                         type = "unodc", new_var = "agecat",
+                         copy = TRUE)
+
+## breaks = c(16, 19, 25, 35, 65)
+dt <- group_age(dt, var = "Alder",
+                breaks = c(16, 19, 25, 35, 65),
+                labels = c("16-18", "19-24", "25-34", "35-64"),
+                new_var = "agecat3",
+                right = TRUE)
 
 ## dummy denominator
 dt[!is.na(Can1), canpop2 := 1]
