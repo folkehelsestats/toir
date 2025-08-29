@@ -1,6 +1,7 @@
 
 source(file.path(here::here(), "setup.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
+source(file.path(here::here(), "unodc","fun-weighted-unweighted.R"))
 source(file.path(here::here(), "unodc","fun-prevalence.R"))
 
 ## Data 2024
@@ -52,7 +53,14 @@ dt[Ans2_e == 1, ltp_heroin := 1] #Heroin
 dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 dt[Ans2_g == 1, ltp_lsd := 1] #LSD
 
-
+get_prev(dt, "ltp_any", "anypop") #Anyrug
+get_prev(dt, "ltp_cannabis", "canpop") #Cannabis-type drugs
+get_prev(dt, "ltp_heroin", "narkpop") #Heroin
+get_prev(dt, "ltp_cocaine", "narkpop") #Cocaine-type drugs
+get_prev(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
+get_prev(dt, "ltp_mdma", "narkpop") #"Ecstasy" type substances
+get_prev(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
+get_prev(dt, "ltp_lsd", "narkpop") #LSD
 
 ## Last year prevalence
 ## --------------------
