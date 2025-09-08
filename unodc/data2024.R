@@ -31,11 +31,24 @@ dt[, narkpop := fcase(Ans1 %in% 1:2, 1,
 dt[canpop == 1 | narkpop == 1, anypop := 1][
   is.na(anypop), anypop := 0]
 
+## Exclude all missing and not answered Can1 or Ans1
+dt <- dt[anypop == 1,]
+
+## Free text - Other types
+## Bør sjekke tekst fra Ans2sps
+dt[, .N, keyby = Ans2sps][!grep("9999", Ans2sps)]
+
+dt[grep("lsd", Ans2sps, ignore.case = TRUE), "AndreLSD" := 1]
+dt[grep("hasj", Ans2sps, ignore.case = TRUE), "AndreCannabis" := 1]
+dt[grep("cb", Ans2sps, ignore.case = TRUE), "AndreNPS" := 1]
+dt[grep("psilocybin", Ans2sps, ignore.case = TRUE), "AndreSOPP" := 1]
+dt[grep("metamfetamin", Ans2sps, ignore.case = TRUE), "AndreAmfetamin" := 1]
+dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+
+
 ## ---------------------
 ## Lifetime  prevalence
 ## ---------------------
-## Bør sjekke tekst fra Ans2sps
-## dt[, .N, keyby = Ans2sps][!grep("9999", Ans2sps)]
 
 dt[Can1 == 1, ltp_cannabis := 1] #Cannabis-type drugs
 dt[Ans1 == 1, ltp_other := 1]
