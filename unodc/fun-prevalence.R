@@ -1,3 +1,4 @@
+kjonnKB <- data.table::data.table(v1 = 0:1, v2 = c("Male", "Female"))
 
 no = "ltp_cannabis"
 de = "canpop"
@@ -7,7 +8,10 @@ group_vars = "Kjonn"
 ## no - nominator
 ## de - denominator
 ## weight_var NULL if unweighted
-get_prev <- function(dt, no, de, weight_var ="VEKT"){
+get_prev <- function(dt, no, de,
+                     weight_var ="VEKT",
+                     kjonnkb = kjonnKB,
+                     diagnostic = FALSE){
 
   tot <- calc_percentage(dt=dt,
                          outcome_var = no,
@@ -15,7 +19,7 @@ get_prev <- function(dt, no, de, weight_var ="VEKT"){
                          denominator_var = de,
                          na_treatment = "as_zero",
                          round_digits = 1,
-                         include_diagnostics = FALSE)
+                         include_diagnostics = diagnostic)
 
   kjonn <- calc_percentage(dt=dt,
                            outcome_var = no,
@@ -24,7 +28,10 @@ get_prev <- function(dt, no, de, weight_var ="VEKT"){
                            denominator_var = de,
                            na_treatment = "as_zero",
                            round_digits = 1,
-                           include_diagnostics = FALSE)
+                           include_diagnostics = diagnostic)
+
+  kjonn[kjonnkb, on = c(Kjonn = "v1"), gender := i.v2]
+  data.table::setcolorder(kjonn, "gender", "percentage", skip_absent =  T)
 
   alder <- calc_percentage(dt=dt,
                            outcome_var = no,
@@ -33,7 +40,7 @@ get_prev <- function(dt, no, de, weight_var ="VEKT"){
                            denominator_var = de,
                            na_treatment = "as_zero",
                            round_digits = 1,
-                           include_diagnostics = FALSE)
+                           include_diagnostics = diagnostic)
 
   data.table::setorder(alder, "agecat")
 
@@ -44,9 +51,11 @@ get_prev <- function(dt, no, de, weight_var ="VEKT"){
                            denominator_var = de,
                            na_treatment = "as_zero",
                            round_digits = 1,
-                           include_diagnostics = FALSE)
+                           include_diagnostics = diagnostic)
 
+  begge[kjonnkb, on = c(Kjonn = "v1"), gender := i.v2]
   data.table::setorder(begge, "Kjonn", "agecat")
+  data.table::setcolorder(begge, "gender", "agecat", skip_absent = T)
 
   list(total = tot, kjonn = kjonn, alder = alder, begge = begge)
 }
