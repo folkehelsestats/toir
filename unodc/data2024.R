@@ -51,8 +51,8 @@ dt[str_detect(Ans2sps, regex("methamfethamin|metamfethamin", ignore_case = TRUE)
 dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 
 dt[, Can1_ny := Can1][AndreCannabis == 1, Can1_ny := 1]
-dt[, Ans2_cny := Ans2_c][AndreAmfetamin == 1, Ans2_cny := 1]
-dt[, Ans2_gny := Ans2_g][AndreLSD == 1, Ans2_gny := 1]
+dt[, Ans2_c_ny := Ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
+dt[, Ans2_g_ny := Ans2_g][AndreLSD == 1, Ans2_g_ny := 1]
 
 ## ---------------------
 ## Lifetime  prevalence
@@ -68,11 +68,11 @@ dt[, ltp_any := fcase(Ans1 == 1, 1,
 
 dt[Ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
 dt[Ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-dt[Ans2_cny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+dt[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
 dt[Ans2_d == 1, ltp_relevin := 1]
 dt[Ans2_e == 1, ltp_heroin := 1] #Heroin
 dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
-dt[Ans2_gny == 1, ltp_lsd := 1] #LSD
+dt[Ans2_g_ny == 1, ltp_lsd := 1] #LSD
 
 get_prev(dt, "ltp_any", "anypop") #Anyrug
 get_prev(dt, "ltp_cannabis", "canpop") #Cannabis-type drugs
@@ -94,11 +94,18 @@ dt[Ans3_4 == 1, lyp_relevin := 1]
 dt[Ans3_5 == 1, lyp_heroin := 1]
 dt[Ans3_6 == 1, lyp_ghb := 1]
 dt[Ans3_7 == 1, lyp_lsd := 1]
+dt[Ans3_8 == 1, lyp_other := 1]
 
-ans_ans3 <- paste0("Ans3_", c(1:8, "x", "y"))
-dt[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
+## ans_ans3 <- paste0("Ans3_", c(1:8, "x", "y"))
+## dt[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
 
-get_prev(dt, "lyp_any", "anypop") #Anyrug
+anyCols <- grep("lyp_", names(dt), value = T)
+dt[, anyLYP := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = anyCols]
+dt[, lyp_any := fcase(anyLYP == 1, 1,
+                      lyp_cannabis == 1, 1,
+                      default = 0)]
+
+get_prev(dt, "lyp_any", "anypop") #Anydrugs
 get_prev(dt, "lyp_cannabis", "canpop") #Cannabis-type drugs
 get_prev(dt, "lyp_heroin", "narkpop", diagnostic = FALSE) #Heroin
 get_prev(dt, "lyp_cocaine", "narkpop") #Cocaine-type drugs
