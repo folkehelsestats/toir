@@ -49,3 +49,10 @@ data.table::setcolorder(canAge, c("agecat", "val", "N"))
 gtsave(gt::gt(canAge), "euda/canAge20.rtf")
 
 dt[, .N]
+
+
+## DTA file fra Jasmina
+## ----------------------
+
+dta <- rio::import("euda/kun 21-23tall.dta")
+data.table::setDT(dta)
