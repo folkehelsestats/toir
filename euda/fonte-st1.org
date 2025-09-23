@@ -2,9 +2,9 @@
 #+date: <2025-09-23 tir.>
 #+OPTIONS: num: t
 
-* General information :done:
-* Quantitative information: Lifetime prevalence :in:progress:
+* DONE General information
+* IN-PROGRESS Quantitative information: Lifetime prevalence
 ** EUDA age-range "All adults" (15-64)
-*** If different from EUDA
+*** DONE If different from EUDA
 16-64
 *** Prevalence - LTP
