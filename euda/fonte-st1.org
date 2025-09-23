@@ -1,0 +1,10 @@
+#+title: Standard Table 1
+#+date: <2025-09-23 tir.>
+#+OPTIONS: num: t
+
+* General information :done:
+* Quantitative information: Lifetime prevalence :in:progress:
+** EUDA age-range "All adults" (15-64)
+*** If different from EUDA
+16-64
+*** Prevalence - LTP
