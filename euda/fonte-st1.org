@@ -1,5 +1,5 @@
 #+title: Standard Table 1
-#+date: <2025-09-23 tir.>
+#+date: 2025-09-26
 #+OPTIONS: num: t
 
 * DONE General information
@@ -7,4 +7,26 @@
 ** EUDA age-range "All adults" (15-64)
 *** DONE If different from EUDA
 16-64
-*** Prevalence - LTP
+*** HOLD Prevalence - LTP
+- Tobacco prevalence er høyere enn i 2023
+- Any New Psychoactive Substances (NPS) - vet ikke hvilken variabler eller om det har endret. Har spurt Ingeborg, men hun er usikkert hvilken variable de er. La det bare tomme selv om det var besvart i 2023
+** DONE Young adults (15-34)
+- Samme veldig lav prevalence for røyking i 2023
+** DONE Broad age groups
+- LTP for tobacco er vesentlig høyere enn ifjor bl.a doble så høyt som ifjor for menn 55+.
+* DONE Quantitative information: Last 12 months prevalence
+** All adults
+- Any illegal drugs var ikke med ifjor
+** Young adults
+** Broad age groups
+* DONE Quantitative info: Last 30 days prevalence
+* IN-PROGRESS Quantitative info: Frequency of cannabis use
+** DONE All adults
+** DONE Young adults
+** Broad age groups
+*** DONE Last 30 days prevalence
+*** DONE Frequency last 30 days
+* DONE Perceived availability
+* DONE Method - References
+* DONE Method - Coverage
+* TODO Method - Sampling
