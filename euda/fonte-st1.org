@@ -20,7 +20,7 @@
 ** Young adults
 ** Broad age groups
 * DONE Quantitative info: Last 30 days prevalence
-* IN-PROGRESS Quantitative info: Frequency of cannabis use
+* DONE Quantitative info: Frequency of cannabis use
 ** DONE All adults
 ** DONE Young adults
 ** Broad age groups
@@ -29,4 +29,5 @@
 * DONE Perceived availability
 * DONE Method - References
 * DONE Method - Coverage
-* TODO Method - Sampling
+* IN-PROGRESS Method - Sampling
+** TODO 9.1.15 How non-response analyzed?
