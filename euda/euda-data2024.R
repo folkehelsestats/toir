@@ -83,10 +83,10 @@ dt[, Ans2_y_ny := Ans2_y][AndreSopp == 1, Ans2_y_ny := 1]
 ## ---------------------
 
 dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
-dt[Ans1 == 1, ltp_other := 1]
+dt[Ans1 == 1, ltp_drugs := 1] #Other drugs than cannabis
 
 ## Any drug
-dt[, ltp_any := fcase(Ans1 == 1, 1,
+dt[, ltp_any := fcase(ltp_drugs == 1, 1,
                       ltp_cannabis == 1, 1,
                       default = 0)]
 
@@ -99,6 +99,7 @@ dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 dt[Ans2_g_ny == 1, ltp_lsd := 1] #LSD
 dt[Ans2_x == 1, ltp_nps := 1] #Any new psychoactive substances (NPS)
 dt[Ans2_y_ny == 1, ltp_sopp := 1] #Sopp
+dt[Ans2_h == 1, ltp_other := 1]
 
 dt[Dop1 == 1, ltp_steroid := 1] #prestasjonsfremmende midler
 dt[Drukket1 == 1 | Drukk1b == 1, ltp_alcohol := 1]
@@ -123,6 +124,7 @@ get_prev_ci(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 get_prev_ci(dt, "ltp_lsd", "narkpop") #LSD
 get_prev_ci(dt, "ltp_nps", "narkpop") #NPS
 get_prev_ci(dt, "ltp_sopp", "narkpop") #Sopp
+general_form(dt, "ltp_other", "narkpop") #other
 get_prev_ci(dt, "ltp_steroid", "doppop")
 get_prev_ci(dt, "ltp_alcohol", "alkopop")
 get_prev_ci(dt, "ltp_tobacco", "tobpop")
@@ -140,6 +142,7 @@ get_prev_ci(dty, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 get_prev_ci(dty, "ltp_lsd", "narkpop") #LSD
 general_form(dty, "ltp_nps", "narkpop") #NPS
 general_form(dty, "ltp_sopp", "narkpop") #Sopp
+general_form(dty, "ltp_other", "narkpop") #other
 get_prev_ci(dty, "ltp_steroid", "doppop")
 get_prev_ci(dty, "ltp_alcohol", "alkopop")
 get_prev_ci(dty, "ltp_tobacco", "tobpop")
@@ -156,6 +159,7 @@ broad_form(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 broad_form(dt, "ltp_lsd", "narkpop") #LSD
 broad_form(dt, "ltp_nps", "narkpop") #NPS
 broad_form(dt, "ltp_sopp", "narkpop") #Sopp
+broad_form(dt, "ltp_other", "narkpop")
 broad_form(dt, "ltp_steroid", "doppop")
 broad_form(dt, "ltp_alcohol", "alkopop")
 broad_form(dt, "ltp_tobacco", "tobpop")
@@ -183,7 +187,7 @@ anyCols <- grep("lyp_", names(dt), value = T)
 
 # Ensure exclude these vars if exists
 excVec <- c("lyp_any", "lyp_steroid", "lyp_alcohol")
-if(!any(anyCols %in% excVec ))
+if(any(anyCols %in% excVec ))
   anyCols <- anyCols[!(anyCols %in% excVec)]
 
 
@@ -208,6 +212,7 @@ general_form(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 general_form(dt, "lyp_lsd", "narkpop") #LSD
 general_form(dt, "lyp_nps", "narkpop") #NPS
 general_form(dt, "lyp_sopp", "narkpop") #Sopp
+general_form(dt, "lyp_other", "narkpop")
 general_form(dt, "lyp_steroid", "doppop")
 general_form(dt, "lyp_alcohol", "alkopop")
 
@@ -225,6 +230,7 @@ general_form(dty, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 general_form(dty, "lyp_lsd", "narkpop") #LSD
 general_form(dty, "lyp_nps", "narkpop") #NPS
 general_form(dty, "lyp_sopp", "narkpop") #Sopp
+general_form(dty, "lyp_other", "narkpop")
 general_form(dty, "lyp_steroid", "doppop")
 general_form(dty, "lyp_alcohol", "alkopop")
 
@@ -239,6 +245,7 @@ broad_form(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 broad_form(dt, "lyp_lsd", "narkpop") #LSD
 broad_form(dt, "lyp_nps", "narkpop") #NPS
 broad_form(dt, "lyp_sopp", "narkpop") #Sopp
+broad_form(dt, "lyp_other", "narkpop") #other
 broad_form(dt, "lyp_steroid", "doppop")
 broad_form(dt, "lyp_alcohol", "alkopop")
 
