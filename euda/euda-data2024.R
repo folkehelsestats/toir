@@ -84,6 +84,9 @@ dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
 dt[Ans1 == 1, ltp_other := 1]
 
 ## Any drug
+dt[, ltp_any := fcase(Ans1 == 1, 1,
+                      ltp_cannabis == 1, 1,
+                      default = 0)]
 
 dt[Ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
 dt[Ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
