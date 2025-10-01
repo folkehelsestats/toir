@@ -71,10 +71,12 @@ dt[grep("cb", Ans2sps, ignore.case = TRUE), "AndreNPS" := 1]
 dt[grep("psilocybin", Ans2sps, ignore.case = TRUE), "AndreSOPP" := 1]
 dt[str_detect(Ans2sps, regex("methamfethamin|metamfethamin", ignore_case = TRUE)), "AndreAmfetamin" := 1]
 dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+dt[grep("psilocybin", Ans2sps, ignore.case = TRUE), "AndreSopp" := 1]
 
 dt[, Can1_ny := Can1][AndreCannabis == 1, Can1_ny := 1]
 dt[, Ans2_c_ny := Ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
 dt[, Ans2_g_ny := Ans2_g][AndreLSD == 1, Ans2_g_ny := 1]
+dt[, Ans2_y_ny := Ans2_y][AndreSopp == 1, Ans2_y_ny := 1]
 
 ## ---------------------
 ## Lifetime  prevalence
@@ -95,6 +97,8 @@ dt[Ans2_d == 1, ltp_relevin := 1]
 dt[Ans2_e == 1, ltp_heroin := 1] #Heroin
 dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 dt[Ans2_g_ny == 1, ltp_lsd := 1] #LSD
+dt[Ans2_x == 1, ltp_nps := 1] #Any new psychoactive substances (NPS)
+dt[Ans2_y_ny == 1, ltp_sopp := 1] #Sopp
 
 dt[Dop1 == 1, ltp_steroid := 1] #prestasjonsfremmende midler
 dt[Drukket1 == 1 | Drukk1b == 1, ltp_alcohol := 1]
@@ -117,6 +121,8 @@ get_prev_ci(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
 get_prev_ci(dt, "ltp_mdma", "narkpop") #"Ecstasy" type substances
 get_prev_ci(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 get_prev_ci(dt, "ltp_lsd", "narkpop") #LSD
+get_prev_ci(dt, "ltp_nps", "narkpop") #NPS
+get_prev_ci(dt, "ltp_sopp", "narkpop") #Sopp
 get_prev_ci(dt, "ltp_steroid", "doppop")
 get_prev_ci(dt, "ltp_alcohol", "alkopop")
 get_prev_ci(dt, "ltp_tobacco", "tobpop")
@@ -132,6 +138,8 @@ get_prev_ci(dty, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
 get_prev_ci(dty, "ltp_mdma", "narkpop") #"Ecstasy" type substances
 get_prev_ci(dty, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 get_prev_ci(dty, "ltp_lsd", "narkpop") #LSD
+general_form(dty, "ltp_nps", "narkpop") #NPS
+general_form(dty, "ltp_sopp", "narkpop") #Sopp
 get_prev_ci(dty, "ltp_steroid", "doppop")
 get_prev_ci(dty, "ltp_alcohol", "alkopop")
 get_prev_ci(dty, "ltp_tobacco", "tobpop")
@@ -146,6 +154,8 @@ broad_form(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
 broad_form(dt, "ltp_mdma", "narkpop") #"Ecstasy" type substances
 broad_form(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 broad_form(dt, "ltp_lsd", "narkpop") #LSD
+broad_form(dt, "ltp_nps", "narkpop") #NPS
+broad_form(dt, "ltp_sopp", "narkpop") #Sopp
 broad_form(dt, "ltp_steroid", "doppop")
 broad_form(dt, "ltp_alcohol", "alkopop")
 broad_form(dt, "ltp_tobacco", "tobpop")
@@ -162,12 +172,21 @@ dt[Ans3_4 == 1, lyp_relevin := 1]
 dt[Ans3_5 == 1, lyp_heroin := 1]
 dt[Ans3_6 == 1, lyp_ghb := 1]
 dt[Ans3_7 == 1, lyp_lsd := 1]
+dt[Ans3_x == 1, lyp_nps := 1] #NPS. Forklaring i kodebok er "Bruk LSD siste 12 månedene" som er feil. Se LYP for forklaringen
+dt[Ans3_y == 1, lyp_sopp := 1] #Sopp. Forklaring i kodebok er "Bruk LSD siste 12 månedene" som er feil. Se LYP for forklaringen
 dt[Ans3_8 == 1, lyp_other := 1]
 
 ## ans_ans3 <- paste0("Ans3_", c(1:8, "x", "y"))
 ## dt[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
 
 anyCols <- grep("lyp_", names(dt), value = T)
+
+# Ensure exclude these vars if exists
+excVec <- c("lyp_any", "lyp_steroid", "lyp_alcohol")
+if(!any(anyCols %in% excVec ))
+  anyCols <- anyCols[!(anyCols %in% excVec)]
+
+
 dt[, anyLYP := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = anyCols]
 dt[, lyp_any := fcase(anyLYP == 1, 1,
                       lyp_cannabis == 1, 1,
@@ -187,6 +206,8 @@ general_form(dt, "lyp_amphetamines", "narkpop") #Amphetamine-type stimulants
 general_form(dt, "lyp_mdma", "narkpop") #"Ecstasy" type substances
 general_form(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 general_form(dt, "lyp_lsd", "narkpop") #LSD
+general_form(dt, "lyp_nps", "narkpop") #NPS
+general_form(dt, "lyp_sopp", "narkpop") #Sopp
 general_form(dt, "lyp_steroid", "doppop")
 general_form(dt, "lyp_alcohol", "alkopop")
 
@@ -202,6 +223,8 @@ general_form(dty, "lyp_amphetamines", "narkpop") #Amphetamine-type stimulants
 general_form(dty, "lyp_mdma", "narkpop") #"Ecstasy" type substances
 general_form(dty, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 general_form(dty, "lyp_lsd", "narkpop") #LSD
+general_form(dty, "lyp_nps", "narkpop") #NPS
+general_form(dty, "lyp_sopp", "narkpop") #Sopp
 general_form(dty, "lyp_steroid", "doppop")
 general_form(dty, "lyp_alcohol", "alkopop")
 
@@ -214,6 +237,8 @@ broad_form(dt, "lyp_amphetamines", "narkpop") #Amphetamine-type stimulants
 broad_form(dt, "lyp_mdma", "narkpop") #"Ecstasy" type substances
 broad_form(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 broad_form(dt, "lyp_lsd", "narkpop") #LSD
+broad_form(dt, "lyp_nps", "narkpop") #NPS
+broad_form(dt, "lyp_sopp", "narkpop") #Sopp
 broad_form(dt, "lyp_steroid", "doppop")
 broad_form(dt, "lyp_alcohol", "alkopop")
 
