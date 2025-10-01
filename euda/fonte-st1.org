@@ -7,9 +7,9 @@
 ** EUDA age-range "All adults" (15-64)
 *** DONE If different from EUDA
 16-64
-*** HOLD Prevalence - LTP
+*** DONE Prevalence - LTP
+- State "DONE"       from "HOLD"       [2025-10-01 ons. 18:39]
 - Tobacco prevalence er høyere enn i 2023
-- Any New Psychoactive Substances (NPS) - vet ikke hvilken variabler eller om det har endret. Har spurt Ingeborg, men hun er usikkert hvilken variable de er. La det bare tomme selv om det var besvart i 2023
 ** DONE Young adults (15-34)
 - Samme veldig lav prevalence for røyking i 2023
 ** DONE Broad age groups
@@ -29,5 +29,23 @@
 * DONE Perceived availability
 * DONE Method - References
 * DONE Method - Coverage
-* IN-PROGRESS Method - Sampling
-** TODO 9.1.15 How non-response analyzed?
+* DONE Method - Sampling
+** DONE 9.1.15 How non-response analyzed?
+* 11. Methodology - Definitions and EMQ
+** 11.1 - Definitions and EMQ
+*** IN-PROGRESS 11.1.1 Drugs definitions
+**** Any opioids
+- Any opioids: 4+5 (LTP only) - Svaret fra ifjor som jeg ikke forstår helt.
+- Any opioids: not asked (svaret for i år)
+**** Other 1
+- Svar i 2024: "GHB/GBL" is an answer category in a list of illegal drugs (LTP and LYP)
+- Svar i 2025: Not asked
+**** Other 2
+- Svar i 2024: Direct question about LTP and LYP of "new drugs, often called
+  'legal highs' or 'research chemicals' (for example synthetic cannabinoids,
+  mefedron, 5-it or plants such as salvia or kratom)"
+- Svar i 2025: not asked
+**** Other hallucinogens (specify)
+- Svar i 2024: When asked about LTP, "mushrooms" (different kinds), "psilocybin"
+  "DMT" "mescalin" and "2C-B"
+- Svar i 2025: Not asked
