@@ -245,7 +245,7 @@ broad_form(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
 broad_form(dt, "lyp_lsd", "narkpop") #LSD
 broad_form(dt, "lyp_nps", "narkpop") #NPS
 broad_form(dt, "lyp_sopp", "narkpop") #Sopp
-broad_form(dt, "lyp_other", "narkpop") #other
+broad_form(dt, "lyp_other", "narkpop", diagnostic = T) #other
 broad_form(dt, "lyp_steroid", "doppop")
 broad_form(dt, "lyp_alcohol", "alkopop")
 
@@ -315,6 +315,13 @@ cannabis_form <- function(dt, group_vars = NULL, dim = NULL){
 }
 
 cannabis_form(dt, "Kjonn")
+
+calc_percentage_flexible(dt = dt,
+                         outcome_var = "Can11",
+                         outcome_type = "categorical",
+                         group_vars = NULL,
+                         weight_var = "VEKT",
+                         denominator_var = "canpop")
 
 # Young adults (15-34)
 dty <- dt[Alder < 35]
