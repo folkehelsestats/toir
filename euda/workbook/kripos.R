@@ -4,6 +4,8 @@
 library(data.table)
 library(ggplot2)
 
+## resin = hasj
+## herbal = marihuana
 
 ## Number of cannabis seizures
 ## Cannabis - antall beslag
@@ -45,6 +47,11 @@ CanKgW <- melt(CanKg, id.vars = "year",
                value.name = "kg",
                variable.name = "can")
 
+CanKgW[, canlab := fcase(can == "herbal", "Herbal/plants",
+                         can == "resin", "Resin",
+                         can == "total", "Total seized")]
+
+## HDIR prefered colors
 chdir <- c('#206276',
            '#7C145C',
            '#3699B6',
@@ -55,49 +62,34 @@ chdir <- c('#206276',
            '#CD3D57',
            '#47A571')
 
-chc <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
+chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
+chc3 <- c("#5F9EA0", "#E1B378", "#7C145C")
 
-## plot1
-CanBesPlot <- ggplot(data = CanBesW[can != "total"], aes(x = year, y = antall, group = can)) +
-  geom_col(aes(fill = can)) +
-  geom_text(aes(label = antall), position = position_stack(vjust = 0.8), size = 2.8) +
-  labs(title = "Number of cannabis seizures (resin and herbal/plants), 2011-2024",
-       y = "", x = "") +
-  scale_y_continuous(expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(2011, 2024, 1)) +
-  scale_fill_manual(values = chc, labels = c("herbal" = "Herbal/plants",
-                                             "begge" = "Resin/herbal",
-                                             "resin" = "Resin")) +
-  theme_classic() +
-  guides(fill = guide_legend(direction = "vertical", reverse = TRUE)) +
-  theme(
-    legend.position = "inside",
-    legend.position.inside = c(0.95, 0.95), # top-right corner
-    legend.justification = c("right", "top"),  # aligns legend box to that corner
-    legend.title = element_blank())
+## Line Diagram
+source(file.path(here::here(), "euda/workbook//fun-line-plot.R"))
 
-CanBesPlot
+CanBesLine <- make_line_plot(data = CanBesW,
+                             x = "year",
+                             y = "antall",
+                             color = "can",
+                             title = "Number of cannabis seizures (resin and herbal/plants), 2011-2024",
+                             color_values = chc4,
+                             label_col = "canlab",
+                             y_lab = "Amount")
 
-ggplot() +
-  geom_line(data = CanBesW[can != "total"], aes(x = year, y = antall, color = can), size = 1.5) +
-  geom_line(data = CanBesW[can == "total"], aes(x = year, y = antall, color = can), size = 3) +
-  scale_color_manual(values = chc) +
-  geom_text(data = CanBesW[year == 2024], aes(x = year, y = antall, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
-  scale_x_continuous(
-    limits = c(2011, 2024),
-    breaks = seq(2011, 2024, 1),
-    expand = expansion(mult = c(0.03, 0.25)) # Add 10% space to the right
-  ) +
-  scale_y_continuous(breaks = seq(0, max(CanBesW$antall), 1000)) +
-  theme_classic() +
-  labs(title = "Number of cannabis seizures (resin and herbal/plants), 2011-2024",
-       y = "", x = "") +
-  theme(
-    panel.grid.major.y = element_line(color = "grey80", linewidth = 0.5, linetype = "dashed")
-  ) +
-  guides(color = "none")
 
 
 ## Cannabis KG
-CanKgPlot <- ggplot(data = CanKgW, aes(x = year, y = kg, group = can)) +
-  geom_col(aes(fill = can)) +
+CanKgLine <- make_line_plot(data = CanKgW,
+                            x = "year",
+                            y = "kg",
+                            color = "can",
+                            title = "Number of cannabis seizures (resin and herbal/plants) in kilograms, 2011-2024",
+                            y_break_interval = 500,
+                            color_values = chc3,
+                            label_col = "canlab",
+                            y_lab = "kilograms (kg)")
+
+## Numbers
+kg2024 <- CanKgW[year == 2024 & can == "total", kg]
+beslag2024 <- CanBesW[year == 2024 & can == "total", antall]
