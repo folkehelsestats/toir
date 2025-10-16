@@ -1,6 +1,57 @@
 #+title: Drugs Workbook 2025
 #+subtitle: Status oppdatering
 
+#+LATEX_HEADER: \usepackage{float}
+
 * TODO T0 Summary
 * Section A. Cannabis
-** T1. National profile
+** IN-PROGRESS T1. National profile
+*The Relative Importance of Different Types of Cannabis*
+
+#+begin_src R :results none :session kripos :exports results
+source(file.path(here::here(), "euda/workbook/kripos.R"))
+
+ggplot2::ggsave(filename = file.path(here::here(), "euda/workbook/beslag.png"),
+                plot = CanBesLine,
+                width = 6, height = 4, dpi = 300)
+
+ggplot2::ggsave(filename = file.path(here::here(), "euda/workbook/beslagKG.png"),
+                plot = CanKgLine,
+                width = 6, height = 4, dpi = 300)
+#+end_src
+
+In 2024, approximately src_R[:session kripos]{format(kg2024, big.mark = ",",
+scientific = FALSE)} kg of cannabis (resin and herbal/plants) was seized in
+Norway, slightly lower than the src_R[:session kripos]{format(kg2023, big.mark =
+",", scientific = FALSE)} kg seized in 2023. Figure [[fig:beslag]] shows the number
+of seizures for resin, herbal cannabis/plants, and combined cases. Resin
+seizures remained relatively stable from 2011 to 2019, followed by a sharp
+decline from 2020 onwards. Compared to the peak in 2019, the number of resin
+seizures in 2024 was down by src_R[:session kripos :results value raw]{nedResin2019_2024}%. Herbal
+cannabis seizures peaked in 2014 and have gradually declined since, but due to
+the sharper drop in resin seizures, herbal cannabis now constitutes a relative
+larger share of total cannabis seizures.
+
+#+ATTR_LATEX: :float t :placement [H]
+#+name: fig:beslag
+#+caption: Number of cannabis seizures (resin and herbal/plants), 2011-2024
+[[file:beslag.png]]
+
+
+Figure [[fig:beslagKG]] illustrates the amount of cannabis seized in kilograms. The
+total amount seized in 2024 was src_R[:session kripos :results value
+raw]{kgStatus2023_2024}% lower than in 2023, but still above the average for the
+2011–2021 period. Resin continues to dominate the total volume seized, although
+its share has decreased. In 2024, herbal cannabis accounted for src_R[:session
+kripos :results value raw]{herbal2024pro}% of the total amount seized—more than
+double the share in 2023 (src_R[:session kripos :results value
+raw]{herbal2023pro}%). This shift suggests a continued trend toward more
+frequent but smaller herbal cannabis seizures, while large resin seizures have
+become less common.
+
+
+#+name: fig:beslagKG
+#+caption: Amount of cannabis seized (resin and herbal/plants) in kilograms, 2011-2024
+[[file:beslagKG.png]]
+
+
