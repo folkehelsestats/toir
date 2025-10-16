@@ -9,6 +9,7 @@
 #' @param y Character string specifying the column name for y-axis variable
 #' @param color Character string specifying the column name for color grouping variable
 #' @param title Character string for the plot title
+#' @param caption Give credit or footnote eg. Source: bla..bla..bla.
 #' @param color_values Named vector of colors for each group. If NULL, uses ggplot2 defaults
 #' @param highlight_value Value in the color column to highlight with thicker line (default: "total")
 #' @param highlight_width Line width for highlighted group (default: 3)
@@ -53,6 +54,7 @@ make_line_plot <- function(data,
                            y,
                            color,
                            title,
+                           caption = NULL,
                            color_values = NULL,
                            highlight_value = "total",
                            highlight_width = 3,
@@ -144,9 +146,19 @@ make_line_plot <- function(data,
   p <- p + scale_y_continuous(breaks = y_breaks)
 
   # Apply theme
+  if (is.null(caption)){
+    p <- p + labs(title = title,
+         y = y_lab,
+         x = x_lab)
+  } else {
+    p <- p + labs(title = title,
+         y = y_lab,
+         x = x_lab,
+         caption = caption)
+  }
+
   p <- p + theme_classic() +
-    labs(title = title, y = y_lab, x = x_lab) +
-    guides(color = "none")
+    guides(color = "none") #no legend
 
   # Add grid lines if requested
   if (show_grid) {
