@@ -65,8 +65,8 @@ chdir <- c('#206276',
 chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
 chc3 <- c("#5F9EA0", "#E1B378", "#7C145C")
 
-## Line Diagram
-source(file.path(here::here(), "euda/workbook/fun-line-plot.R"))
+## ## Line Diagram
+## source(file.path(here::here(), "euda/workbook/fun-line-plot.R"))
 
 CanBesLine <- make_line_plot(data = CanBesW,
                              x = "year",
