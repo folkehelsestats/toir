@@ -16,13 +16,14 @@
 #' @param regular_width Line width for regular groups (default: 1.5)
 #' @param label_col Character string specifying column name for labels. If NULL, uses color column
 #' @param x_breaks Numeric vector of x-axis breaks. If NULL, uses ggplot2 defaults
-#' @param y_breaks Numeric vector of y-axis breaks. If NULL, calculated automatically
+#' @param y_breaks Numeric vector of y-axis breaks eg. seq(0,80,10). If NULL, calculated automatically
 #' @param y_break_interval Numeric value for y-axis break intervals (default: 1000)
 #' @param x_limits Numeric vector of length 2 for x-axis limits. If NULL, uses data range
 #' @param x_expansion Numeric vector of length 2 for expansion multipliers (default: c(0.03, 0.25))
 #' @param show_grid Logical, whether to show horizontal grid lines (default: TRUE)
 #' @param x_lab Character string for x-axis label (default: "")
 #' @param y_lab Character string for y-axis label (default: "")
+#' @param hvjust Adjust position of text legend horizontally and vertically eg. c(-0.1, 0.2) horizontally slightly to the right and vertially up
 #'
 #' @return A ggplot2 object
 #' @export
@@ -67,7 +68,8 @@ make_line_plot <- function(data,
                            x_expansion = c(0.03, 0.25),
                            show_grid = TRUE,
                            x_lab = "",
-                           y_lab = "") {
+                           y_lab = "",
+                           hvjust = NULL) {
 
   # Load required package
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
@@ -116,11 +118,23 @@ make_line_plot <- function(data,
   }
 
   # Add labels at the end of lines
+  if (is.null(hvjust)){
   p <- p + geom_text(
     data = data_labels,
     aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
-    hjust = -0.1
+    hjust = -0.1 # -0.1 will place slightly to the right
   )
+  } else {
+    hjust <- hvjust[1]
+    vjust <- hvjust[2]
+    p <- p + geom_text(
+               data = data_labels,
+               aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
+               hjust = hjust,
+               vjust = vjust
+             )
+  }
+
 
   # Set x-axis scale
   if (is.null(x_limits)) {
@@ -134,7 +148,7 @@ make_line_plot <- function(data,
   p <- p + scale_x_continuous(
     limits = x_limits,
     breaks = x_breaks,
-    expand = expansion(mult = x_expansion)
+    expand = expansion(mult = x_expansion) #Add % space to the right
   )
 
   # Set y-axis scale
