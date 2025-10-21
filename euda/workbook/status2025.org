@@ -1,5 +1,6 @@
 #+title: Drugs Workbook 2025
 #+subtitle: Status oppdatering
+#+author:
 
 #+LATEX_HEADER: \usepackage{float}
 
@@ -64,9 +65,6 @@ become less common.
 #+caption: Amount of cannabis seized (resin and herbal/plants) in kilograms, 2011-2024
 [[file:beslagKG.png]]
 
-In previous annual substance use urveys, those who reported last year cannabis
-use where asked about the type of cannabis used last 12 months. As shown in
-
 #+begin_src R :results none :session kripos :exports results
 source(file.path(here::here(), "euda/workbook/rusund2012_2024.R"))
 
@@ -75,6 +73,24 @@ ggplot2::ggsave(filename = file.path(here::here(), "euda/workbook/cantypes.png")
                 width = 6, height = 4, dpi = 300)
 #+end_src
 
+\pagebreak
+
+In previous annual substance use surveys, respondents who reported cannabis use
+in the past 12 months were asked about the type of cannabis they had used.
+Figure [[fig:cantypes]] shows that in 2024, src_R[:session kripos
+:results value raw]{dcan[year==2024 & can=="marihuana"]$pro}% of users reported
+using herbal cannabis (marijuana), an increase from src_R[:session kripos
+:results value raw]{dcan[year==2023 & can=="marihuana"]$pro}% in 2023. In
+contrast, the use of cannabis resin (hashish) slightly decreased from
+src_R[:session kripos :results value raw]{dcan[year==2023 & can=="hasj"]$pro}%
+in 2023 to src_R[:session kripos :results value raw]{dcan[year==2024 &
+can=="hasj"]$pro}% in 2024. Despite these shifts, the proportions of resin and
+herbal cannabis use remain relatively similar. Notably, the use of cannabis oil
+rose from src_R[:session kripos :results value raw]{dcan[year==2023 &
+can=="canoil"]$pro}% in 2023 to src_R[:session kripos :results value
+raw]{dcan[year==2024 & can=="canoil"]$pro}% in 2024, but its prevalence is still
+low compared to resin and herbal cannabis among users in Norway.
+
 #+name: fig:cantypes
-#+caption: Types og cannabi used last 12 months all adults(16-64), 2012-2024
+#+caption: Types of cannabis used last 12 months all adults (16-64), 2012-2024
 [[file:cantypes.png]]
