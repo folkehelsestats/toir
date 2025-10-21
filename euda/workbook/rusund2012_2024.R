@@ -41,13 +41,13 @@ can12types <- ggplot() +
   scale_color_manual(values = chc4) +
   ## geom_text(data = dcan[year == 2024], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
   scale_x_continuous(
-    limits = c(2011, 2024),
-    breaks = seq(2011, 2024, 1)
+    limits = c(2012, 2024),
+    breaks = seq(2012, 2024, 1)
     ## expand = expansion(mult = c(0.03, 0.25)) # Add 10% space to the right
   ) +
   scale_y_continuous(breaks = seq(0, max(dcan$pro) + 10, 10)) +
   theme_classic() +
-  labs(title = "Number of cannabis seizures (resin and herbal/plants), 2011-2024",
+  labs(title = "Types of cannabis used last 12 months all adults (16-64), 2012-2024",
        y = "", x = "") +
   theme(
     panel.grid.major.y = element_line(color = "grey80", linewidth = 0.5, linetype = "dashed")
