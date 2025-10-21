@@ -19,7 +19,7 @@
 #' @param y_breaks Numeric vector of y-axis breaks eg. seq(0,80,10). If NULL, calculated automatically
 #' @param y_break_interval Numeric value for y-axis break intervals (default: 1000)
 #' @param x_limits Numeric vector of length 2 for x-axis limits. If NULL, uses data range
-#' @param x_expansion Numeric vector of length 2 for expansion multipliers (default: c(0.03, 0.25))
+#' @param x_expansion Numeric vector of length 2 for expansion multipliers (default: c(0.03, 0.25) to add 10% to the right)
 #' @param show_grid Logical, whether to show horizontal grid lines (default: TRUE)
 #' @param x_lab Character string for x-axis label (default: "")
 #' @param y_lab Character string for y-axis label (default: "")
