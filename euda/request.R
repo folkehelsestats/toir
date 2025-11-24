@@ -8,10 +8,8 @@ source(file.path(here::here(), "unodc","fun-prevalence.R"))
 
 ## Data 2024
 ## --------------
-mainpath <- "O:\\Prosjekt\\Rusdata"
-## DT <- haven::read_dta(file.path("Rusundersøkelsen", "Rusus 2024", "nytt forsøk februar 25 rus24.dta"))
-## saveRDS(DT, file.path("Rusundersøkelsen", "Rusus 2024","rus2024.rds"))
-DT <- readRDS(file.path(mainpath, "Rusundersøkelsen", "Rusus 2024","rus2024.rds"))
+source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/folder-path.R")
+DT <- readRDS(file.path(Rususdata, "Rusus_2024","rus2024.rds"))
 dt <- as.data.table(DT)
 
 ## Age groups
