@@ -9,7 +9,7 @@ dx <- copy(DT)
 
 ## OBS! Exclude those that used Relevin Ans2_d == 1
 ## dt <- dt[ans2_d != 1]
-ans2 <- grep("ans2_", names(dx), ignore.case = T, value=T)
+ans2 <- grep("ans2_", names(dx), ignore.case = TRUE, value = TRUE)
 
 dx[, (ans2) := lapply(.SD, function(x) {
   fcase(
@@ -25,4 +25,4 @@ ansX <- c(ans2, "ansSum", "year")
 dx[ansSum == 8, ..ansX]
 dx[ansSum == 7 & ans2_d == 1, ..ansX]
 
-dx[ans2_d == 1 & ansSum < 6 , ..ansX][order(ansSum)]
+dx[ans2_d == 1 & ansSum < 6, ..ansX][order(ansSum)]
