@@ -221,6 +221,32 @@ ggplot(tblCannabis, aes(x = type, y = value, fill = gender)) +
   ) +
   ylim(0, 42)
 
+
+## ---------------------
+## Figure 8: Freq of cannabis use all adults (16-64), 2022-2024
+## ---------------------
+dt[, .N, keyby = can2]
+dt[can2 %in% 1:5, freq_cannabis := can2]
+
+dtCanUse <- dt[!is.na(freq_cannabis), .N, keyby = freq_cannabis]
+canTot <- dtCanUse[, sum(N, na.rm = TRUE) ]
+dtCanUse[, pct := round(100 * N / canTot, 1), by = freq_cannabis]
+
+## Set factor order
+dtCanUse[, can_lab := factor(freq_cannabis, levels = c(1,2,3,4,5),
+                             labels = c("Once",
+                                        "2-5 times",
+                                        "6-10 times",
+                                        "11-50 times",
+                                        "More than 50 times"))]
+
+source(here::here("euda/workbook/fun-plot-facet.R"))
+create_plot(dtCanUse, x = "can_lab", y = "pct", fill = "can_lab",
+            hdir_color = hdir_color,
+            title = "Frequency of cannabis use among users (2022-2024)",
+            xlab = "",
+            ylab = "Cumulative Percentage (%)", lglab = "", show_legend = FALSE)
+
 ## ---------------------
 ## Other narcotics prevalence
 ## ---------------------
