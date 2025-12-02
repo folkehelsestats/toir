@@ -229,3 +229,42 @@ ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure8_frequency_c
                 width = 8,
                 height = 6,
                 dpi = 300)
+
+## ----------------------------------
+## Figure 11 - Number of amphetamines seizures (methamphetamine and amphetamine), 2008-2024
+## ----------------------------------
+
+source(file.path(here::here(), "euda/workbook/fun-line-plot.R"))
+source(file.path(here::here(), "euda/workbook/fun-prosent.R"))
+
+amfi <- readxl::read_xlsx(here::here("euda/workbook/data/amphetamines-seizures.xlsx"),
+                          sheet = "Ark1")
+
+setnames(amfi, names(amfi), tolower(names(amfi)))
+amfiDT <- data.table::as.data.table(amfi)
+
+amfiDT[, total := rowSums(.SD, na.rm = TRUE), keyby = year]
+amfiDT <- amfiDT[year >= 2010]
+amfiW <- melt(amfiDT, id.vars = "year",
+                measure.vars = c("methamphetamine", "amphetamine", "total"),
+                value.name = "antall",
+                variable.name = "amfi")
+
+
+chc3 <- c("#5F9EA0", "#E1B378", "#7C145C")
+
+amfiBesLine <- make_line_plot(data = amfiW,
+                             x = "year",
+                             y = "antall",
+                             color = "amfi",
+                             title = "Number of amphetamines seizures (methamphetamine and amphetamine), 2010-2024",
+                             caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
+                             color_values = chc3,
+                             label_col = "amfi",
+                             y_lab = NULL)
+
+ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure11_amphetamines_seizures_2010-2024.png"),
+                plot = amfiBesLine,
+                width = 10,
+                height = 6,
+                dpi = 300)
