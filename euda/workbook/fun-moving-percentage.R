@@ -1,72 +1,65 @@
-
-#' Calculate 3-Year Rolling Cannabis Prevalence by Gender
+#' @title Calculate Moving Prevalence
 #'
-#' This function computes yearly cases and denominators for cannabis prevalence,
-#' grouped by selected variable e.g. (`kjonn`) and overall, and then calculates 3-year rolling sums
-#' and percentages.
+#' Computes rolling prevalence (percentage) over a specified time window
+#' for binary case and denominator variables, optionally grouped by one or more variables.
 #'
-#' @param dt A `data.table` containing the input data.
-#' @param case_var Character string specifying the column name for cases (e.g., `"ltp_cannabis"`).
-#' @param denom_var Character string specifying the column name for denominator (e.g., `"canpop"`).
-#' @param by_var Character string specifying the column name for grouping by (e.g., `"kjonn"`).
+#' @param dt A `data.table` containing the data.
+#' @param case_var Character string. Name of the binary variable representing cases (1/0).
+#' @param denom_var Character string. Name of the binary variable representing the denominator (1/0).
+#' @param by_var Character vector or `NULL`. Optional grouping variable(s) (e.g., "kjonn", "age_group").
+#' @param window Integer. Size of the rolling window (default = 3).
 #'
-#' @return A list of three `data.table` objects when using `kjonn` as grouping variable:
-#' \describe{
-#'   \item{kjonn}{Cases and denominators by year and gender.}
-#'   \item{menn}{Rolling 3-year summary for men (`kjonn == 1`).}
-#'   \item{kvinner}{Rolling 3-year summary for women (`kjonn == 2`).}
-#'   \item{all}{Rolling 3-year summary for all genders combined.}
+#' @return A `data.table` with aggregated counts, rolling sums, and rolling percentage.
+#' Columns returned:
+#' \itemize{
+#'   \item \code{year} - Year of observation.
+#'   \item \code{cases} - Sum of cases per group/year.
+#'   \item \code{denom} - Sum of denominator per group/year.
+#'   \item \code{cases_roll} - Rolling sum of cases over the specified window.
+#'   \item \code{denom_roll} - Rolling sum of denominator over the specified window.
+#'   \item \code{pct_roll} - Rolling percentage (cases_roll / denom_roll * 100).
 #' }
+#'
 #' @examples
 #' library(data.table)
-#' dt <- data.table(
-#'   year = rep(2010:2020, each = 2),
-#'   kjonn = rep(1:2, times = 11),
-#'   ltp_cannabis = sample(1:100, 22),
-#'   canpop = sample(100:1000, 22)
+#' DT <- data.table(
+#'   id = 1:100,
+#'   year = sample(2015:2024, 100, replace = TRUE),
+#'   case = rbinom(100, 1, 0.4),
+#'   eligible = rbinom(100, 1, 0.8),
+#'   kjonn = sample(c("M", "F"), 100, replace = TRUE),
+#'   age_group = sample(c("18-29", "30-49", "50+"), 100, replace = TRUE)
 #' )
-#' result <- calc_cannabis_prevalence(dt, "ltp_cannabis", "canpop", "kjonn")
-#' str(result)
+#'
+#' # Overall prevalence
+#' calc_moving_prevalence(DT, "case", "eligible")
+#'
+#' # By gender
+#' calc_moving_prevalence(DT, "case", "eligible", by_var = "kjonn")
+#'
+#' # By gender and age group
+#' calc_moving_prevalence(DT, "case", "eligible", by_var = c("kjonn", "age_group"))
 #'
 #' @export
-calc_moving_prevalence <- function(dt, case_var, denom_var, by_var) {
+calc_moving_prevalence <- function(dt, case_var, denom_var, by_var = NULL, window = 3) {
   stopifnot(data.table::is.data.table(dt))
 
-  # Aggregate by year and gender
-  canltpKjonn <- dt[, .(
+  # Build grouping columns dynamically
+  group_cols <- c("year", by_var)
+
+  # Aggregate by year and optional grouping variables
+  agg <- dt[, .(
     cases = sum(get(case_var), na.rm = TRUE),
     denom = sum(get(denom_var), na.rm = TRUE)
-  ), by = .(year, kjonn = get(by_var))][order(year)]
+  ), by = group_cols][order(year)]
 
-  # Function to compute rolling sums and percentage
-  compute_rolling <- function(data) {
-    data[, `:=`(
-      cases_3yr = data.table::frollsum(cases, n = 3, align = "right"),
-      denom_3yr = data.table::frollsum(denom, n = 3, align = "right")
-    )]
-    data[, pct_3yr := fifelse(denom_3yr > 0, 100 * cases_3yr / denom_3yr, NA_real_)]
-    data.table::setkey(data, year)
-    return(data)
-  }
+  # Compute rolling sums and percentage within each group
+  agg[, `:=`(
+    cases_roll = data.table::frollsum(cases, n = window, align = "right"),
+    denom_roll = data.table::frollsum(denom, n = window, align = "right")
+  ), by = by_var]
 
-  # Men
-  canltpMenn <- compute_rolling(canltpKjonn[kjonn == 1])
+  agg[, pct_roll := fifelse(denom_roll > 0, 100 * cases_roll / denom_roll, NA_real_)]
 
-  # Women
-  canltpKvinner <- compute_rolling(canltpKjonn[kjonn == 2])
-
-  # All genders combined
-  canltpAll <- dt[, .(
-    cases = sum(get(case_var), na.rm = TRUE),
-    denom = sum(get(denom_var), na.rm = TRUE)
-  ), by = .(year)][order(year)]
-  canltpAll <- compute_rolling(canltpAll)
-  canltpAll[, kjonn := 0]
-
-  ## return(list(kjonn = canltpKjonn, menn = canltpMenn, kvinner = canltpKvinner, all = canltpAll))
-  return(data.table::rbindlist(list(
-    canltpMenn,
-    canltpKvinner,
-    canltpAll
-  ), use.names = TRUE, fill = TRUE))
+  return(agg)
 }
