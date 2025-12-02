@@ -16,6 +16,7 @@
 #' @param xlab Label for x-axis (default: "Prevalence Type").
 #' @param ylab Label for y-axis (default: "Percentage (%)").
 #' @param lglab Label for the legend (default: "").
+#' @param show_legend Logical indicating whether to display the legend (default: TRUE).
 #'
 #' @return A \code{ggplot} object.
 #' @examples
@@ -37,7 +38,7 @@ create_plot <- function(data, x, y, fill, hdir_color,
                         wrap = NULL, grid = NULL,
                         title = "Title is here",
                         xlab = "X-label", ylab = "Y-label",
-                        lglab = "Legend name") {
+                        lglab = "Legend name", show_legend = TRUE) {
 
   p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, fill = fill)) +
     ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.7) +
@@ -54,7 +55,7 @@ create_plot <- function(data, x, y, fill, hdir_color,
                                                color = "grey80", linewidth = 0.5),
       panel.background = ggplot2::element_rect(fill = c("#E8F4F8", "#FFF4E6"),
                                                color = NA),
-      legend.position = "bottom"
+      legend.position = if (show_legend) "bottom" else "none"
     ) +
     ggplot2::ylim(0, 42)
 
