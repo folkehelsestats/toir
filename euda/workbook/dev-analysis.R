@@ -27,7 +27,7 @@ nrow(dt)
 ## dt <- dt[ans2_d != 1]
 
 dt[ans2_d == 1, .N]
-ans2 <- grep("ans2_", names(dx), ignore.case = TRUE, value = TRUE)
+ans2 <- grep("ans2_", names(dt), ignore.case = TRUE, value = TRUE)
 ansTmp <- paste0(ans2, "_tmp")
 
 dt[, (ansTmp) := lapply(.SD, function(x) {
@@ -247,18 +247,71 @@ create_plot(dtCanUse, x = "can_lab", y = "pct", fill = "can_lab",
             xlab = "",
             ylab = "Cumulative Percentage (%)", lglab = "", show_legend = FALSE)
 
+## ===========================
+## Figure 12 - Cocaine, Amphetamines and MDMA/Ecstasy
+## ===========================
+
+## Free text - responses to other types of drugs
+dt[str_detect(ans2sps, regex("methamfethamin|metamfethamin", ignore_case = TRUE)), "AndreAmfetamin" := 1]
+
+## includes free text answers to the new variables
+dt[, Ans2_c_ny := ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
+
+dt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
+dt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
+dt[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+
+## Lifetime prevalence
+ltCocaine <- calc_prev_all(dt, "ltp_cocaine", "narkpop", "kjonn")
+ltAmphetamines <- calc_prev_all(dt, "ltp_amphetamines", "narkpop", "kjonn")
+ltMdma <- calc_prev_all(dt, "ltp_mdma", "narkpop", "kjonn")
+
+tbLTPDrugs <- rbindlist(list(
+  create_tbl_grp(ltCocaine, "LTP", "Cocaine"),
+  create_tbl_grp(ltAmphetamines, "LTP", "Amphetamines"),
+  create_tbl_grp(ltMdma, "LTP", "MDMA/Ecstasy")
+))
+
+## Last year prevalence
+dt[ans3_1 == 1, lyp_cocaine := 1]
+dt[ans3_2 == 1, lyp_mdma := 1]
+dt[ans3_3 == 1, lyp_amphetamines := 1]
+
+lyCocaine <- calc_prev_all(dt, "lyp_cocaine", "narkpop", "kjonn")
+lyAmphetamines <- calc_prev_all(dt, "lyp_amphetamines", "narkpop", "kjonn")
+lyMdma <- calc_prev_all(dt, "lyp_mdma", "narkpop", "kjonn")
+
+tblLYPDrugs <- rbindlist(list(
+  create_tbl_grp(lyCocaine, "LYP", "Cocaine"),
+  create_tbl_grp(lyAmphetamines, "LYP", "Amphetamines"),
+  create_tbl_grp(lyMdma, "LYP", "MDMA/Ecstasy")
+))
+
+dtDrugs <- rbindlist(list(tbLTPDrugs, tblLYPDrugs))
+
+dtDrugs[, gender := factor(kjonn, levels = c("1", "2", "Total"), labels = c("Men", "Women", "Total"))]
+
+create_plot(dtDrugs,
+    x = "gender", y = "value", fill = "grp", wrap = "type",
+    hdir_color = hdir_color,
+    title = "Cocaine, Amphetamines and MDMA/Ecstasy use with cumulative percentage (2022-2024)"
+)
+
+
+
+
+
+
 ## ---------------------
 ## Other narcotics prevalence
 ## ---------------------
 
 dt[grep("cb", ans2sps, ignore.case = TRUE), "AndreNPS" := 1]
 dt[grep("psilocybin", ans2sps, ignore.case = TRUE), "AndreSOPP" := 1]
-dt[str_detect(ans2sps, regex("methamfethamin|metamfethamin", ignore_case = TRUE)), "AndreAmfetamin" := 1]
 dt[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 dt[grep("psilocybin", ans2sps, ignore.case = TRUE), "AndreSopp" := 1]
 
 ## includes free text answers to the new variables
-dt[, Ans2_c_ny := ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
 dt[, Ans2_g_ny := ans2_g][AndreLSD == 1, Ans2_g_ny := 1]
 ## dt[, Ans2_y_ny := ans2_y][AndreSopp == 1, Ans2_y_ny := 1]
 
@@ -269,9 +322,6 @@ dt[, ltp_any := fcase(ltp_drugs == 1, 1,
                       ltp_cannabis == 1, 1,
                       default = 0)]
 
-dt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
-dt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-dt[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
 dt[ans2_d == 1, ltp_relevin := 1]
 dt[ans2_e == 1, ltp_heroin := 1] #Heroin
 dt[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
