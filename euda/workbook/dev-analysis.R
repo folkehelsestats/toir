@@ -247,6 +247,30 @@ create_plot(dtCanUse, x = "can_lab", y = "pct", fill = "can_lab",
             xlab = "",
             ylab = "Cumulative Percentage (%)", lglab = "", show_legend = FALSE)
 
+## ---------------------
+## Figure 11: Number of amphetamines sizures 2008 - 2024
+## ---------------------
+
+
+amfi <- readxl::read_xlsx(here::here("euda/workbook/data/amphetamines-seizures.xlsx"),
+                          sheet = "Ark1")
+
+setnames(amfi, names(amfi), tolower(names(amfi)))
+data.table::setDT(amfi)
+
+
+## ===========================
+## Figure 11.1 - Amphetamines seizures in kg
+## ==========================
+
+amfiKg <- readxl::read_xlsx(here::here("euda/workbook/data/ammfetamin-seizures-kg.xlsx"), sheet = "Ark1")
+data.table::setDT(amfiKg)
+
+setnames(amfiKg, names(amfiKg), tolower(paste0(names(amfiKg), "_kg")))
+
+amfiDT <- merge(amfiDT, amfiKg, by.x = "year", by.y = "year_kg", all.y = TRUE)
+
+
 ## ===========================
 ## Figure 12 - Cocaine, Amphetamines and MDMA/Ecstasy
 ## ===========================
