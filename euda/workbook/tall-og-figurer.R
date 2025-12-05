@@ -21,6 +21,7 @@ hdir_color <- c("#025169", "#0069E8",
                 "#BF78DE", "#767676")
 
 chc3 <- c("#5F9EA0", "#E1B378", "#7C145C")
+chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
 
 ## popvar: population variable
 ## by: grouping variable
@@ -101,6 +102,62 @@ DT[canpop == 1 | narkpop == 1, anypop := 1][
 ## Dataset for 2022-2024 only
 ## -------------------------
 dt <- DT[year %in% 2022:2024]
+
+## ===========================
+## Figure 3 - Cannabis use last 12 months all adults (16-64), 2012-2024
+## ==========================
+
+ddt <- copy(DT) #Rename to use it locally
+
+# clean labelled attributes coz it makes troubles
+ddtc <- ddt[, lapply(.SD, \(col) {
+  attributes(col) <- NULL
+  col
+})]
+
+hasj <- calc_pro(ddtc, "can6", "can7_a", "hasj")
+marihuana <- calc_pro(ddtc, "can6", "can7_b", "marihuana")
+canoil <- calc_pro(ddtc, "can6", "can7_c", "canoil")
+
+dcan <- data.table::rbindlist(list(hasj, marihuana, canoil), use.names = TRUE)
+dcan[can == "hasj", canlab := "Resin"]
+dcan[can == "marihuana", canlab := "Herbal/plants"]
+dcan[can == "canoil", canlab := "Cannabis oil"]
+
+chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
+
+annotdf <- dcan[year == 2021]
+annotdf[, loc := fcase(can == "hasj", pro + 2 ,
+                      can == "marihuana", pro - 2,
+                      can == "canoil", pro - 2)]
+
+library(ggplot2)
+## Linje diagram
+can12types <- ggplot() +
+  geom_line(data = dcan[can != "total"], aes(x = year, y = pro, color = can), linewidth = 1.5) +
+  geom_line(data = dcan[can == "total"], aes(x = year, y = pro, color = can), linewidth = 3) +
+  scale_color_manual(values = chc4) +
+  ## geom_text(data = dcan[year == 2024], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
+  scale_x_continuous(
+    limits = c(2012, 2024),
+    breaks = seq(2012, 2024, 1)
+    ## expand = expansion(mult = c(0.03, 0.25)) # Add 10% space to the right
+  ) +
+  scale_y_continuous(breaks = seq(0, max(dcan$pro) + 10, 10)) +
+  theme_classic() +
+  labs(title = "Types of cannabis used last 12 months all adults (16-64), 2012-2024",
+       y = "", x = "") +
+  theme(
+    panel.grid.major.y = element_line(color = "grey80", linewidth = 0.5, linetype = "dashed")
+  ) +
+  guides(color = "none") +
+  ## annotate("text", x = rep(2021, 3), y = c(4, 53, 75), label = c("canoil", "mari", "hasj"))
+  geom_text(data = annotdf, aes(x = year, y = loc, label = canlab))
+
+
+ggplot2::ggsave(filename = here::here("euda/workbook/figures/cantypes.png"),
+                plot = can12types,
+                width = 6, height = 4, dpi = 300)
 
 ## --------------------------------------------------
 ## Figure 6: Cannabis use all adults (16-64) and young adults (16-34), 2022-2024
@@ -303,7 +360,36 @@ ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure11_amphetamin
                 height = 6,
                 dpi = 300)
 
+## ===========================
+## Figure 11.1 - Amphetamines seizures in kg
+## ==========================
 
+amfiKg <- readxl::read_xlsx(here::here("euda/workbook/data/ammfetamin-seizures-kg.xlsx"), sheet = "Ark1")
+data.table::setDT(amfiKg)
+setnames(amfiKg, names(amfiKg), tolower(names(amfiKg)))
+setnames(amfiKg, "amfetamin/metamfetaminbase", "amphetamine base")
+
+amfiKg[, total := rowSums(.SD, na.rm = TRUE), by = year]
+amfiKgDT <- melt(amfiKg, id.vars = "year",
+                measure.vars = c("metamfetamin", "amfetamin", "amphetamine base", "total"),
+                value.name = "kg",
+                variable.name = "amfi")
+
+amfiKgLine <- make_line_plot(data = amfiKgDT,
+                             x = "year",
+                             y = "kg",
+                             color = "amfi",
+                             title = "Seized amphetamines in kg (methamphetamine and amphetamine), 2015-2024",
+                             caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
+                             color_values = chc4,
+                             label_col = "amfi",
+                             y_lab = "Kilograms (kg)")
+
+ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure11_1_amphetamines_seizures_kg_2015-2024.png"),
+                plot = amfiKgLine,
+                width = 10,
+                height = 6,
+                dpi = 300)
 
 ## ===========================
 ## Figure 12 - Cocaine, Amphetamines and MDMA/Ecstasy
@@ -439,7 +525,7 @@ fig14 <- make_line_plot(data = tblMovDrugs,
                         color = "drug",
                         title = "3-year moving average of percentage for stimulants use last 12 months (16-34 yrs old), 2014-2024",
                         caption = "",
-                        color_values = chc3,
+                        color_values = chc4,
                         label_col = "drug",
                         y_break_interval = 0.5,
                         y_limit = c(0, 10),
@@ -451,3 +537,68 @@ ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure14_stimulant_
                 width = 10,
                 height = 6,
                 dpi = 300)
+
+## ===========================
+## Figure 15 - Estimated number of people injecting drugs in Norway, 2010–2022
+## ==========================
+
+injdt <- readxl::read_xlsx(here::here("O:\\Prosjekt\\Rusdata\\PWID\\pwid_workbook2025.xlsx"),
+                           sheet = "Ark1")
+setDT(injdt)
+ids <- injdt[, .N, keyby = År]$År
+ids <- ids[!is.na(ids)]
+injdt[, item := as]
+injdt <- injdt[!is.na(År)]
+
+omkod <- data.table(v1 = ids, v2 = c("Antall", "diedMX", "pwidMX",
+                                     "yearMX", "lowCI", "sd", "sdMX",
+                                     "tot", "highCI"))
+
+injdt[, item := c("Antall", "pwid", "sd", "upCI",
+                  "lowCI", "yrMX", "diedMX", "pwidMX",
+                  "sdMX", "upCI_MX", "lowCI_MX")]
+
+injx <- injdt[item %in% c("pwid", "pwidMX")]
+injx[, År := NULL]
+
+pwid <- melt(injx, id.vars = "item",
+             measure.vars = c("2019", "2020", "2021", "2022", "2023", "2024"),
+             variable.name = "year",
+             value.name = "n")
+
+pwid[, year := as.integer(as.character(year))]
+
+make_line_plot(pwid, x = "year", y = "n", color = "item",
+               title = "Estimated number of people injecting drugs in Norway, 2019-2024",
+               color_values = chc3,
+               label_col = "item",
+               y_lab = "Estimated number of people injecting drugs",
+               y_limit = c(0, 30000)
+               )
+
+
+library(ggplot2)
+## Linje diagram
+pwidPlot <- ggplot() +
+  geom_line(data = pwid, aes(x = year, y = n, color = item), linewidth = 1.5) +
+  scale_color_manual(values = chc4) +
+  ## geom_text(data = dcan[year == 2024], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
+  scale_x_continuous(
+    limits = c(2019, 2024),
+    breaks = seq(2019, 2024, 1)
+    ## expand = expansion(mult = c(0.03, 0.25)) # Add 10% space to the right
+  ) +
+  ## scale_y_continuous(breaks = seq(0, max(pwid$n) + 15000, 100)) +
+  theme_classic() +
+  labs(title = "Estimated number of people injecting drugs in Norway, 2010–2022",
+       y = "", x = "") +
+  theme(
+    panel.grid.major.y = element_line(color = "grey80", linewidth = 0.5, linetype = "dashed")
+  ) +
+  guides(color = "none")
+  ## annotate("text", x = rep(2021, 3), y = c(4, 53, 75), label = c("canoil", "mari", "hasj"))
+
+
+ggplot2::ggsave(filename = here::here("euda/workbook/figures/pwid.png"),
+                plot = can12types,
+                width = 6, height = 4, dpi = 300)
