@@ -178,8 +178,8 @@ dty <- dt[agecat %chin% c("16-24", "25-34")] #16-34 yrs
 ## Lifetime  prevalence
 ## ---------------------
 
-dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
-dty[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
+dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs all adults
+dty[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs young adults
 
 dttKj <- calc_moving_prevalence(dt, "ltp_cannabis", "canpop", "kjonn")
 dttTot <- calc_moving_prevalence(dt, "ltp_cannabis", "canpop")
@@ -199,8 +199,8 @@ tbLTP <- rbindlist(list(
 ## Last year prevalence
 ## ---------------------
 
-dt[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs
-dty[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs
+dt[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs all adults
+dty[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs young adults
 
 dtlypKjonn <- calc_moving_prevalence(dt, "lyp_cannabis", "canpop", "kjonn")
 dtlypTot <- calc_moving_prevalence(dt, "lyp_cannabis", "canpop")
