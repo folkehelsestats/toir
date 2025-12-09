@@ -1,0 +1,26 @@
+---
+title: "Tall om illegale rusmidler"
+format:
+  html:
+    toc: true
+    toc-location: left
+
+---
+
+# Cannabis
+  * Bruk av cannabis 16-64 og 16-34:
+    - Noen gang
+    - Siste 12 måneder
+    - Siste 4 uker
+  
+# Sentralstimulerende stoffer
+# Lifetime prevalence
+  - Kjønn
+  - Alder 16-64, 16-34 
+# Last 12 months prevalence
+# Last 30 days prevalence 
+# Status idag
+# Bruk over tid (utvikling)
+# ulike grupper
+  - Sosioøkonomisk
+  - Utdanning
