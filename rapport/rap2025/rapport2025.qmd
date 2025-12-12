@@ -7,6 +7,8 @@ format:
 
 ---
 
+
+
 # Cannabis
   * Bruk av cannabis 16-64 og 16-34:
     - Noen gang

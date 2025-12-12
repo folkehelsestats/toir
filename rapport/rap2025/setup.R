@@ -59,15 +59,15 @@ DT25[, (ansTmp) := NULL]
 ## Exclude all missing and not answered Can1 or Ans1
 ## Denominator for Illigal rusmidler
 ## ------------
-DT25[, canpop := ifelse(can1 %in% 1:2, 1, 0)]
-DT25[, narkpop := ifelse(ans1 %in% 1:2, 1, 0)]
+DT25[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
+DT25[, narkpop := fifelse(ans1 %in% 1:2, 1, 0)] #Other illegal drugs
 DT25[canpop == 1 | narkpop == 1, anypop := 1][
-  is.na(anypop), anypop := 0]
+  is.na(anypop), anypop := 0] # Any illegal drugs
 
-DT25 <- DT25[anypop == 1,]
+DT <- DT25[anypop == 1,]
 
 ## Free text - Other types
 ## Bør sjekke tekst fra Ans2sps
-DT25[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
+DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
 
-dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+DT[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
