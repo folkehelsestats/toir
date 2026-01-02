@@ -52,6 +52,7 @@ DT25[, (ansTmp) := lapply(.SD, function(x) {
 
 DT25[, ansSum := rowSums(.SD, na.rm = TRUE), .SDcols = ansTmp]
 # Remove ONLY those who answered yes to all drugs including Relevin
+# Relevin is a non-existing drug, used to identify non-serious respondents
 DT25 <- DT25[ansSum != 8]
 DT25[, (ansTmp) := NULL]
 
@@ -70,4 +71,4 @@ DT <- DT25[anypop == 1,]
 ## Bør sjekke tekst fra Ans2sps
 DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
 
-DT[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+DT[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
