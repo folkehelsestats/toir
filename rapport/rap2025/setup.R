@@ -7,6 +7,7 @@ source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/
 ## Functions
 ## --------------------------------------------------
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
+source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c04329b2a562e053/R/utils.R") #is_encode() and is_delete_index()
 
 ## Data 2012 - 2024
 ## --------------------------------------------------
@@ -69,6 +70,7 @@ DT <- DT25[anypop == 1,]
 
 ## Free text - Other types
 ## Bør sjekke tekst fra Ans2sps
+DT[, ans2sps := is_encode(ans2sps)]
 DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
 
 DT[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
