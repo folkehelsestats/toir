@@ -38,29 +38,43 @@ DT25 <- group_age_standard(DT25, var = "alder", type = "rusund",
 
 ## Relevin exclusion
 ## ------------------
-## OBS! Exclude those that used Relevin Ans2_d == 1
+## OBS! Relevin ie. Ans2_d == 1 is not an illegal drug, but a fake drug
+## Remove ONLY those who answered yes to all drugs including Relevin
+## Relevin is a non-existing drug, used to identify non-serious respondents
 
-ans2 <- grep("ans2_", names(DT25), ignore.case = TRUE, value = TRUE)
-ansTmp <- paste0(ans2, "_tmp")
+exclude_relevin <- function(dt) {
+  data <- data.table::copy(dt)
+  ans2_var <- grep("ans2_", names(data), ignore.case = TRUE, value = TRUE)
+  ans2_tmp <- paste0(ans2_var, "_tmp")
 
-DT25[, (ansTmp) := lapply(.SD, function(x) {
-  fcase(
-    x == 1, 1,
-    x %in% c(2, 8, 9), NA,
-    default = NA
-  )
-}), .SDcols = ans2]
+  data[, (ans2_tmp) := lapply(.SD, function(x) {
+    fcase(
+      x == 1, 1,
+      x %in% c(2, 8, 9), NA,
+      default = NA
+    )
+  }), .SDcols = ans2_var]
 
-DT25[, ansSum := rowSums(.SD, na.rm = TRUE), .SDcols = ansTmp]
-# Remove ONLY those who answered yes to all drugs including Relevin
-# Relevin is a non-existing drug, used to identify non-serious respondents
-DT25 <- DT25[ansSum != 8]
-DT25[, (ansTmp) := NULL]
+  data[, ansSum := rowSums(.SD, na.rm = TRUE), .SDcols = ans2_tmp]
 
+  data <- data[ansSum != 8]
 
+  data[, (ans2_tmp) := NULL]
+  data[, ansSum := NULL]
+
+  return(data)
+}
+
+## Rusus 2012-2024 includes a fake drug "Relevin" to identify non-serious respondents.
+ddt <- exclude_relevin(ddt)
+
+## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
+DT25 <- exclude_relevin(DT25)
+
+## ==================================
 ## Exclude all missing and not answered Can1 or Ans1
 ## Denominator for Illigal rusmidler
-## ------------
+## ----------------------------------
 DT25[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
 DT25[, narkpop := fifelse(ans1 %in% 1:2, 1, 0)] #Other illegal drugs
 DT25[canpop == 1 | narkpop == 1, anypop := 1][
