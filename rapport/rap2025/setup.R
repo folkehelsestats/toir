@@ -78,7 +78,7 @@ DT25 <- exclude_relevin(DT25)
 ## Denominator for Illigal rusmidler
 ## ----------------------------------
 
-create_demoniminator <- function(dt) {
+create_population <- function(dt) {
   data <- data.table::copy(dt)
 
   data[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
@@ -89,7 +89,7 @@ create_demoniminator <- function(dt) {
   return(data)
 }
 
-DT <- create_demoniminator(DT25)
+DT <- create_population(DT25)
 
 ## Free text - Other types
 ## Bør sjekke tekst fra Ans2sps
@@ -122,4 +122,4 @@ DTT <- group_age_standard(DTT,
                           type = "rusund",
                           new_var = "agecat")
 
-DTT <- create_demoniminator(DTT)
+DTT <- create_population(DTT)
