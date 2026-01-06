@@ -8,6 +8,12 @@ source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/
 ## --------------------------------------------------
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c04329b2a562e053/R/utils.R") #is_encode() and is_delete_index()
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
+source(here::here("unodc","fun-weighted-unweighted-ci.R"))
+source(here::here("unodc","fun-weighted-unweighted-ci-flexible.R"))
+source(here::here("unodc","fun-prevalence-ci.R"))
+source(here::here("unodc","fun-pct-change.R"))
+source(here::here("euda","fun-form-style.R"))
 
 ## Data 2012 - 2024
 ## --------------------------------------------------
@@ -27,16 +33,9 @@ setnames(DT25, names(DT25), tolower(names(DT25)))
 ## ==================================
 ## Data preparation
 ## ----------------------------------
-
 # clean labelled attributes coz it makes troubles
 DT25[, (names(DT25)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
 
-## Age groups
-## -------------
-DT25 <- group_age_standard(DT25,
-                           var = "alder",
-                           type = "rusund",
-                           new_var = "agecat")
 
 ## Relevin exclusion
 ## ------------------
@@ -72,6 +71,14 @@ ddt <- exclude_relevin(ddt)
 
 ## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
 DT25 <- exclude_relevin(DT25)
+
+## Age groups
+## -------------
+DT25 <- DT25[alder <= 64] # only those 16-64 years old being asked about drug use
+DT25 <- group_age_standard(DT25,
+                           var = "alder",
+                           type = "rusund",
+                           new_var = "agecat")
 
 ## ==================================
 ## Exclude all missing and not answered Can1 or Ans1
@@ -114,6 +121,8 @@ dtx <- ddt[, lapply(.SD, \(col) {
 
 DTT <- rbindlist(list(dtx[, ..commonCols], DT[, ..commonCols]), use.names = TRUE, fill = TRUE)
 
+DTT <- create_population(DTT)
+
 ## Age groups
 ## -------------
 DTT <- DTT[alder <= 64] # only those 16-64 years old being asked about drug use
@@ -122,4 +131,3 @@ DTT <- group_age_standard(DTT,
                           type = "rusund",
                           new_var = "agecat")
 
-DTT <- create_population(DTT)
