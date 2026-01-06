@@ -33,8 +33,10 @@ DT25[, (names(DT25)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
 
 ## Age groups
 ## -------------
-DT25 <- group_age_standard(DT25, var = "alder", type = "rusund",
-                         new_var = "agecat")
+DT25 <- group_age_standard(DT25,
+                           var = "alder",
+                           type = "rusund",
+                           new_var = "agecat")
 
 ## Relevin exclusion
 ## ------------------
@@ -75,12 +77,19 @@ DT25 <- exclude_relevin(DT25)
 ## Exclude all missing and not answered Can1 or Ans1
 ## Denominator for Illigal rusmidler
 ## ----------------------------------
-DT25[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
-DT25[, narkpop := fifelse(ans1 %in% 1:2, 1, 0)] #Other illegal drugs
-DT25[canpop == 1 | narkpop == 1, anypop := 1][
-  is.na(anypop), anypop := 0] # Any illegal drugs
 
-DT <- DT25[anypop == 1,]
+create_demoniminator <- function(dt) {
+  data <- data.table::copy(dt)
+
+  data[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
+  data[, narkpop := fifelse(ans1 %in% 1:2, 1, 0)] #Other illegal drugs
+  data[canpop == 1 | narkpop == 1, anypop := 1][
+    is.na(anypop), anypop := 0] # Any illegal drugs
+
+  return(data)
+}
+
+DT <- create_demoniminator(DT25)
 
 ## Free text - Other types
 ## Bør sjekke tekst fra Ans2sps
@@ -88,3 +97,29 @@ DT[, ans2sps := is_encode(ans2sps)]
 DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
 
 DT[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+
+## ==================================
+## Merge data 2012-2024 and 2025
+## ----------------------------------
+DT[, year := 2025]
+
+commonCols <- intersect(names(ddt), names(DT))
+
+# clean labelled attributes coz it makes troubles
+dtx <- ddt[, lapply(.SD, \(col) {
+  attributes(col) <- NULL
+  col
+})]
+
+
+DTT <- rbindlist(list(dtx[, ..commonCols], DT[, ..commonCols]), use.names = TRUE, fill = TRUE)
+
+## Age groups
+## -------------
+DTT <- DTT[alder <= 64] # only those 16-64 years old being asked about drug use
+DTT <- group_age_standard(DTT,
+                          var = "alder",
+                          type = "rusund",
+                          new_var = "agecat")
+
+DTT <- create_demoniminator(DTT)
