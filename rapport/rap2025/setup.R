@@ -80,6 +80,11 @@ DT25 <- group_age_standard(DT25,
                            type = "rusund",
                            new_var = "agecat")
 
+## Vekt is character - convert to numeric
+## ----------------------------------
+DT25[, vekt := as.numeric(gsub(",", ".", vekt))]
+
+
 ## ==================================
 ## Exclude all missing and not answered Can1 or Ans1
 ## Denominator for Illigal rusmidler
@@ -109,6 +114,7 @@ DT[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 ## Merge data 2012-2024 and 2025
 ## ----------------------------------
 DT[, year := 2025]
+ddt[, vekt := nyvekt2]
 
 commonCols <- intersect(names(ddt), names(DT))
 
