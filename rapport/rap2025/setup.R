@@ -11,9 +11,10 @@ source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
 source(here::here("unodc","fun-weighted-unweighted-ci.R"))
 source(here::here("unodc","fun-weighted-unweighted-ci-flexible.R"))
-source(here::here("unodc","fun-prevalence-ci.R"))
-source(here::here("unodc","fun-pct-change.R"))
-source(here::here("euda","fun-form-style.R"))
+
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-ci-graph.R")
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-graph.R")
+
 
 ## Data 2012 - 2024
 ## --------------------------------------------------
