@@ -1,0 +1,40 @@
+
+Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, brukte de siste 12 måneder eller siste 4 uker i perioden 2012 til 2025.
+
+```{r cann_alle}
+#| echo: false
+
+source(file.path(pathToir, "analysis_2012_2025/cannabis_trend.R"))
+## output:
+## cannAll - 16-64
+## cannYng - 16 - 34
+
+make_hist(
+  d = cannAll,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk i alderen 16-64, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+Figuren nedenfor er for de i alderen 16-34 
+
+```{r cann_yngre}
+
+make_hist(
+  d = cannYng,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
