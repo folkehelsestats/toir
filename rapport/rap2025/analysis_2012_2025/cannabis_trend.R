@@ -7,13 +7,13 @@ DTT[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
 DTT[can6 == 1, lyp_cannabis := 1] # Last year prevalence
 DTT[can10 == 1, lmp_cannabis := 1] # Last month prevalence
 
-cannabis_trend <- function(data) {
+cannabis_trend <- function(data, group = "year") {
     canLtpAllHist <- calc_percentage_ci(
         dt = data,
         outcome_var = "ltp_cannabis",
         weight_var = "vekt",
         denominator_var = "canpop",
-        group_vars = "year",
+        group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
         include_diagnostics = TRUE
@@ -24,7 +24,7 @@ cannabis_trend <- function(data) {
         outcome_var = "lyp_cannabis",
         weight_var = "vekt",
         denominator_var = "canpop",
-        group_vars = "year",
+        group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
         include_diagnostics = TRUE
@@ -35,7 +35,7 @@ cannabis_trend <- function(data) {
         outcome_var = "lmp_cannabis",
         weight_var = "vekt",
         denominator_var = "canpop",
-        group_vars = "year",
+        group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
         include_diagnostics = TRUE
@@ -51,22 +51,9 @@ cannabis_trend <- function(data) {
 }
 
 cannAll <- cannabis_trend(DTT) #16-64 år
+cannAllMenn <- cannabis_trend(DTT[kjonn == 1]) # 16-64 år og menn
+cannAllKvinner <- cannabis_trend(DTT[kjonn == 2]) #16-64 år og kvinner
 
 cannYng <- cannabis_trend(DTT[alder <= 34]) #16-34
-
-## create_ci_graph(data = canLtpAllHist,
-##                 x_col = "year",
-##                 y_col = "percentage",
-##                 lower_col = "ci_lower",
-##                 upper_col = "ci_upper")
-
-## make_hist(
-##   d = cannAll,
-##   x = "year",
-##   y = "percentage",
-##   n = "n_level",
-##   group = "grp",
-##   type = "line",
-##   title = "Andel cannabis bruk i alderen 16-64, 2012-2025 ",
-##   caption = "Tall om illegale rusmidler"
-## )
+cannYngMenn <- cannabis_trend(DTT[alder <= 34 & kjonn == 1]) #16-34 og menn
+cannYngKvinner <- cannabis_trend(DTT[alder <= 34 & kjonn == 2]) #16-34 og kvinner
