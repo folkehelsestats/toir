@@ -4,16 +4,21 @@ format:
   html:
     toc: true
     toc-location: left
+execute:
+ echo: false
 
 ---
 
+```{r setup}
+#| warning: false
 
+pathToir <- file.path(here::here("rapport", "rap2025"))
+source(file.path(pathToir, "setup.R"))
+```
 
 # Cannabis
-  * Bruk av cannabis 16-64 og 16-34:
-    - Noen gang
-    - Siste 12 måneder
-    - Siste 4 uker
+
+{{< include _cannabis.qmd >}}
   
 # Sentralstimulerende stoffer
 # Lifetime prevalence

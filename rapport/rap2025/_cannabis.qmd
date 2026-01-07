@@ -1,3 +1,4 @@
+## Cannabis bruk fra 2012 til 2025 blant personer i alderen mellom 16 og 64
 
 Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, brukte de siste 12 måneder eller siste 4 uker i perioden 2012 til 2025.
 
@@ -53,6 +54,8 @@ make_hist(
 
 ```
 
+## Cannabis bruk fra 2012 til 2025 blant personer i alderen mellom 16 og 34 
+
 Figuren nedenfor er for de i alderen 16-34 
 
 ```{r cann_yngre}
@@ -103,10 +106,51 @@ make_hist(
 
 ```
 
+## Bruk av cannabis siste 12 måneder
+
+```{r cann_lyp}
+
+make_hist(
+  d = cannLypYng,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabis bruk siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+```
 
 
+```{r cann_lyp_menn}
+
+make_hist(
+  d = cannLypYngMenn,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabis bruk blant menn siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+```
 
 
+```{r cann_lyp_kvinner}
+
+make_hist(
+  d = cannLypYngKvinner,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabis bruk blant kvinner siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+```
 
 
 
