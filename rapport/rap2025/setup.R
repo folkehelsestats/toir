@@ -18,7 +18,7 @@ source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/ru
 
 ## Data 2012 - 2024
 ## --------------------------------------------------
-ddt <- readRDS(file.path(Rususdata, "Rusus_2012_2023", "data_2012_2024.rds"))
+ddt <- readRDS(file.path(Rususdata, "rusus_2012_2024.rds"))
 
 ## ## Data 2024
 ## ## --------------------------------------------------
@@ -75,7 +75,9 @@ DT25 <- exclude_relevin(DT25)
 
 ## Age groups
 ## -------------
-DT25 <- DT25[alder <= 64] # only those 16-64 years old being asked about drug use
+## In 2025 the questions about drug use were asked to all ages 16-79.
+## To be comparable with previous years, we only include ages 16-64.
+DT25 <- DT25[alder <= 64]
 DT25 <- group_age_standard(DT25,
                            var = "alder",
                            type = "rusund",
@@ -132,7 +134,8 @@ DTT <- create_population(DTT)
 
 ## Age groups
 ## -------------
-DTT <- DTT[alder <= 64] # only those 16-64 years old being asked about drug use
+## only those 16-64 years old being asked about drug use 2012-2024
+DTT <- DTT[alder <= 64]
 DTT <- group_age_standard(DTT,
                           var = "alder",
                           type = "rusund",
