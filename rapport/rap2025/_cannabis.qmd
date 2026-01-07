@@ -2,7 +2,6 @@
 Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, brukte de siste 12 måneder eller siste 4 uker i perioden 2012 til 2025.
 
 ```{r cann_alle}
-#| echo: false
 
 source(file.path(pathToir, "analysis_2012_2025/cannabis_trend.R"))
 ## output:
@@ -17,6 +16,38 @@ make_hist(
   group = "grp",
   type = "line",
   title = "Andel cannabis bruk i alderen 16-64, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+Kjønn forskjell vises i figurene nedenfor.
+
+```{r cann_menn}
+
+make_hist(
+  d = cannAllMenn,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk blant menn i alderen 16-64, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+```{r cann_kvinner}
+
+make_hist(
+  d = cannAllKvinner,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk blant kvinner i alderen 16-64, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -38,3 +69,46 @@ make_hist(
 )
 
 ```
+
+Kjønn forkjell vises i figurene nedenfor.
+
+```{r cann_yngre_menn}
+
+make_hist(
+  d = cannYngMenn,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk blant menn i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r cann_yngre_kvinner}
+
+make_hist(
+  d = cannYngKvinner,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "grp",
+  type = "line",
+  title = "Andel cannabis bruk blant kvinner i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+
+
+
+
+
+
+
+
