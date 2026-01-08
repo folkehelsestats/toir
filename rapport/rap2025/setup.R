@@ -11,6 +11,7 @@ source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
 source(here::here("unodc","fun-weighted-unweighted-ci.R"))
 source(here::here("unodc","fun-weighted-unweighted-ci-flexible.R"))
+source(here::here("unodc","fun-weighted-unweighted-ci-rolling.R"))
 
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-ci-graph.R")
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-graph.R")
@@ -90,7 +91,7 @@ DT25[, vekt := as.numeric(gsub(",", ".", vekt))]
 
 ## ==================================
 ## Exclude all missing and not answered Can1 or Ans1
-## Denominator for Illigal rusmidler
+## Denominator for Illegal rusmidler
 ## ----------------------------------
 
 create_population <- function(dt) {
