@@ -1,4 +1,4 @@
-## Cannabis bruk fra 2012 til 2025 blant personer i alderen mellom 16 og 64
+## Cannabisbruk i aldersgruppen 16–64 år: Trender fra 2012 til 2025
 
 Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, brukte de siste 12 måneder eller siste 4 uker i perioden 2012 til 2025.
 
@@ -16,7 +16,7 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk i alderen 16-64, 2012-2025 ",
+  title = "Andel cannabisbruk i alderen 16-64, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -33,7 +33,7 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk blant menn i alderen 16-64, 2012-2025 ",
+  title = "Andel cannabisbruk blant menn i alderen 16-64, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -48,15 +48,16 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk blant kvinner i alderen 16-64, 2012-2025 ",
+  title = "Andel cannabisbruk blant kvinner i alderen 16-64, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
 
-## Cannabis bruk fra 2012 til 2025 blant personer i alderen mellom 16 og 34 
+## Cannabisbruk i aldersgruppen 16–34 år: Trender fra 2012 til 2025
 
 Figuren nedenfor er for de i alderen 16-34 
+
 
 ```{r cann_yngre}
 
@@ -67,11 +68,12 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
+
 
 Kjønn forkjell vises i figurene nedenfor.
 
@@ -84,7 +86,7 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk blant menn i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk blant menn i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -100,13 +102,17 @@ make_hist(
   n = "n_level",
   group = "grp",
   type = "line",
-  title = "Andel cannabis bruk blant kvinner i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk blant kvinner i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
 
-## Bruk av cannabis siste 12 måneder
+## Cannabisbruk siste 12 måneder i aldersgruppen 16–34 år: Trender fra 2012 til 2025
+
+::: {.panel-tabset}
+
+### Gjennonsnitt
 
 ```{r cann_lyp}
 
@@ -115,44 +121,96 @@ make_hist(
   x = "year",
   y = "percentage",
   n = "n_level",
-  group = "agecat3",
+  group = "agecat",
   type = "line",
-  title = "Andel cannabis bruk siste 12 måneder i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk siste 12 måneder i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 ```
 
+### Glidende gjennonsnitt 
+
+```{r cann_yngre2}
+
+make_hist(
+  d = cannLypYng2,
+  x = "year",
+  y = "percentage_roll",
+  group = "agecat",
+  type = "line",
+  title = "3-årig glidende gjennomsnitt cannabisbruk siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Gjennomsnitt
 
 ```{r cann_lyp_menn}
-
 make_hist(
   d = cannLypYngMenn,
   x = "year",
   y = "percentage",
   n = "n_level",
-  group = "agecat3",
+  group = "agecat",
   type = "line",
-  title = "Andel cannabis bruk blant menn siste 12 måneder i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk blant menn siste 12 måneder i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 ```
 
+### Glidende gjennomsnitt 
+
+```{r cann_lyp_menn2}
+make_hist(
+  d = cannLypYngMenn2,
+  x = "year",
+  y = "percentage_roll",
+  group = "agecat",
+  type = "line",
+  title = "3-årig glidende gjennomsnitt cannabisbruk blant menn siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Gjennomsnitt
 
 ```{r cann_lyp_kvinner}
-
 make_hist(
   d = cannLypYngKvinner,
   x = "year",
   y = "percentage",
   n = "n_level",
-  group = "agecat3",
+  group = "agecat",
   type = "line",
-  title = "Andel cannabis bruk blant kvinner siste 12 måneder i alderen 16-34, 2012-2025 ",
+  title = "Andel cannabisbruk blant kvinner siste 12 måneder i alderen 16-34, 2012-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 ```
 
+### Glidende gjennomsnitt 
 
+```{r cann_lyp_kvinner2}
+make_hist(
+  d = cannLypYngKvinner2,
+  x = "year",
+  y = "percentage_roll",
+  group = "agecat",
+  type = "line",
+  title = "3-årig glidende gjennomsnitt cannabisbruk blant kvinner siste 12 måneder i alderen 16-34, 2012-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+```
+
+:::
 
 
 

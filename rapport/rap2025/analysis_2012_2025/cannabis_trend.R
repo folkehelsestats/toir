@@ -62,29 +62,106 @@ cannYngKvinner <- cannabis_trend(DTT[alder <= 34 & kjonn == 2]) #16-34 og kvinne
 ## Age regoups for those below 35
 ## ---------------------------------
 
-dty <- group_age(DTT[alder <= 34], var = "alder",
-                breaks = c(16, 20, 25, 30, 34),
-                labels = c("16-20", "21-25", "26-30", "31-34"),
-                new_var = "agecat3",
-                right = TRUE)
+## dty <- group_age(DTT[alder <= 34], var = "alder",
+##                 breaks = c(16, 20, 25, 30, 34),
+##                 labels = c("16-20", "21-25", "26-30", "31-34"),
+##                 new_var = "agecat3",
+##                 right = TRUE)
+
+dty <- DTT[alder <= 34]
 
 cannLypYng <- calc_percentage_ci(dt = dty,
                                 outcome_var = "lyp_cannabis",
                                 weight_var = "vekt",
                                 denominator_var = "canpop",
-                                group_vars = c("year", "agecat3"),
+                                group_vars = c("year", "agecat"),
                                 na_treatment = "as_zero",
                                 round_digits = 1,
                                 include_diagnostics = TRUE)
 
-data.table::setorder(cannLypYng, year, agecat3)
+data.table::setorder(cannLypYng, year, agecat)
+
+
+cannLypYngMenn <- calc_percentage_ci(dt = dty[kjonn == 1],
+                                    outcome_var = "lyp_cannabis",
+                                    weight_var = "vekt",
+                                    denominator_var = "canpop",
+                                    group_vars = c("year", "agecat"),
+                                    na_treatment = "as_zero",
+                                    round_digits = 1,
+                                    include_diagnostics = TRUE)
+
+data.table::setorder(cannLypYngMenn, year, agecat)
+
+cannLypYngKvinner <- calc_percentage_ci(dt = dty[kjonn == 2],
+                                    outcome_var = "lyp_cannabis",
+                                    weight_var = "vekt",
+                                    denominator_var = "canpop",
+                                    group_vars = c("year", "agecat"),
+                                    na_treatment = "as_zero",
+                                    round_digits = 1,
+                                    include_diagnostics = TRUE)
+
+data.table::setorder(cannLypYngKvinner, year, agecat)
+
+## Rolling means
+## ------------------
+
+cannLypYng2 <- calc_percentage_ci2(dt = dty,
+                                outcome_var = "lyp_cannabis",
+                                weight_var = "vekt",
+                                denominator_var = "canpop",
+                                group_vars = c("year", "agecat"),
+                                na_treatment = "as_zero",
+                                round_digits = 1,
+                                include_diagnostics = TRUE,
+                                rolling_by = "year",
+                                rolling_n = 3, # 3-year window
+                                rolling_align = "right", # trailing
+                                rolling_method = "sum_then_ratio" # recommended
+                                )
+
+
+data.table::setorder(cannLypYng2, year, agecat)
+
+cannLypYngMenn2 <- calc_percentage_ci2(dt = dty[kjonn == 1],
+                                    outcome_var = "lyp_cannabis",
+                                    weight_var = "vekt",
+                                    denominator_var = "canpop",
+                                    group_vars = c("year", "agecat"),
+                                    na_treatment = "as_zero",
+                                    round_digits = 1,
+                                    include_diagnostics = TRUE,
+                                    rolling_by = "year",
+                                    rolling_n = 3,
+                                    rolling_align = "right", # trailing
+                                    rolling_method = "sum_then_ratio" # recommended
+                                    )
+
+data.table::setorder(cannLypYngMenn2, year, agecat)
+
+cannLypYngKvinner2 <- calc_percentage_ci2(dt = dty[kjonn == 2],
+                                    outcome_var = "lyp_cannabis",
+                                    weight_var = "vekt",
+                                    denominator_var = "canpop",
+                                    group_vars = c("year", "agecat"),
+                                    na_treatment = "as_zero",
+                                    round_digits = 1,
+                                    include_diagnostics = TRUE,
+                                    rolling_by = "year",
+                                    rolling_n = 3,
+                                    rolling_align = "right", # trailing
+                                    rolling_method = "sum_then_ratio" # recommended
+                                    )
+
+data.table::setorder(cannLypYngKvinner2, year, agecat)
 
 ## ## rolling means
 ## cannLypYng2 <- calc_percentage_ci2(dt = dty,
 ##                                  outcome_var = "lyp_cannabis",
 ##                                  weight_var = NULL,
 ##                                  denominator_var = "canpop",
-##                                  group_vars = c("year", "agecat3"),
+##                                  group_vars = c("year", "agecat"),
 ##                                  na_treatment = "as_zero",
 ##                                  round_digits = 1,
 ##                                  rolling_by  = "year",
@@ -92,25 +169,3 @@ data.table::setorder(cannLypYng, year, agecat3)
 ##                                  rolling_align = "right",            # trailing
 ##                                  rolling_method = "sum_then_ratio",   # recommended
 ##                                  include_diagnostics = TRUE)
-
-cannLypYngMenn <- calc_percentage_ci(dt = dty[kjonn == 1],
-                                    outcome_var = "lyp_cannabis",
-                                    weight_var = "vekt",
-                                    denominator_var = "canpop",
-                                    group_vars = c("year", "agecat3"),
-                                    na_treatment = "as_zero",
-                                    round_digits = 1,
-                                    include_diagnostics = TRUE)
-
-data.table::setorder(cannLypYngMenn, year, agecat3)
-
-cannLypYngKvinner <- calc_percentage_ci(dt = dty[kjonn == 2],
-                                    outcome_var = "lyp_cannabis",
-                                    weight_var = "vekt",
-                                    denominator_var = "canpop",
-                                    group_vars = c("year", "agecat3"),
-                                    na_treatment = "as_zero",
-                                    round_digits = 1,
-                                    include_diagnostics = TRUE)
-
-data.table::setorder(cannLypYngKvinner, year, agecat3)
