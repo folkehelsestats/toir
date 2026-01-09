@@ -461,3 +461,130 @@ calc_percentage_ci_auto <- function(dt, outcome_var, group_vars, weight_var = NU
 #
 # print(result1)  # Overall percentage with CI
 # print(result3)  # By age group with CI
+
+
+### ================================================================
+
+#' Calculate percentage + CI and append effective sample size (n_eff)
+#'
+#' A small wrapper around calc_percentage_ci() that also returns n_eff per group.
+#' - Weighted: n_eff = (sum(w)^2) / sum(w^2), using the same NA handling as the CI.
+#' - Unweighted: n_eff = number of valid outcome observations used.
+#'
+#' @param dt data.table
+#' @param outcome_var character, binary outcome (0/1 or logical)
+#' @param group_vars character vector, optional grouping variables
+#' @param weight_var character, optional weight variable
+#' @param denominator_var character, optional denominator variable
+#' @param denominator_value numeric, value of denominator_var to include (default 1)
+#' @param na_treatment "exclude" (default) or "as_zero"
+#' @param ... forwarded to calc_percentage_ci()
+#' @return data.table: original result with an extra column `n_eff`
+#' @examples
+#' calc_percentage_ci_with_neff(dt, "ltp_cannabis", "agecat",
+#'                              weight_var = "VEKT", denominator_var = "canpop")
+calc_percentage_ci_with_neff <- function(dt,
+                                         outcome_var,
+                                         group_vars = NULL,
+                                         weight_var = NULL,
+                                         denominator_var = NULL,
+                                         denominator_value = 1,
+                                         na_treatment = "exclude",
+                                         ...) {
+
+  stopifnot(data.table::is.data.table(dt))
+
+  # First, get your standard output (percentage + CI)
+  res <- calc_percentage_ci(
+    dt = dt,
+    outcome_var = outcome_var,
+    group_vars = group_vars,
+    weight_var = weight_var,
+    denominator_var = denominator_var,
+    denominator_value = denominator_value,
+    na_treatment = na_treatment,
+    ...
+  )
+
+  # Build a working subset that mirrors the denominator population used above
+  dt_work <- data.table::copy(dt)
+
+  # Apply denominator filter if specified
+  if (!is.null(denominator_var)) {
+    dt_work <- dt_work[get(denominator_var) == denominator_value]
+  }
+
+  # Construct the outcome indicator consistent with na_treatment
+  if (na_treatment == "exclude") {
+    dt_work[, outcome_indicator :=
+              ifelse(is.na(get(outcome_var)), NA,
+                     ifelse(get(outcome_var) == 1, 1, 0))]
+    valid_idx <- !is.na(dt_work$outcome_indicator)
+  } else { # na_treatment == "as_zero"
+    dt_work[, outcome_indicator := ifelse(get(outcome_var) == 1, 1, 0)]
+    dt_work[is.na(outcome_indicator), outcome_indicator := 0]
+    valid_idx <- rep(TRUE, nrow(dt_work))  # All rows contribute
+  }
+
+  # Aggregate sums required for n_eff
+  if (!is.null(weight_var)) {
+    # Weighted path: sum(w) and sum(w^2) using the same valid rows
+    if (is.null(group_vars)) {
+      agg <- dt_work[valid_idx, .(
+        sum_weights         = sum(get(weight_var)),
+        sum_weights_squared = sum(get(weight_var)^2)
+      )]
+    } else {
+      agg <- dt_work[valid_idx, .(
+        sum_weights         = sum(get(weight_var)),
+        sum_weights_squared = sum(get(weight_var)^2)
+      ), by = group_vars]
+    }
+    # Effective n
+    agg[, n_eff := (sum_weights^2) / sum_weights_squared]
+
+    # Keep only the join keys and n_eff
+    keep_cols <- if (is.null(group_vars)) "n_eff" else c(group_vars, "n_eff")
+    agg <- agg[, ..keep_cols]
+
+    # Merge onto result
+    if (is.null(group_vars)) {
+      res[, n_eff := agg$n_eff]
+    } else {
+      res <- data.table::merge(res, agg, by = group_vars, all.x = TRUE)
+    }
+
+  } else {
+    # Unweighted path: n_eff = count of valid outcome rows used in the denominator
+    if (is.null(group_vars)) {
+      res[, n_eff := sum(valid_idx)]
+    } else {
+      agg <- dt_work[, .(valid_idx = valid_idx)]
+      for (g in group_vars) agg[, (g) := dt_work[[g]]]
+      agg <- agg[, .(n_eff = sum(valid_idx)), by = group_vars]
+      res <- data.table::merge(res, agg, by = group_vars, all.x = TRUE)
+    }
+  }
+
+  return(res[])
+}
+
+## Example usage:
+
+## # Overall, weighted, with n_eff
+## res_overall <- calc_percentage_ci_with_neff(
+##   dt, outcome_var = "ltp_cannabis",
+##   weight_var = "VEKT", denominator_var = "canpop"
+## )
+
+## # By age group, weighted, with n_eff
+## res_by_age <- calc_percentage_ci_with_neff(
+##   dt, outcome_var = "ltp_cannabis", group_vars = "agecat",
+##   weight_var = "VEKT", denominator_var = "canpop"
+## )
+
+## # Unweighted variant still returns n_eff (valid n used)
+## res_unw <- calc_percentage_ci_with_neff(
+##   dt, outcome_var = "ltp_cannabis", group_vars = "agecat",
+##   denominator_var = "canpop", na_treatment = "exclude"
+## )
