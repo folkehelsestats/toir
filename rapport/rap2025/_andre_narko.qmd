@@ -1,4 +1,4 @@
-# Aldersgrupper 16-64 år: Trender fra 2013 til 2025 
+## Bruk noen gang av andre sentralstimulerende stoffer 16-64 år: Trender fra 2013 til 2025 
 
 
 ```{r nark_alle}
@@ -9,14 +9,220 @@ source(file.path(pathToir, "analysis_2013_2025/andre_narko.R"))
 ## cannYng - 16 - 34
 
 make_hist(
-  d = cannAll,
+  d = ltpData,
   x = "year",
   y = "percentage",
   n = "n_level",
-  ylim = c(0,50),
-  group = "grp",
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
   type = "line",
-  title = "Andel cannabisbruk i alderen 16-64, 2013-2025 ",
+  title = "Andel har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r nark_alle_menn}
+
+make_hist(
+  d = ltpDataMenn,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel menn har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r nark_alle_kvinner}
+
+make_hist(
+  d = ltpDataKvinner,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel kvinner har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+## Bruk av andre sentralstimulerende stoffer 16-34 år: Trender fra 2013 til 2025 
+
+
+```{r nark_alle_yng}
+
+make_hist(
+  d = ltpDataYng,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel har noen gang brukt andre sentralstimulerende stoffer i alderen 16-34, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r ltp_yng_menn}
+
+make_hist(
+  d = ltpDataYngMenn,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel menn har noen gang brukt andre sentralstimulerende stoffer i alderen 16-34, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r ltp_yng_kvinner}
+
+make_hist(
+  d = ltpDataYngKvinner,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel kvinner har noen gang brukt andre sentralstimulerende stoffer i alderen 16-34, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+## Bruk av andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64 år: Trender fra 2013 til 2025 
+
+```{r lyp_alle}
+
+make_hist(
+  d = lypData,
+  x = "year",
+  y = "percentage",
+  n = NULL,
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r lyp_alle_menn}
+
+make_hist(
+  d = lypDataMenn,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel menn har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r lyp_alle_kvinner}
+
+make_hist(
+  d = lypDataKvinner,
+  x = "year",
+  y = "percentage",
+  n = NULL,
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel kvinner har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+## Bruk av andre sentralstimulerende stoffer siste 12 måneder i alderen 16-34 år: Trender fra 2013 til 2025 
+
+
+```{r lyp_alle_yng}
+
+make_hist(
+  d = lypDataYng,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-34, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r lyp_yng_menn}
+
+make_hist(
+  d = lypDataYngMenn,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel menn har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-34, 2013-2025 ",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+```{r lyp_yng_kvinner}
+
+make_hist(
+  d = lypDataYngKvinner,
+  x = "year",
+  y = "percentage",
+  n = NULL, 
+  yint = 2,
+  ylim = c(0,15),
+  group = "substance",
+  type = "line",
+  title = "Andel kvinner har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-34, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 

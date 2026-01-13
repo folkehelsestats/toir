@@ -4,6 +4,7 @@ format:
   html:
     toc: true
     toc-location: left
+    fig-cap-location: bottom
 execute:
  echo: false
 
@@ -21,13 +22,14 @@ source(file.path(pathToir, "setup.R"))
 {{< include _cannabis.qmd >}}
   
 # Sentralstimulerende stoffer
-# Lifetime prevalence
-  - Kjønn
-  - Alder 16-64, 16-34 
-# Last 12 months prevalence
-# Last 30 days prevalence 
+
+{{< include _andre_narko.qmd >}}
+
+
+# Kombinasjon alkohol og rusmidler 
+
 # Status idag
-# Bruk over tid (utvikling)
+
 # ulike grupper
   - Sosioøkonomisk
   - Utdanning
