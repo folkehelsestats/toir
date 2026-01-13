@@ -3,9 +3,9 @@
 ## Cannabis trend 2012 - 2025
 ## ----------------------------------
 
-DTT[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
-DTT[can6 == 1, lyp_cannabis := 1] # Last year prevalence
-DTT[can10 == 1, lmp_cannabis := 1] # Last month prevalence
+## DTT[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
+## DTT[can6 == 1, lyp_cannabis := 1] # Last year prevalence
+## DTT[can10 == 1, lmp_cannabis := 1] # Last month prevalence
 
 cannabis_trend <- function(data, group = "year") {
     canLtpAllHist <- calc_percentage_ci(

@@ -1,22 +1,22 @@
 ## Andre stoffer og narkotika
 ## ---------------------------------
 
-DTT[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
-DTT[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-DTT[ans2_c == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
-DTT[ans2_e == 1, ltp_heroin := 1] #Heroin
-DTT[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
-DTT[ans2_g == 1, ltp_lsd := 1] #LSD
-DTT[ans2_h == 1, ltp_other := 1] #Andre stoffer noen gang
+## DTT[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
+## DTT[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
+## DTT[ans2_c == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+## DTT[ans2_e == 1, ltp_heroin := 1] #Heroin
+## DTT[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
+## DTT[ans2_g == 1, ltp_lsd := 1] #LSD
+## DTT[ans2_h == 1, ltp_other := 1] #Andre stoffer noen gang
 
 
-DTT[ans3_1 == 1, lyp_cocaine := 1]
-DTT[ans3_2 == 1, lyp_mdma := 1]
-DTT[ans3_3 == 1, lyp_amphetamines := 1]
-DTT[ans3_5 == 1, lyp_heroin := 1]
-DTT[ans3_6 == 1, lyp_ghb := 1]
-DTT[ans3_7 == 1, lyp_lsd := 1]
-DTT[ans3_8 == 1, lyp_other := 1]
+## DTT[ans3_1 == 1, lyp_cocaine := 1]
+## DTT[ans3_2 == 1, lyp_mdma := 1]
+## DTT[ans3_3 == 1, lyp_amphetamines := 1]
+## DTT[ans3_5 == 1, lyp_heroin := 1]
+## DTT[ans3_6 == 1, lyp_ghb := 1]
+## DTT[ans3_7 == 1, lyp_lsd := 1]
+## DTT[ans3_8 == 1, lyp_other := 1]
 
 
 
