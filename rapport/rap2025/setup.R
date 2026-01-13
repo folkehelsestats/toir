@@ -129,9 +129,14 @@ dtx <- ddt[, lapply(.SD, \(col) {
 })]
 
 
-DTT <- rbindlist(list(dtx[, ..commonCols], DT[, ..commonCols]), use.names = TRUE, fill = TRUE)
+DD <- rbindlist(list(dtx[, ..commonCols], DT[, ..commonCols]), use.names = TRUE, fill = TRUE)
 
-DTT <- create_population(DTT)
+DD <- create_population(DD)
+
+## Remove 2012 data for drug use questions due to error in filter from SSB
+## See email from Elin https://github.com/folkehelsestats/toa/blob/main/misc/missing-etc.org
+## ------------------------------
+DTT <- DD[year != 2012]
 
 ## Age groups
 ## -------------
