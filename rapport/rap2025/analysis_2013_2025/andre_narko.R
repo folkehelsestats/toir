@@ -54,32 +54,45 @@ narko_trend <- function(dt, outcome_var, group_vars = "year") {
   return(out)
 }
 
+
+
+calc_narko <- function(data, type = c("ltp", "lyp")) {
+  vars <- c("cocaine", "mdma", "amphetamines", "heroin", "ghb", "lsd", "other")
+
+  outcome_vars <- switch(type,
+      "ltp" = paste0("ltp_", vars),
+      "lyp" = paste0("lyp_", vars)
+  )
+
+  dx <- narko_trend(data, outcome_var = outcome_vars)
+  out <- rbindlist(dx, use.names = TRUE, fill = TRUE)
+  out[, grp := fifelse(type == "ltp", "Noen gang", "Siste 12 måneder")]
+  out[, substance := gsub(paste0(type, "_"), "", substance)]
+
+  return(out[])
+}
+
 ## Noen gang
 ## ---------------------------------
 
-ltp_narko <- narko_trend(DTT, outcome_var = c("ltp_cocaine",
-                                              "ltp_mdma",
-                                              "ltp_amphetamines",
-                                              "ltp_heroin",
-                                              "ltp_ghb",
-                                              "ltp_lsd",
-                                              "ltp_other"))
+ltpData <- calc_narko(DTT, type = "ltp")
+ltpDataMenn <- calc_narko(DTT[kjonn == 1], type = "ltp")
+ltpDataKvinner <- calc_narko(DTT[kjonn == 2], type = "ltp")
 
-ltpData <- rbindlist(ltp_narko, use.names = TRUE, fill = TRUE)
-ltpData[, grp := "Noen gang"]
-ltpData[, substance := gsub("ltp_", "", substance)]
+ltpDataYng <- calc_narko(DTT[agecat %in% c("16-24", "25-34")], type = "ltp")
+ltpDataYngMenn <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 1], type = "ltp")
+ltpDataYngKvinner <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 2], type = "ltp")
+
+
+
 
 ## Siste 12 måneder
 ## ---------------------------------
 
-lyp_narko <- narko_trend(DTT, outcome_var = c("lyp_cocaine",
-                                              "lyp_mdma",
-                                              "lyp_amphetamines",
-                                              "lyp_heroin",
-                                              "lyp_ghb",
-                                              "lyp_lsd",
-                                              "lyp_other"))
+lypData <- calc_narko(DTT, type = "lyp")
+lypDataMenn <- calc_narko(DTT[kjonn == 1], type = "lyp")
+lypDataKvinner <- calc_narko(DTT[kjonn == 2], type = "lyp")
 
-lypData <- rbindlist(lyp_narko, use.names = TRUE, fill = TRUE)
-lypData[, grp := "Siste 12 måneder"]
-lypData[, substance := gsub("lyp_", "", substance)]
+lypDataYng <- calc_narko(DTT[agecat %in% c("16-24", "25-34")], type = "lyp")
+lypDataYngMenn <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 1], type = "lyp")
+lypDataYngKvinner <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 2], type = "lyp")
