@@ -20,8 +20,14 @@ source(file.path(pathToir, "setup.R"))
 # Cannabis
 
 European Union Drugs Agency (EUDA) fremhever i sin rapport for 2025 at cannabis
-fortsatt utgjør det mest utbredte illegale rusmiddelet i Europa [EUDA 2025](https://www.euda.europa.eu/publications/european-drug-report/2025_en).
-Figuren nedenfor viser at blant personer i Norge i 2025 som har brukt cannabis noen ganger, utgjør cannabis nesten fire ganger så stor andel av bruken av illegale rusmidler i alderen 16–64 år. Data fra perioden 2013–2025 indikerer at andelen personer som har brukt cannabis minst én gang i løpet av livet økte gradvis frem til 2024, før den viste en nedgang i 2025.
+fortsatt utgjør det mest utbredte illegale rusmiddelet i Europa ([EUDA
+2025](https://www.euda.europa.eu/publications/european-drug-report/2025_en)).
+Figuren nedenfor viser at blant personer i Norge i 2025 som har brukt cannabis
+noen ganger, utgjør cannabis nesten fire ganger så stor andel av bruken av
+illegale rusmidler i alderen 16–64 år. Data fra 2013–2025 indikerer at andelen
+personer i alderen 16–64 år med erfaring fra illegale rusmidler som har brukt
+cannabis minst én gang, økte frem til 2024, men gikk ned i 2025. Figur X
+nedenfor illustrerer denne endringen.
 
 ```{r any}
 
