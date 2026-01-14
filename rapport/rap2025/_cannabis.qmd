@@ -153,6 +153,25 @@ make_hist(
 )
 ```
 
+### 5 år aldersintervall
+
+```{r can_lyp5}
+
+make_hist(
+  d = lypDX3$all,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabisbruk siste 12 måneder i alderen 16-34, 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+
+```
+
+
 ### Glidende gjennonsnitt 
 
 ```{r cann_yngre2}
@@ -193,6 +212,25 @@ make_hist(
 )
 ```
 
+### 5 år aldersintervall
+
+```{r can_lyp_menn5}
+
+make_hist(
+  d = lypDX3$menn,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabisbruk blant menn siste 12 måneder i alderen 16-34, 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+
+```
+
+
 ### Glidende gjennomsnitt 
 
 ```{r cann_lyp_menn2}
@@ -231,6 +269,25 @@ make_hist(
   caption = "Tall om illegale rusmidler"
 )
 ```
+
+
+### 5 år aldersintervall
+
+```{r can_lyp_kvinner5}
+
+make_hist(
+  d = lypDX3$kvinner,
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  group = "agecat3",
+  type = "line",
+  title = "Andel cannabisbruk blant kvinner siste 12 måneder i alderen 16-34, 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
 
 ### Glidende gjennomsnitt 
 
