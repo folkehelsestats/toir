@@ -6,7 +6,7 @@ source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/
 
 ## Functions
 ## --------------------------------------------------
-source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
+## source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c04329b2a562e053/R/utils.R") #is_encode() and is_delete_index()
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
 source(here::here("unodc","fun-weighted-unweighted-ci.R"))
@@ -17,7 +17,6 @@ source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/ru
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-graph.R")
 
 
-## Data 2012 - 2024
 ## --------------------------------------------------
 ddt <- readRDS(file.path(Rususdata, "rusus_2012_2024.rds"))
 
@@ -79,10 +78,10 @@ DT25 <- exclude_relevin(DT25)
 ## In 2025 the questions about drug use were asked to all ages 16-79.
 ## To be comparable with previous years, we only include ages 16-64.
 DT25 <- DT25[alder <= 64]
-DT25 <- group_age_standard(DT25,
-                           var = "alder",
-                           type = "rusund",
-                           new_var = "agecat")
+DT25 <- torr::group_age_standard(DT25,
+                                 var = "alder",
+                                 type = "rusund",
+                                 new_var = "agecat")
 
 ## Vekt is character - convert to numeric
 ## ----------------------------------
@@ -142,10 +141,10 @@ DTT <- DD[year != 2012]
 ## -------------
 ## only those 16-64 years old being asked about drug use 2012-2024
 DTT <- DTT[alder <= 64]
-DTT <- group_age_standard(DTT,
-                          var = "alder",
-                          type = "rusund",
-                          new_var = "agecat")
+DTT <- torr::group_age_standard(DTT,
+                                var = "alder",
+                                type = "rusund",
+                                new_var = "agecat")
 
 ## Illegal drugs variables
 ## ----------------------------------
