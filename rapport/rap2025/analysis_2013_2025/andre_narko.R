@@ -57,7 +57,8 @@ narko_trend <- function(dt, outcome_var, group_vars = "year") {
 
 
 calc_narko <- function(data, type = c("ltp", "lyp")) {
-  vars <- c("cocaine", "mdma", "amphetamines", "heroin", "ghb", "lsd", "other")
+  ## vars <- c("cocaine", "mdma", "amphetamines", "heroin", "ghb", "lsd", "other")
+  vars <- c("cocaine", "mdma", "amphetamines")
 
   outcome_vars <- switch(type,
       "ltp" = paste0("ltp_", vars),
@@ -79,9 +80,9 @@ ltpData <- calc_narko(DTT, type = "ltp")
 ltpDataMenn <- calc_narko(DTT[kjonn == 1], type = "ltp")
 ltpDataKvinner <- calc_narko(DTT[kjonn == 2], type = "ltp")
 
-ltpDataYng <- calc_narko(DTT[agecat %in% c("16-24", "25-34")], type = "ltp")
-ltpDataYngMenn <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 1], type = "ltp")
-ltpDataYngKvinner <- calc_narko(DTT[agecat %in% c("16-24", "25-34") & kjonn == 2], type = "ltp")
+ltpDataYng <- calc_narko(DTT[alder <= 30], type = "ltp")
+ltpDataYngMenn <- calc_narko(DTT[alder <= 30 & kjonn == 1], type = "ltp")
+ltpDataYngKvinner <- calc_narko(DTT[alder <= 30  & kjonn == 2], type = "ltp")
 
 
 
