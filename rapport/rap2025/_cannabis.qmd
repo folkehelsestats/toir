@@ -110,7 +110,6 @@ make_hist(
 
 ```{r}
 #| label: cann_yngre_kvinner 
-#| fig-cap: "Andel cannabisbruk blant kvinner i alderen 16-30, 2013-2025"
 
 make_hist(
   d = cannYngKvinner,
@@ -130,7 +129,6 @@ make_hist(
 
 ```{r}
 #| label: cann_lyp
-#| fig-cap: "Andel cannabisbruk siste 12 måneder i alderen 16-30, 2013-2025"
 
 make_hist(
   d = cannLypYng,
@@ -147,7 +145,6 @@ make_hist(
 
 ```{r}
 #| label: cann_lyp_menn
-#| fig-cap: "Andel cannabisbruk blant menn siste 12 måneder i alderen 16-30, 2013-2025"
 
 make_hist(
   d = cannLypYngMenn,
@@ -164,7 +161,6 @@ make_hist(
 
 ```{r}
 #| label: cann_lyp_kvinner
-#| fig-cap: "Andel cannabisbruk blant kvinner siste 12 måneder i alderen 16-30, 2013-2025"
 
 make_hist(
   d = cannLypYngKvinner,
