@@ -60,7 +60,7 @@ make_hist(
 
 ```
 
-## Cannabisbruk i aldersgruppen 16–34 år: Trender fra 2013 til 2025
+## Cannabisbruk i aldersgruppen 16–30 år: Trender fra 2013 til 2025
 
 ```{r cann_Yng_stat}
 
