@@ -13,6 +13,7 @@ execute:
 ```{r setup}
 #| warning: false
 
+library("torr")
 pathToir <- file.path(here::here("rapport", "rap2025"))
 source(file.path(pathToir, "setup.R"))
 ```
