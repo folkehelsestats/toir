@@ -59,6 +59,7 @@ narko_trend <- function(dt, outcome_var, group_vars = "year") {
 calc_narko <- function(data, type = c("ltp", "lyp")) {
   ## vars <- c("cocaine", "mdma", "amphetamines", "heroin", "ghb", "lsd", "other")
   vars <- c("cocaine", "mdma", "amphetamines")
+  norsk <- c("Kokain", "Ecstasy/MDMA", "Amfetaminer")
 
   outcome_vars <- switch(type,
       "ltp" = paste0("ltp_", vars),
@@ -69,6 +70,7 @@ calc_narko <- function(data, type = c("ltp", "lyp")) {
   out <- rbindlist(dx, use.names = TRUE, fill = TRUE)
   out[, grp := fifelse(type == "ltp", "Noen gang", "Siste 12 måneder")]
   out[, substance := gsub(paste0(type, "_"), "", substance)]
+  out[.(substance = vars, norsk = norsk), on = .(substance), substance := norsk] #rename substances to Norwegian names
 
   return(out[])
 }

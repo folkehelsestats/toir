@@ -2,6 +2,19 @@
 ## -------------------------
 
 vars01 <- c("cannabis", "cocaine", "mdma", "amphetamines", "heroin", "ghb", "lsd", "other")
+
+vars_no <- c(
+  "Cannabis",
+  "Kokain",
+  "Ecstasy/MDMA",
+  "Amfetaminer",
+  "Heroin",
+  "GHB",
+  "LSD",
+  "Annet"
+)
+
+
 outcome_var <- paste0("ltp_", vars01)
 
 out <- vector("list", length(outcome_var))
@@ -23,3 +36,5 @@ for (i in seq_along(outcome_var)) {
 anyDT <- rbindlist(out, use.names = TRUE, fill = TRUE)
 anyDT[, substance := gsub("ltp_", "", substance)]
 setorder(anyDT, -percentage)
+
+anyDT[.(substance = vars01, norwegian = vars_no), on = .(substance), substance := i.norwegian]
