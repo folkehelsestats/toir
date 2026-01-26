@@ -5,7 +5,7 @@ Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, bru
 ```{r}
 #| label: cann_alle
 
-source(file.path(pathToir, "analysis_2013_2025/cannabis_trend.R"))
+source(file.path(pathToir, "analysis_2013_2026/cannabis_trend.R"))
 ## output:
 ## cannAll - 16-64
 ## cannYng - 16-30

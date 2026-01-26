@@ -3,7 +3,7 @@
 
 ```{r nark_alle}
 
-source(file.path(pathToir, "analysis_2013_2025/andre_narko.R"))
+source(file.path(pathToir, "analysis_2013_2026/andre_narko.R"))
 ## output:
 ## cannAll - 16-64
 ## cannYng - 16 - 34

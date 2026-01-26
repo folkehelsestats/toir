@@ -37,7 +37,10 @@ setnames(DT25, names(DT25), tolower(names(DT25)))
 # clean labelled attributes coz it makes troubles
 DT25[, (names(DT25)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
 
-
+## =================================
+## OBS!! Etter møte med FHI 19.jan 2026 så er det avklart at de som svarte bruk
+## av Relevin skal IKKE ekskluderes likevel
+## ==================================
 ## Relevin exclusion
 ## ------------------
 ## OBS! Relevin ie. Ans2_d == 1 is not an illegal drug, but a fake drug
@@ -67,11 +70,11 @@ exclude_relevin <- function(dt) {
   return(data)
 }
 
-## Rusus 2012-2024 includes a fake drug "Relevin" to identify non-serious respondents.
-ddt <- exclude_relevin(ddt)
+## ## Rusus 2012-2024 includes a fake drug "Relevin" to identify non-serious respondents.
+## ddt <- exclude_relevin(ddt)
 
-## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
-DT25 <- exclude_relevin(DT25)
+## ## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
+## DT25 <- exclude_relevin(DT25)
 
 ## Age groups
 ## -------------

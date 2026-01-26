@@ -14,7 +14,7 @@ execute:
 #| warning: false
 
 library("torr")
-pathToir <- file.path(here::here("rapport", "rap2025"))
+pathToir <- file.path(here::here("reports", "pub-2026"))
 source(file.path(pathToir, "setup.R"))
 ```
 
@@ -32,7 +32,7 @@ nedenfor illustrerer denne endringen.
 
 ```{r any}
 
-source(file.path(pathToir, "analysis_2013_2025/any_narko.R"))
+source(file.path(pathToir, "analysis_2013_2026/any_narko.R"))
 
 make_hist(
   d = anyDT,
