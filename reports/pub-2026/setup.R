@@ -76,6 +76,7 @@ exclude_relevin <- function(dt) {
 ## ## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
 ## DT25 <- exclude_relevin(DT25)
 
+
 ## Age groups
 ## -------------
 ## In 2025 the questions about drug use were asked to all ages 16-79.
@@ -87,9 +88,10 @@ DT25 <- torr::group_age_standard(DT25,
                                  new_var = "agecat")
 
 ## Vekt is character - convert to numeric
+## Create standardized weight variable like previous years
 ## ----------------------------------
-DT25[, vekt := as.numeric(gsub(",", ".", vekt))]
-
+DT25[, vektnr := as.numeric(gsub(",", ".", vekt))]
+DT25[, vekt := vektnr / mean(vektnr, na.rm = TRUE)]
 
 ## ==================================
 ## Exclude all missing and not answered Can1 or Ans1
