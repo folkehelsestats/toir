@@ -47,9 +47,10 @@ make_hist(
 )
 ```
 
-Blant respondentene som har erfaring med cannabis, ble det innhentet informasjon
-om alder ved første gangs bruk. Median debutalder var 18 år. Laveste rapporterte
-debutalder var 11 år, og den høyeste var 59 år.
+Blant dem som har brukt cannabis, spurte vi om hvor gamle de var da de prøvde
+stoffet for første gang. De fleste hadde sin første erfaring i 18‑årsalderen.
+Den yngste som rapporterte debut, var 11 år, og den eldste var 59 år. I
+gjennomsnitt var debutalderen 20 år.
 
 ```{r alder}
 ## source(file.path(pathToir, "analysis_2026/debut-alder.R"))
