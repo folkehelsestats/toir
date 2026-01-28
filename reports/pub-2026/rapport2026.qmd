@@ -18,17 +18,12 @@ pathToir <- file.path(here::here("reports", "pub-2026"))
 source(file.path(pathToir, "setup.R"))
 ```
 
-# Cannabis
-
 European Union Drugs Agency (EUDA) fremhever i sin rapport for 2025 at cannabis
 fortsatt utgjør det mest utbredte illegale rusmiddelet i Europa ([EUDA
 2025](https://www.euda.europa.eu/publications/european-drug-report/2025_en)).
 Som figuren nedenfor viser, utgjør cannabis i 2025 mer enn tre ganger så stor
 andel av bruken av illegale rusmidler blant personer i Norge som har svart på spørsmålet om
-noen gang å ha brukt rusmidler (16–64 år). Data fra 2013–2025 indikerer at andelen
-personer i alderen 16–64 år med erfaring fra illegale rusmidler som har brukt
-cannabis minst én gang, økte frem til 2024, men gikk ned i 2025. Figur X
-nedenfor illustrerer denne endringen.
+noen gang å ha brukt rusmidler (16–64 år).
 
 ```{r any}
 
@@ -47,30 +42,7 @@ make_hist(
 )
 ```
 
-Blant dem som har brukt cannabis, spurte vi om hvor gamle de var da de prøvde
-stoffet for første gang. De fleste hadde sin første erfaring i 18‑årsalderen.
-Den yngste som rapporterte debut, var 11 år, og den eldste var 59 år. I
-gjennomsnitt var debutalderen 20 år.
-
-```{r alder}
-## source(file.path(pathToir, "analysis_2026/debut-alder.R"))
-
-debut <- DT[, .N, keyby = can3][!is.na(can3) & can3 != 99]
-
-## # Ensure data.table and sorted by x
-## data.table::setDT(debut2)
-debut <- debut[!is.na(can3) & !is.na(N)][order(can3)]
-debut[, pros := round(N/sum(N)*100, digits = 1)]
-
-# Basic line chart (continuous x)
-highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
-  highcharter::hc_title(text = "Debutalder for cannabis") %>%
-  highcharter::hc_xAxis(title = list(text = "Alder")) %>%
-  highcharter::hc_yAxis(title = list(text = "Prosent")) %>%
-  highcharter::hc_colors("#2C7FB8") %>%
-  highcharter::hc_tooltip(pointFormat = "Alder: {point.x}<br>Prosent: <b>{point.y}%</b>") %>%
-  highcharter::hc_exporting(enabled = TRUE)
-```
+# Cannabis
 
 {{< include _cannabis.qmd >}}
   

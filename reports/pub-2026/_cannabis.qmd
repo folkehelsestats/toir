@@ -1,6 +1,36 @@
+
+Blant dem som har brukt cannabis, spurte vi om hvor gamle de var da de prøvde
+stoffet for første gang. De fleste hadde sin første erfaring i 18‑årsalderen.
+Den yngste som rapporterte debut, var 11 år, og den eldste var 59 år. I
+gjennomsnitt var debutalderen 20 år.
+
+```{r alder}
+## source(file.path(pathToir, "analysis_2026/debut-alder.R"))
+
+debut <- DT[, .N, keyby = can3][!is.na(can3) & can3 != 99]
+
+## # Ensure data.table and sorted by x
+## data.table::setDT(debut2)
+debut <- debut[!is.na(can3) & !is.na(N)][order(can3)]
+debut[, pros := round(N/sum(N)*100, digits = 1)]
+
+# Basic line chart (continuous x)
+highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
+  highcharter::hc_title(text = "Debutalder for cannabis") %>%
+  highcharter::hc_xAxis(title = list(text = "Alder")) %>%
+  highcharter::hc_yAxis(title = list(text = "Prosent")) %>%
+  highcharter::hc_colors("#2C7FB8") %>%
+  highcharter::hc_tooltip(pointFormat = "Alder: {point.x}<br>Prosent: <b>{point.y}%</b>") %>%
+  highcharter::hc_exporting(enabled = TRUE)
+```
+
 ## Cannabisbruk i aldersgruppen 16–64 år: Trender fra 2013 til 2025
 
-Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis, brukte de siste 12 måneder eller siste 4 uker i perioden 2013 til 2025.
+Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis,
+brukte de siste 12 måneder eller siste 4 uker i perioden 2013 til 2025. Data fra
+2013–2025 indikerer at andelen personer i alderen 16–64 år med erfaring fra
+illegale rusmidler som har brukt cannabis minst én gang, økte frem til 2024, men
+gikk ned i 2025. Figuren nedenfor illustrerer denne endringen.
 
 ```{r}
 #| label: cann_alle
@@ -55,6 +85,30 @@ make_hist(
   group = "grp",
   type = "line",
   title = "Andel cannabisbruk blant kvinner i alderen 16-64, 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+## Cannabis bruk og kjønnsforskjeller i alderen 16-64 i 2025 
+
+Figuren viser at andelen menn som har brukt cannabis er gjennomgående høyere enn
+andelen kvinner – både for bruk noen gang, bruk siste 12 måneder og bruk siste 4
+uker i 2025.
+
+```{r}
+#| label: kjonn_all
+
+source(file.path(pathToir, "analysis_2026/kjonn.R"))
+
+make_hist(
+  d = canDT,
+  x = "periode",
+  y = "percentage",
+  n = "n_level",
+  group = "kjonnSTR",
+  type = "column",
+  title = "Andel som noen gang har brukt cannabis i alderen 16-64 år i 2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -173,6 +227,42 @@ make_hist(
   caption = "Tall om illegale rusmidler"
 )
 ```
+
+## Cannabisbruk og kjønnsforskjeller i alderen 16-30 i 2025
+
+På samme måte som i aldersgruppen 16–64 år, viser figuren at menn mellom 16 og
+30 år oftere har brukt cannabis enn kvinner. Dette gjelder både for bruk noen
+gang, bruk det siste året og bruk de siste fire ukene i 2025. Kjønnsforskjellen
+er likevel noe mindre blant yngre voksne enn i den totale aldersgruppen 16–64
+år.
+
+```{r}
+#| label: kjonn_yng
+
+## source(file.path(pathToir, "analysis_2026/kjonn.R"))
+
+make_hist(
+  d = canDTYng,
+  x = "periode",
+  y = "percentage",
+  n = "n_level",
+  group = "kjonnSTR",
+  type = "column",
+  title = "Andel som noen gang har brukt cannabis i alderen 16-30 år i 2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 

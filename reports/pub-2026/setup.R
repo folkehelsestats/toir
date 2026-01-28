@@ -151,6 +151,10 @@ DTT <- torr::group_age_standard(DTT,
                                 type = "rusund",
                                 new_var = "agecat")
 
+## Kjonn variable
+## -------------
+DTT[, kjonnSTR := factor(kjonn, levels = c(1, 2), labels = c("Menn", "Kvinner"))]
+
 ## Illegal drugs variables
 ## ----------------------------------
 DTT[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
