@@ -108,7 +108,7 @@ make_hist(
   n = "n_level",
   group = "kjonnSTR",
   type = "column",
-  title = "Andel som noen gang har brukt cannabis i alderen 16-64 år i 2025",
+  title = "Andel som har brukt cannabis i alderen 16-64 år i 2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -248,7 +248,7 @@ make_hist(
   n = "n_level",
   group = "kjonnSTR",
   type = "column",
-  title = "Andel som noen gang har brukt cannabis i alderen 16-30 år i 2025",
+  title = "Andel som har brukt cannabis i alderen 16-30 år i 2025",
   caption = "Tall om illegale rusmidler"
 )
 
