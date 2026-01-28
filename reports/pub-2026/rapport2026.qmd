@@ -47,6 +47,30 @@ make_hist(
 )
 ```
 
+Blant respondentene som har erfaring med cannabis, ble det innhentet informasjon
+om alder ved første gangs bruk. Median debutalder var 18 år. Laveste rapporterte
+debutalder var 11 år, og den høyeste var 59 år.
+
+```{r alder}
+## source(file.path(pathToir, "analysis_2026/debut-alder.R"))
+
+debut <- DT[, .N, keyby = can3][!is.na(can3) & can3 != 99]
+
+## # Ensure data.table and sorted by x
+## data.table::setDT(debut2)
+debut <- debut[!is.na(can3) & !is.na(N)][order(can3)]
+debut[, pros := round(N/sum(N)*100, digits = 1)]
+
+# Basic line chart (continuous x)
+highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
+  highcharter::hc_title(text = "Debutalder for cannabis") %>%
+  highcharter::hc_xAxis(title = list(text = "Alder")) %>%
+  highcharter::hc_yAxis(title = list(text = "Prosent")) %>%
+  highcharter::hc_colors("#2C7FB8") %>%
+  highcharter::hc_tooltip(pointFormat = "Alder: {point.x}<br>Prosent: <b>{point.y}%</b>") %>%
+  highcharter::hc_exporting(enabled = TRUE)
+```
+
 {{< include _cannabis.qmd >}}
   
 # Sentralstimulerende stoffer
