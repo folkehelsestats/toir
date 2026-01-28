@@ -112,7 +112,7 @@ create_population <- function(dt) {
 DT <- create_population(DT25)
 
 ## Free text - Other types
-## Bør sjekke tekst fra Ans2sps
+## OBS!! Bør sjekke tekst fra Ans2sps
 DT[, ans2sps := is_encode(ans2sps)]
 DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
 
