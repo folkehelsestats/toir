@@ -1,19 +1,31 @@
+## Debut alder 
 
-Blant dem som har brukt cannabis, spurte vi om hvor gamle de var da de prøvde
-stoffet for første gang. De fleste hadde sin første erfaring i 18‑årsalderen.
-Den yngste som rapporterte debut, var 11 år, og den eldste var 59 år. I
-gjennomsnitt var debutalderen 20 år.
+```{r debut-calc}
 
-```{r alder}
-## source(file.path(pathToir, "analysis_2026/debut-alder.R"))
+stats <- c("mean", "median", "min", "max")
 
-debut <- DT[, .N, keyby = can3][!is.na(can3) & can3 != 99]
+debutAge <- DT25[
+  !can3 %in% 98:99,
+  lapply(stats, \(f) match.fun(f)(can3, na.rm = TRUE))
+]
+
+data.table::setnames(debutAge, stats)
+
+
+debut <- DT25[, .N, keyby = can3][!is.na(can3) & can3 != 99]
 
 ## # Ensure data.table and sorted by x
 ## data.table::setDT(debut2)
 debut <- debut[!is.na(can3) & !is.na(N)][order(can3)]
 debut[, pros := round(N/sum(N)*100, digits = 1)]
+```
 
+Blant dem som har brukt cannabis i 2025, spurte vi om hvor gamle de var da de prøvde
+stoffet for første gang. De fleste hadde sin første erfaring i `r debutAge[["median"]]`‑årsalderen.
+Den yngste som rapporterte debut, var `r debutAge[["min"]]` år, og den eldste var `r debutAge[["max"]]` år. I
+gjennomsnitt var debutalderen `r round(debutAge[["mean"]], digits = 0)` år.
+
+```{r debut-fig}
 # Basic line chart (continuous x)
 highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
   highcharter::hc_title(text = "Debutalder for cannabis") %>%
