@@ -20,7 +20,7 @@
 
 
 
-narko_trend <- function(dt, outcome_var, group_vars = "year") {
+narko_trend <- function(dt, outcome_var, denominator_var, group_vars = "year") {
 
   if (length(outcome_var) != 1) {
     out <- vector("list", length(outcome_var))
@@ -30,7 +30,7 @@ narko_trend <- function(dt, outcome_var, group_vars = "year") {
         dt = dt,
         outcome_var = outcome_var[i],
         weight_var = "vekt",
-        denominator_var = "narkpop",
+        denominator_var = denominator_var[i],
         group_vars = group_vars,
         na_treatment = "as_zero",
         round_digits = 1,
@@ -44,7 +44,7 @@ narko_trend <- function(dt, outcome_var, group_vars = "year") {
     out <- calc_percentage_ci(dt = dt,
                               outcome_var = outcome_var,
                               weight_var = "vekt",
-                              denominator_var = "narkpop",
+                              denominator_var = denominator_var,
                               group_vars = c("year"),
                               na_treatment = "as_zero",
                               round_digits = 1,
@@ -66,7 +66,12 @@ calc_narko <- function(data, type = c("ltp", "lyp")) {
       "lyp" = paste0("lyp_", vars)
   )
 
-  dx <- narko_trend(data, outcome_var = outcome_vars)
+  denoNavn <- c("kokain", "mdma", "amfetaminer")
+  deno_vars <- switch(type,
+                      "ltp" = paste0("ltpPop_", denoNavn),
+                      "lyp" = paste0("lypPop_", denoNavn))
+
+  dx <- narko_trend(data, outcome_var = outcome_vars, denominator_var = deno_vars)
   out <- rbindlist(dx, use.names = TRUE, fill = TRUE)
   out[, grp := fifelse(type == "ltp", "Noen gang", "Siste 12 måneder")]
   out[, substance := gsub(paste0(type, "_"), "", substance)]
@@ -87,8 +92,6 @@ ltpDataYngMenn <- calc_narko(DTT[alder <= 30 & kjonn == 1], type = "ltp")
 ltpDataYngKvinner <- calc_narko(DTT[alder <= 30  & kjonn == 2], type = "ltp")
 
 
-
-
 ## Siste 12 måneder
 ## ---------------------------------
 
@@ -99,3 +102,5 @@ lypDataKvinner <- calc_narko(DTT[kjonn == 2], type = "lyp")
 lypDataYng <- calc_narko(DTT[alder <= 30], type = "lyp")
 lypDataYngMenn <- calc_narko(DTT[alder <= 30 & kjonn == 1], type = "lyp")
 lypDataYngKvinner <- calc_narko(DTT[alder <= 30 & kjonn == 2], type = "lyp")
+
+
