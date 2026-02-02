@@ -15,7 +15,7 @@ canLtp <- calc_percentage_ci(
   outcome_var = "ltp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "ltpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE
@@ -26,7 +26,7 @@ canLyp <- calc_percentage_ci(
   outcome_var = "lyp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "lypPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE
@@ -37,7 +37,7 @@ canLmp <- calc_percentage_ci(
   outcome_var = "lmp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "lmpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE
@@ -58,7 +58,7 @@ canLtpYng <- calc_percentage_ci(
   outcome_var = "ltp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "ltpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE
@@ -69,7 +69,7 @@ canLypYng <- calc_percentage_ci(
   outcome_var = "lyp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "lypPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE
@@ -80,7 +80,7 @@ canLmpYng <- calc_percentage_ci(
   outcome_var = "lmp_cannabis",
   group_vars = "kjonnSTR",
   weight_var = "vekt",
-  denominator_var = "canpop",
+  denominator_var = "lmpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
   include_diagnostics = TRUE

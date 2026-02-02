@@ -117,13 +117,19 @@ make_hist(
 ## Cannabisbruk i aldersgruppen 16–30 år: Trender fra 2013 til 2025
 
 ```{r cann_Yng_stat}
-
+## source(file.path(pathToir, "analysis_2013_2026/cannabis_trend.R"))
 canMax <- cannYng[grp == "Noen gang", max(percentage)]
 canMin <- cannYng[grp == "Noen gang", min(percentage)]
 
 ```
 
-Figuren nedenfor viser trender i cannabisbruk blant yngre i alderen 16-30 år fordelt på tre kategorier: andelen som noen gang har brukt cannabis, andelen som har brukt cannabis siste 12 måneder, og andelen som har brukt cannabis siste 4 uker. Andelen av yngre som har noen gang brukt cannabis ligger mellom `r round(canMin, 0)` til `r round(canMax, 0)`  prosent. Figuren viser at det har mindre variasjoner fra år til år i selvrapportert cannabisbruk blant yngre, både når det gjelder noen ganger har brukt og mer nylig bruk. 
+Figuren nedenfor viser trender i cannabisbruk blant yngre i alderen 16-30 år
+fordelt på tre kategorier: andelen som noen gang har brukt cannabis, andelen som
+har brukt cannabis siste 12 måneder, og andelen som har brukt cannabis siste 4
+uker. Andelen av yngre som har noen gang brukt cannabis ligger mellom `r
+round(canMin, 1)` til `r round(canMax, 1)` prosent. Figuren viser at det har
+mindre variasjoner fra år til år i selvrapportert cannabisbruk blant yngre, både
+når det gjelder noen ganger har brukt og mer nylig bruk.
 
 
 ```{r}

@@ -20,6 +20,11 @@ source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/ru
 ## --------------------------------------------------
 ddt <- readRDS(file.path(Rususdata, "rusus_2012_2024.rds"))
 
+## Remove 2012 data for drug use questions due to error in filter from SSB
+## See email from Elin https://github.com/folkehelsestats/toa/blob/main/misc/missing-etc.org
+## ------------------------------
+ddt <- ddt[year != 2012]
+
 ## ## Data 2024
 ## ## --------------------------------------------------
 ## DT24 <- readRDS(file.path(Rususdata, "Rusus_2024","rus2024.rds"))
@@ -93,9 +98,46 @@ DT25 <- torr::group_age_standard(DT25,
 DT25[, vektnr := as.numeric(gsub(",", ".", vekt))]
 DT25[, vekt := vektnr / mean(vektnr, na.rm = TRUE)]
 
+
+## Free text - Other types
+## OBS!! Bør sjekke tekst fra Ans2sps
+DT25[, ans2sps := is_encode(ans2sps)]
+DT25[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
+
+DT25[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+
 ## ==================================
-## Exclude all missing and not answered Can1 or Ans1
-## Denominator for Illegal rusmidler
+## Merge data 2012-2024 and 2025
+## ----------------------------------
+DT25[, year := 2025]
+ddt[, vekt := nyvekt2]
+
+commonCols <- intersect(names(ddt), names(DT25))
+
+# clean labelled attributes coz it makes troubles
+dtx <- ddt[, lapply(.SD, \(col) {
+  attributes(col) <- NULL
+  col
+})]
+
+## Age groups
+## -------------
+## only those 16-64 years old being asked about drug use 2012-2024
+dtx <- dtx[alder <= 64] #Only 16-64 years old included
+DD <- rbindlist(list(dtx[, ..commonCols], DT25[, ..commonCols]), use.names = TRUE, fill = TRUE)
+
+DD <- torr::group_age_standard(DD,
+                                var = "alder",
+                                type = "rusund",
+                                new_var = "agecat")
+
+## Kjonn variable
+## -------------
+DD[, kjonnSTR := factor(kjonn, levels = c(1, 2), labels = c("Menn", "Kvinner"))]
+
+## ==================================
+## Exclude all missing and not answered Can1 or Ans1 used to create
+## denominator for Illegal rusmidler for general calculation
 ## ----------------------------------
 
 create_population <- function(dt) {
@@ -109,52 +151,34 @@ create_population <- function(dt) {
   return(data)
 }
 
-DT <- create_population(DT25)
-
-## Free text - Other types
-## OBS!! Bør sjekke tekst fra Ans2sps
-DT[, ans2sps := is_encode(ans2sps)]
-DT[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
-
-DT[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
-
-## ==================================
-## Merge data 2012-2024 and 2025
-## ----------------------------------
-DT[, year := 2025]
-ddt[, vekt := nyvekt2]
-
-commonCols <- intersect(names(ddt), names(DT))
-
-# clean labelled attributes coz it makes troubles
-dtx <- ddt[, lapply(.SD, \(col) {
-  attributes(col) <- NULL
-  col
-})]
-
-
-DD <- rbindlist(list(dtx[, ..commonCols], DT[, ..commonCols]), use.names = TRUE, fill = TRUE)
-
 DD <- create_population(DD)
 
-## Remove 2012 data for drug use questions due to error in filter from SSB
-## See email from Elin https://github.com/folkehelsestats/toa/blob/main/misc/missing-etc.org
-## ------------------------------
-DTT <- DD[year != 2012]
+CanVars = c("can1", "can6", "can10")
+DTT <- torr::create_cann_pop(DD, vars = CanVars )
 
-## Age groups
-## -------------
-## only those 16-64 years old being asked about drug use 2012-2024
-DTT <- DTT[alder <= 64]
-DTT <- torr::group_age_standard(DTT,
-                                var = "alder",
-                                type = "rusund",
-                                new_var = "agecat")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_a", "ans3_1"), val = "kokain")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_b", "ans3_2"), val = "mdma")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_e", "ans3_5"), val = "heroin")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_f", "ans3_6"), val = "ghb")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_g", "ans3_7"), val = "lsd")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_h", "ans3_8"), val = "annet")
 
-## Kjonn variable
-## -------------
-DTT[, kjonnSTR := factor(kjonn, levels = c(1, 2), labels = c("Menn", "Kvinner"))]
+## ## Alternative---
+## vars_list <- list(
+##   c("ans2_a", "ans3_1"),
+##   c("ans2_b", "ans3_2"),
+##   c("ans2_c", "ans3_3"),
+##   c("ans2_e", "ans3_5"),
+##   c("ans2_f", "ans3_6"),
+##   c("ans2_g", "ans3_7"),
+##   c("ans2_h", "ans3_8")
+## )
+## vals <- c("kokain", "mdma", "amfetaminer", "heroin", "ghb", "lsd", "annet")
 
+## for (i in seq_along(vals)) {
+##   DD <- torr::create_narko_pop(DD, vars = vars_list[[i]], val = vals[i])
+## }
 ## Illegal drugs variables
 ## ----------------------------------
 DTT[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
@@ -176,3 +200,6 @@ DTT[ans3_5 == 1, lyp_heroin := 1]
 DTT[ans3_6 == 1, lyp_ghb := 1]
 DTT[ans3_7 == 1, lyp_lsd := 1]
 DTT[ans3_8 == 1, lyp_other := 1]
+
+
+

@@ -12,7 +12,7 @@ cannabis_trend <- function(data, group = "year") {
         dt = data,
         outcome_var = "ltp_cannabis",
         weight_var = "vekt",
-        denominator_var = "canpop",
+        denominator_var = "ltpPop_cannabis",
         group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
@@ -23,7 +23,7 @@ cannabis_trend <- function(data, group = "year") {
         dt = data,
         outcome_var = "lyp_cannabis",
         weight_var = "vekt",
-        denominator_var = "canpop",
+        denominator_var = "lypPop_cannabis",
         group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
@@ -34,7 +34,7 @@ cannabis_trend <- function(data, group = "year") {
         dt = data,
         outcome_var = "lmp_cannabis",
         weight_var = "vekt",
-        denominator_var = "canpop",
+        denominator_var = "lmpPop_cannabis",
         group_vars = group,
         na_treatment = "as_zero",
         round_digits = 1,
@@ -65,7 +65,7 @@ cannYngKvinner <- cannabis_trend(DTT[alder <= 30 & kjonn == 2]) #16-30 og kvinne
 calc_narko_gender <- function(data,
                               outcome = "lyp_cannabis",
                               group = c("year", "agecat"),
-                              denominator = "canpop") {
+                              denominator = "lypPop_cannabis") {
 
   cannLypYng <- calc_percentage_ci(dt = data,
                                    outcome_var = outcome,
@@ -116,7 +116,7 @@ dty <- torr::group_age_standard(DTT[alder <= 30],
 lypDX <- calc_narko_gender(data = dty,
                            outcome = "lyp_cannabis",
                            group = c("year", "ageYng"),
-                           denominator = "canpop")
+                           denominator = "lypPop_cannabis")
 
 cannLypYng <- lypDX$all
 cannLypYngMenn <- lypDX$menn
@@ -129,7 +129,7 @@ cannLypYngKvinner <- lypDX$kvinner
 cannLypYng2 <- calc_percentage_ci2(dt = dty,
                                 outcome_var = "lyp_cannabis",
                                 weight_var = "vekt",
-                                denominator_var = "canpop",
+                                denominator_var = "lypPop_cannabis",
                                 group_vars = c("year", "ageYng"),
                                 na_treatment = "as_zero",
                                 round_digits = 1,
@@ -146,7 +146,7 @@ data.table::setorder(cannLypYng2, year, ageYng)
 cannLypYngMenn2 <- calc_percentage_ci2(dt = dty[kjonn == 1],
                                     outcome_var = "lyp_cannabis",
                                     weight_var = "vekt",
-                                    denominator_var = "canpop",
+                                    denominator_var = "lypPop_cannabis",
                                     group_vars = c("year", "ageYng"),
                                     na_treatment = "as_zero",
                                     round_digits = 1,
@@ -162,7 +162,7 @@ data.table::setorder(cannLypYngMenn2, year, ageYng)
 cannLypYngKvinner2 <- calc_percentage_ci2(dt = dty[kjonn == 2],
                                     outcome_var = "lyp_cannabis",
                                     weight_var = "vekt",
-                                    denominator_var = "canpop",
+                                    denominator_var = "lypPop_cannabis",
                                     group_vars = c("year", "ageYng"),
                                     na_treatment = "as_zero",
                                     round_digits = 1,
