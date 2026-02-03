@@ -75,14 +75,14 @@ make_hist(
 #| label: trend_cannabis
 #| warning: false
 
-library(htmltools)
+DTT[, syv_lypCan := fcase(lyp_cannabis == 1, 1,
+                          is.na(lyp_cannabis) & lypPop_cannabis == 1, 0)]
+DTT[, kjonn := as.numeric((kjonn))]
 
-# If you have a file on disk:
-tags$iframe(
-  src = here::here("img/trend-lypcann.html"),  # <-- use a relative path inside your project
-  style = "width:100%; height:600px; border:0;",
-  loading = "lazy"
-)
+source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-trend-analysis.R"))
+
+plot_trend
+
 
 ```
 
