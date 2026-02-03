@@ -1,5 +1,6 @@
 ## Path to data and standard setup
 ## --------------------------------------------------
+defaultOpt <- options()
 options(scipen = 999) # disable scientific notation
 source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/folder-path.R")
 source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/setup.R")
@@ -32,15 +33,15 @@ ddt <- ddt[year != 2012]
 
 ## Data 2025
 ## --------------------------------------------------
-DT25 <- readRDS(file = file.path(Rususdata, "Rusus_2025", "rusus2025_20251126.rds"))
-setDT(DT25)
-setnames(DT25, names(DT25), tolower(names(DT25)))
+DT25all <- readRDS(file = file.path(Rususdata, "Rusus_2025", "rusus2025_20251126.rds"))
+setDT(DT25all)
+setnames(DT25all, names(DT25all), tolower(names(DT25all)))
 
 ## ==================================
 ## Data preparation
 ## ----------------------------------
 # clean labelled attributes coz it makes troubles
-DT25[, (names(DT25)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
+DT25all[, (names(DT25all)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
 
 ## =================================
 ## OBS!! Etter møte med FHI 19.jan 2026 så er det avklart at de som svarte bruk
@@ -79,32 +80,33 @@ exclude_relevin <- function(dt) {
 ## ddt <- exclude_relevin(ddt)
 
 ## ## Rusus 2025 includes a fake drug "Relevin" to identify non-serious respondents.
-## DT25 <- exclude_relevin(DT25)
+## DT25all <- exclude_relevin(DT25all)
 
+
+## Vekt is character - convert to numeric
+## Create standardized weight variable like previous years
+## ----------------------------------
+DT25all[, vekt2 := as.numeric(gsub(",", ".", vekt))]
+DT25all[, vekt := vekt2 / mean(vekt2, na.rm = TRUE)]
+
+
+## Free text - Other types
+## OBS!! Bør sjekke tekst fra Ans2sps
+DT25all[, ans2sps := is_encode(ans2sps)]
+DT25all[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
+
+DT25all[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 
 ## Age groups
 ## -------------
 ## In 2025 the questions about drug use were asked to all ages 16-79.
 ## To be comparable with previous years, we only include ages 16-64.
-DT25 <- DT25[alder <= 64]
-DT25 <- torr::group_age_standard(DT25,
+DT25all <- torr::group_age_standard(DT25all,
                                  var = "alder",
                                  type = "rusund",
                                  new_var = "agecat")
 
-## Vekt is character - convert to numeric
-## Create standardized weight variable like previous years
-## ----------------------------------
-DT25[, vektnr := as.numeric(gsub(",", ".", vekt))]
-DT25[, vekt := vektnr / mean(vektnr, na.rm = TRUE)]
-
-
-## Free text - Other types
-## OBS!! Bør sjekke tekst fra Ans2sps
-DT25[, ans2sps := is_encode(ans2sps)]
-DT25[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
-
-DT25[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+DT25 <- DT25all[alder <= 64]
 
 ## ==================================
 ## Merge data 2012-2024 and 2025
