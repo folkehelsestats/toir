@@ -13,7 +13,7 @@ gender_prop <- function(DTT, nominator, denominator,
     DTT <- DTT[year == yr & alder <= agemax]
   }
 
-ltp <- calc_percentage_ci(
+ltp <- calc_percentage_total_ci(
   DTT[year == yr],
   outcome_var = nom[1],
   group_vars = "kjonnSTR",
@@ -21,12 +21,15 @@ ltp <- calc_percentage_ci(
   denominator_var = dom[1],
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-outLtp <- append_total_row(ltp)
+## outLtp <- append_total_row(ltp)
+outLtp <- ltp
 
-lyp <- calc_percentage_ci(
+lyp <- calc_percentage_total_ci(
   DTT[year == yr],
   outcome_var = nom[2],
   group_vars = "kjonnSTR",
@@ -34,10 +37,13 @@ lyp <- calc_percentage_ci(
   denominator_var = dom[2],
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-outLyp <- append_total_row(lyp)
+## outLyp <- append_total_row(lyp)
+outLyp <- lyp
 
   out <- rbindlist(list(
   outLtp[, periode := "Noen gang"],
@@ -109,7 +115,7 @@ kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30)
 
 ## yr <- 2025
 
-## kokainLtp <- calc_percentage_ci(
+## kokainLtp <- calc_percentage_total_ci(
 ##   DTT[year == yr],
 ##   outcome_var = "ltp_cocaine",
 ##   group_vars = "kjonnSTR",
@@ -120,7 +126,7 @@ kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30)
 ##   include_diagnostics = TRUE
 ## )
 
-## kokainLyp <- calc_percentage_ci(
+## kokainLyp <- calc_percentage_total_ci(
 ##   DTT[year == yr],
 ##   outcome_var = "lyp_cocaine",
 ##   group_vars = "kjonnSTR",
@@ -140,7 +146,7 @@ kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30)
 ## ## -------------------------
 ## ageMax <- 30
 
-## kokainLtpYng <- calc_percentage_ci(
+## kokainLtpYng <- calc_percentage_total_ci(
 ##   DTT[year == yr & alder <= ageMax],
 ##   outcome_var = "ltp_cocaine",
 ##   group_vars = "kjonnSTR",
@@ -151,7 +157,7 @@ kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30)
 ##   include_diagnostics = TRUE
 ## )
 
-## kokainLypYng <- calc_percentage_ci(
+## kokainLypYng <- calc_percentage_total_ci(
 ##   DTT[year == yr & alder <= ageMax],
 ##   outcome_var = "lyp_cocaine",
 ##   group_vars = "kjonnSTR",
