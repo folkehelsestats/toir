@@ -39,6 +39,34 @@ highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
   highcharter::hc_exporting(enabled = TRUE)
 ```
 
+## Hyppighet bruk av cannabis
+
+```{r}
+#| label: cann-hyggpig
+
+source(here::here("reports/pub-2026/analysis_2026/cann-hyppighet.R"))
+```
+
+Figuren nedenfor viser fordelingen av brukshyppighet blant personer som har brukt cannabis noen gang og blant dem som har brukt cannabis i løpet av de siste 12 månedene. Flertallet rapporterer bruk fem ganger eller færre. Andelen som har brukt cannabis mer enn 50 ganger, er imidlertid høyere i gruppen som oppgir bruk de siste 12 månedene. Videre rapporterte `r canBruk3[["pros"]][4]` prosent at de hadde brukt cannabis en til tre dager i løpet av de siste fire ukene, mens `r canBruk3[["pros"]][1]` prosent brukte 20 dager eller mer.
+
+```{r}
+#| label: cann-hyggpig-fig
+
+make_hist(
+ d = canNo,
+ x = "vals",
+ y = "pros",
+ n = "n",
+ ylim = c(0,70),
+ group = "type",
+ flip = TRUE,
+ title = "Hyppighet bruk av cannabis",
+ caption = "Tall om illegale rusmidler"
+)
+
+
+```
+
 ## Cannabisbruk i aldersgruppen 16–64 år: Trender fra 2013 til 2025
 
 Figuren viser andelene i alderen 16-64 år som har noen gang brukt cannabis,
