@@ -1,3 +1,38 @@
+## Bruk av sentralstimulerende stoffer 16-64 år i 2025 
+
+```{r}
+#| label: stoff_kjonn_ltp
+
+source(here::here("reports/pub-2026/analysis_2026/kjonn-andre.R"))
+
+make_hist(
+  d = andreDT[periode %like% "Noen gang"],
+  x = "stuff",
+  y = "percentage",
+  n = "n_level",
+  ylim = c(0,15),
+  group = "kjonnSTR",
+  title = "Bruk av sentralstimulerende noen gang i 2025",
+  caption = "Tall om illegale rusmidler"
+)
+
+```
+
+```{r}
+#| label: stoff_kjonn_lyp
+
+make_hist(
+  d = andreDT[periode %like% "Siste"],
+  x = "stuff",
+  y = "percentage",
+  n = "n_level",
+  ylim = c(0,15),
+  group = "kjonnSTR",
+  title = "Bruk av sentralstimulerende siste 12 måneder i 2025",
+  caption = "Tall om illegale rusmidler"
+)
+```
+
 ## Bruk noen gang av andre sentralstimulerende stoffer 16-64 år: Trender fra 2013 til 2025 
 
 
