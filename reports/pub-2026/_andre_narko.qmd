@@ -1,6 +1,16 @@
 ## Bruk av sentralstimulerende stoffer 16-64 år i 2025 
 
 ```{r}
+#| label: sentral-all
+
+source(here::here("reports/pub-2026/analysis_2026/sentral-narko.R"))
+
+```
+
+Resultater fra rus- og tobakksundersøkelsen 2025 viser at `r round(sentralDT[["percentage"]][3], 1)` % i aldersgruppen 16-64 år rapporterte at de hadde brukt sentralstimulerende stoffer noen gang (livstidsprevalens) hvor av dem `r round(sentralDT[["percentage"]][1], 1)` % er menn og `r round(sentralDT[["percentage"]][2], 1)` % kvinner. Kokain, ecstasy/MDMA og amfetaminer er de stoffene som flest rapporterer at de har brukt. 
+
+
+```{r}
 #| label: stoff_kjonn_ltp
 
 source(here::here("reports/pub-2026/analysis_2026/kjonn-andre.R"))
