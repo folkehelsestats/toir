@@ -127,6 +127,21 @@ source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-trend-analysis.R
 plot_trend
 ```
 
+### Test for trend for cannabisbruk siste 4 uker 
+
+```{r}
+#| label: trend_cannabis_lmp
+#| warning: false
+
+DTT[, syv_lmpCan := fcase(lmp_cannabis == 1, 1,
+                          is.na(lmp_cannabis) & lmpPop_cannabis == 1, 0)]
+DTT[, kjonn := as.numeric((kjonn))]
+
+source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-lmp-trend-analysis.R"))
+
+plot_trend_lmp
+```
+
 
 Kjønnsforskjeller vises i figurene nedenfor.
 
@@ -179,7 +194,7 @@ make_hist(
   d = canDT,
   x = "periode",
   y = "percentage",
-  n = "n_level",
+  n = "n_valid",
   group = "kjonnSTR",
   type = "column",
   title = "Andel som har brukt cannabis i alderen 16-64 år i 2025",
@@ -325,7 +340,7 @@ make_hist(
   d = canDTYng,
   x = "periode",
   y = "percentage",
-  n = "n_level",
+  n = "n_valid",
   group = "kjonnSTR",
   type = "column",
   title = "Andel som har brukt cannabis i alderen 16-30 år i 2025",

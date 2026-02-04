@@ -17,6 +17,8 @@ source(here::here("unodc","fun-weighted-unweighted-ci-rolling.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-ci-graph.R")
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-graph.R")
 
+## similar like fun-weighted-unweighted-ci.R but this one has total in the output
+source(here::here("reports/functions/fun-weighted-ci-total.R"))
 
 ## --------------------------------------------------
 ddt <- readRDS(file.path(Rususdata, "rusus_2012_2024.rds"))

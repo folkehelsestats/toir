@@ -1,3 +1,4 @@
+## source(here::here("reports/functions/fun-weighted-ci-total.R"))
 
 yr <- 2025
 
@@ -10,7 +11,7 @@ yr <- 2025
 ##   denominator_var = "canpop"
 ## )
 
-canLtp <- calc_percentage_ci(
+canLtp <- calc_percentage_total_ci(
   DTT[year == yr],
   outcome_var = "ltp_cannabis",
   group_vars = "kjonnSTR",
@@ -18,10 +19,12 @@ canLtp <- calc_percentage_ci(
   denominator_var = "ltpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-canLyp <- calc_percentage_ci(
+canLyp <- calc_percentage_total_ci(
   DTT[year == yr],
   outcome_var = "lyp_cannabis",
   group_vars = "kjonnSTR",
@@ -29,10 +32,12 @@ canLyp <- calc_percentage_ci(
   denominator_var = "lypPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-canLmp <- calc_percentage_ci(
+canLmp <- calc_percentage_total_ci(
   DTT[year == yr],
   outcome_var = "lmp_cannabis",
   group_vars = "kjonnSTR",
@@ -40,7 +45,9 @@ canLmp <- calc_percentage_ci(
   denominator_var = "lmpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
 canDT <- rbindlist(list(
@@ -53,7 +60,7 @@ canDT <- rbindlist(list(
 ## -------------------------
 ageMax <- 30
 
-canLtpYng <- calc_percentage_ci(
+canLtpYng <- calc_percentage_total_ci(
   DTT[year == yr & alder <= ageMax],
   outcome_var = "ltp_cannabis",
   group_vars = "kjonnSTR",
@@ -61,10 +68,12 @@ canLtpYng <- calc_percentage_ci(
   denominator_var = "ltpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-canLypYng <- calc_percentage_ci(
+canLypYng <- calc_percentage_total_ci(
   DTT[year == yr & alder <= ageMax],
   outcome_var = "lyp_cannabis",
   group_vars = "kjonnSTR",
@@ -72,10 +81,12 @@ canLypYng <- calc_percentage_ci(
   denominator_var = "lypPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
-canLmpYng <- calc_percentage_ci(
+canLmpYng <- calc_percentage_total_ci(
   DTT[year == yr & alder <= ageMax],
   outcome_var = "lmp_cannabis",
   group_vars = "kjonnSTR",
@@ -83,7 +94,9 @@ canLmpYng <- calc_percentage_ci(
   denominator_var = "lmpPop_cannabis",
   na_treatment = "as_zero",
   round_digits = 1,
-  include_diagnostics = TRUE
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
 )
 
 canDTYng <- rbindlist(list(
