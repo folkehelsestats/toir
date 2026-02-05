@@ -280,7 +280,7 @@ plot_trend_ltp <- highchart() %>%
     marker = list(enabled = TRUE, radius = 5, fillColor = "#7C145C", symbol = "diamond")
   ) %>%
   hc_title(
-    text = "Andel cannabisbruk noen ganger: 2013 - 2025",
+    text = "Figur 5: Andel cannabisbruk noen ganger: 2013 - 2025",
     style = list(fontWeight = "bold", fontSize = "16px")
   ) %>%
   hc_subtitle(

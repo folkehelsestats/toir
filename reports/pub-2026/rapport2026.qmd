@@ -43,7 +43,7 @@ make_hist(
   ylim = c(0,30),
   group = "year",
   type = "column",
-  title = "Andel bruk av illegale rusmidler i alderen 16-64 i 2025",
+  title = "Figur 1: Andel bruk av illegale rusmidler i alderen 16-64 i 2025",
   caption = "Tall om illegale rusmidler"
 )
 ```

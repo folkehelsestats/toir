@@ -63,7 +63,8 @@ canBruk3 <- calc_simple_pros(DT25, "can11", "Siste 4 uker")
 ## Dataset for figure
 ## ---------
 
-canNo <- data.table::rbindlist(list(canBruk12, canBruk2))
+## canNo <- data.table::rbindlist(list(canBruk12, canBruk2))
+canNo <- canBruk2
 
 vals <- data.table::data.table(from = 1:4,
                                to = c("1-5 ganger",

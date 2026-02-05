@@ -31,7 +31,7 @@ gjennomsnitt var debutalderen `r round(debutAge[["mean"]], digits = 0)` år.
 
 # Basic line chart (continuous x)
 highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
-  highcharter::hc_title(text = "Debutalder for cannabis") %>%
+  highcharter::hc_title(text = "Figur 2: Debutalder for cannabis") %>%
   highcharter::hc_xAxis(title = list(text = "Alder")) %>%
   highcharter::hc_yAxis(title = list(text = "Prosent")) %>%
   highcharter::hc_colors("#2C7FB8") %>%
@@ -60,7 +60,7 @@ make_hist(
  ylim = c(0,70),
  group = "type",
  flip = TRUE,
- title = "Hyppighet bruk av cannabis",
+ title = "Figur 3: Hyppighet bruk av cannabis",
  caption = "Tall om illegale rusmidler"
 )
 
@@ -91,7 +91,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk i alderen 16-64, 2013-2025 ",
+  title = "Figur 4: Andel cannabisbruk i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -156,7 +156,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk blant menn i alderen 16-64, 2013-2025",
+  title = "Figur 8: Andel cannabisbruk blant menn i alderen 16-64, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -173,7 +173,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk blant kvinner i alderen 16-64, 2013-2025",
+  title = "Figur 9: Andel cannabisbruk blant kvinner i alderen 16-64, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -197,7 +197,7 @@ make_hist(
   n = "n_valid",
   group = "kjonnSTR",
   type = "column",
-  title = "Andel som har brukt cannabis i alderen 16-64 år i 2025",
+  title = "Figur 10: Andel som har brukt cannabis i alderen 16-64 år i 2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -232,7 +232,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk i alderen 16-30, 2013-2025",
+  title = "Figur 11: Andel cannabisbruk i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -250,7 +250,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk blant menn i alderen 16-30, 2013-2025",
+  title = "Figur 12: Andel cannabisbruk blant menn i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -268,7 +268,7 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Andel cannabisbruk blant kvinner i alderen 16-30, 2013-2025",
+  title = "Figur 13: Andel cannabisbruk blant kvinner i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -286,7 +286,7 @@ make_hist(
   n = "n_level",
   group = "ageYng",
   type = "line",
-  title = "Andel cannabisbruk siste 12 måneder i alderen 16-30, 2013-2025",
+  title = "Figur 14: Andel cannabisbruk siste 12 måneder i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 ```
@@ -302,7 +302,7 @@ make_hist(
   n = "n_level",
   group = "ageYng",
   type = "line",
-  title = "Andel cannabisbruk blant menn siste 12 måneder i alderen 16-30, 2013-2025",
+  title = "Figur 15: Andel cannabisbruk blant menn siste 12 måneder i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 ```
@@ -318,7 +318,7 @@ make_hist(
   n = "n_level",
   group = "ageYng",
   type = "line",
-  title = "Andel cannabisbruk blant kvinner siste 12 måneder i alderen 16-30, 2013-2025",
+  title = "Figur 16: Andel cannabisbruk blant kvinner siste 12 måneder i alderen 16-30, 2013-2025",
   caption = "Tall om illegale rusmidler"
 )
 ```
@@ -343,7 +343,7 @@ make_hist(
   n = "n_valid",
   group = "kjonnSTR",
   type = "column",
-  title = "Andel som har brukt cannabis i alderen 16-30 år i 2025",
+  title = "Figur 17: Andel som har brukt cannabis i alderen 16-30 år i 2025",
   caption = "Tall om illegale rusmidler"
 )
 
