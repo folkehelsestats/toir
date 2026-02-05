@@ -57,3 +57,38 @@ make_hist(
 {{< include _andre_narko.qmd >}}
 
 
+# Rusundersøkelsen 
+Rus- og tobakksundersøkelsen ble etablert i 2012 og datainnsamlingen gjennomføres årlig av Statistisk sentralbyrå (SSB).
+Undersøkelsen kartlegger befolkningens bruk av tobakk, nikotinprodukter, alkohol og illegale rusmidler, samt bruk av reseptbelagte legemidler og erfaringer med konsekvenser av egen og andres rusmiddelbruk. 
+
+## Utvalg, gjennomføring og svarprosent
+I 2025 ble det trukket et landsrepresentativt utvalg på 8 000 personer i alderen
+16–79 år, fra Folkeregisteret. Undersøkelsen ble gjennomført i perioden 28.
+april til 6. juli 2025 som en mixed-modeundersøkelse, der deltakerne enten ble
+intervjuet via telefon (CATI) eller besvarte en webundersøkelse (CAWI). Av
+bruttoutvalget på 7 984 personer (etter 16 avganger) deltok 4 614, noe som gir
+en svarprosent på 57,8 prosent. Av deltakerne svarte 68 prosent via web og 32
+prosent via telefon. Den viktigste årsaken til frafall var manglende kontakt,
+som utgjorde 26 prosent av bruttoutvalget.
+
+I 2023 svarte omtrent halvparten av deltakerne på undersøkelsen om høsten og
+halvparten om våren. Dette metodebruddet kan føre til at tallene for 2023
+skiller seg noe fra andre år. Analysene i denne rapporten gjelder bare personer mellom
+16 og 64 år. Personer som er 65 år eller eldre fikk ikke spørsmål om rusmidler
+før i 2025, og for å kunne sammenligne tall over tid har vi derfor begrenset
+analysene til dem under 65 år. Prosentandelene i rapporten er vektet etter
+alder, kjønn, utdanning og landsdel. Dette gjør resultatene mer representative
+for den norske befolkningen og gjør det lettere å sammenligne utviklingen mellom
+år. Vektingen tar hensyn både til forskjeller og til endringer i befolkningens
+sammensetning, slik at resultatene gir et mer rettferdig og pålitelig bilde av
+utviklingen.
+
+
+## Styrker og svakheter
+Styrker ved Rus- og tobakksundersøkelsen er at den:
+ - er stor og landsrepresentativ
+ - gjennomføres årlig og dermed egner seg til trendanalyser
+ - dekker hele voksenbefolkningen 16–79 år
+ - innhenter informasjon om både tobakk, nikotin, alkohol og illegale rusmidler
+
+Samtidig har undersøkelsen noen kjente begrensninger. Som i andre befolkningsundersøkelser er det sannsynlig at tunge brukere av både alkohol og illegale rusmidler er underrepresentert, og enkelte grupper har lavere svarvillighet. Selvrapportering kan innebære både under- og overrapportering. Undersøkelsen fanger heller ikke opp helt nye stoffer som kommer på markedet, ettersom skjemaet består av forhåndsdefinerte spørsmål. Se dokumentasjonsrapport (SSB) for mer informasjon om metoden som er brukt i undersøkelsen; Rusundersøkelsen 2025 – SSB  
