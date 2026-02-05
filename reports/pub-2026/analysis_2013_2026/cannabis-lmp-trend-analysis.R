@@ -227,6 +227,11 @@ setorder(obs_by_gender_dt, gender, year)
 # 5. CREATE HIGHCHARTER PLOTS
 ################################################################################
 
+hdir_color <- c("#025169", "#7C145C",
+                "#7C145C", "#047FA4",
+                "#C68803", "#38A389",
+                "#6996CE", "#366558",
+                "#BF78DE", "#767676")
 # --- PLOT 1: OVERALL ADJUSTED vs OBSERVED PREVALENCE ---
 plot_trend_lmp <- highchart() %>%
   # Confidence interval for adjusted prevalence
@@ -235,7 +240,7 @@ plot_trend_lmp <- highchart() %>%
     type = "arearange",
     hcaes(x = year, low = lower_ci, high = upper_ci),
     name = "95% CI (Justert)",
-    color = "steelblue",
+    color = "#025169",
     fillOpacity = 0.2,
     lineWidth = 0,
     marker = list(enabled = FALSE),
@@ -247,9 +252,9 @@ plot_trend_lmp <- highchart() %>%
     type = "line",
     hcaes(x = year, y = predicted_prevalence),
     name = "Justert Prevalens",
-    color = "steelblue",
+    color = "#025169",
     lineWidth = 3,
-    marker = list(enabled = TRUE, radius = 5, fillColor = "steelblue", symbol = "circle")
+    marker = list(enabled = TRUE, radius = 5, fillColor = "#025169", symbol = "circle")
   ) %>%
   # Confidence interval for observed prevalence
   hc_add_series(
@@ -257,7 +262,7 @@ plot_trend_lmp <- highchart() %>%
     type = "arearange",
     hcaes(x = year, low = obs_lower_ci, high = obs_upper_ci),
     name = "95% CI (Observert)",
-    color = "darkorange",
+    color = "#7C145C",
     fillOpacity = 0.15,
     lineWidth = 0,
     marker = list(enabled = FALSE),
@@ -269,13 +274,13 @@ plot_trend_lmp <- highchart() %>%
     type = "line",
     hcaes(x = year, y = observed_prevalence),
     name = "Observert Prevalens",
-    color = "darkorange",
+    color = "#7C145C",
     lineWidth = 3,
     dashStyle = "ShortDash",
-    marker = list(enabled = TRUE, radius = 5, fillColor = "darkorange", symbol = "diamond")
+    marker = list(enabled = TRUE, radius = 5, fillColor = "#7C145C", symbol = "diamond")
   ) %>%
   hc_title(
-    text = "Prevalens av cannabisbruk siste 4 uker: 2013 - 2025",
+    text = "Andel cannabisbruk siste 4 uker: 2013 - 2025",
     style = list(fontWeight = "bold", fontSize = "16px")
   ) %>%
   hc_subtitle(
@@ -288,7 +293,7 @@ plot_trend_lmp <- highchart() %>%
   hc_yAxis(
     title = list(text = "Prevalens av cannabisbruk (%)", style = list(fontWeight = "bold")),
     min = 0,
-    max = 50
+    max = 15
   ) %>%
   hc_tooltip(
     shared = TRUE,

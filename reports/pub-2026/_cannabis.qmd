@@ -122,7 +122,7 @@ DTT[, syv_lypCan := fcase(lyp_cannabis == 1, 1,
                           is.na(lyp_cannabis) & lypPop_cannabis == 1, 0)]
 DTT[, kjonn := as.numeric((kjonn))]
 
-source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-trend-analysis.R"))
+source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-lyp-trend-analysis.R"))
 
 plot_trend
 ```
