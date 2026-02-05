@@ -114,6 +114,8 @@ plot_trend_ltp
 
 ### Test for trend for cannabisbruk siste 12 måneder
 
+Figuren nedenfor viser en liten, men statistisk signifikant økning i andelen som har brukt cannabis de siste 12 månedene, etter at det er tatt hensyn til forskjeller i alder og kjønn.
+
 ```{r}
 #| label: trend_cannabis
 #| warning: false
