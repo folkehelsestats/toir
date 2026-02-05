@@ -2,8 +2,10 @@
 gender_prop <- function(DTT, nominator, denominator,
                         yr = 2025,
                         agemax = NULL,
-                        type = c("ltp", "lyp")){
+                        type = c("ltp", "lyp"),
+                        narko = NULL) {
 
+  # narko - Name of narko eg. Ecstasy/MDMA, Kokain, Amfetaminer
   nom <- paste0(type, "_", nominator)
   dom <- paste0(type, "Pop_", denominator)
 
@@ -50,24 +52,24 @@ outLyp <- lyp
   outLyp[, periode := "Siste 12 måneder"]
 ), use.names = TRUE, fill = TRUE)
 
-out[, stuff := denominator]
+out[, stuff := narko]
 
 return(out[])
 }
 
 
-kokainDT <- gender_prop(DTT, "cocaine", "kokain")
-mdmaDT <- gender_prop(DTT, "mdma", "mdma")
-ampheDT <- gender_prop(DTT, "amphetamines", "amfetaminer")
+kokainDT <- gender_prop(DTT, "cocaine", "kokain", narko = "Kokain")
+mdmaDT <- gender_prop(DTT, "mdma", "mdma", narko = "Ecstasy/MDMA")
+ampheDT <- gender_prop(DTT, "amphetamines", "amfetaminer", narko = "Amfetaminer")
 
 andreDT <- data.table::rbindlist(list(kokainDT, mdmaDT, ampheDT))
 andreDT[, percentage := round(percentage, 1)]
 
 ### ---- Yngre <=30
 ### ------------------
-kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30)
-mdmaDTyng <- gender_prop(DTT, "mdma", "mdma", agemax = 30)
-ampheDTyng <- gender_prop(DTT, "amphetamines", "amfetaminer", agemax = 30)
+kokainDTyng <- gender_prop(DTT, "cocaine", "kokain", agemax = 30, narko = "Kokain")
+mdmaDTyng <- gender_prop(DTT, "mdma", "mdma", agemax = 30, narko = "Ecstasy/MDMA")
+ampheDTyng <- gender_prop(DTT, "amphetamines", "amfetaminer", agemax = 30, narko = "Amfetaminer")
 
 andreDTyng <- data.table::rbindlist(list(kokainDTyng, mdmaDTyng, ampheDTyng))
 andreDTyng[, percentage := round(percentage, 1)]
