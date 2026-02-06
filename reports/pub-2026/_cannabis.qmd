@@ -39,7 +39,7 @@ highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
   highcharter::hc_exporting(enabled = TRUE)
 ```
 
-## Hyppighet bruk av cannabis
+## Frekvens bruk av cannabis
 
 ```{r}
 #| label: cann-hyggpig
@@ -61,7 +61,7 @@ make_hist(
  ylim = c(0,70),
  group = "cat",
  flip = TRUE,
- title = "Figur 3: Hyppighet bruk av cannabis",
+ title = "Figur 3: Frekvens bruk av cannabis",
  caption = "Tall om illegale rusmidler"
 )
 
