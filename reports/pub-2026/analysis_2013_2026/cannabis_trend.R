@@ -66,8 +66,15 @@ cannAll[, kjonn := "Alle"]
 cannAllMenn[, kjonn := "Menn"]
 cannAllKvinner[, kjonn := "Kvinner"]
 
-cannKjonn <- data.table::rbindlist(list(cannAllMenn, cannAllKvinner, cannAll), use.names = TRUE, fill = TRUE)
+cannKjonn <- data.table::rbindlist(list(cannAllMenn, cannAllKvinner, cannAll),
+                                   use.names = TRUE, fill = TRUE)
 
+cannYng[, kjonn := "Alle"]
+cannYngMenn[, kjonn := "Menn"]
+cannYngKvinner[, kjonn := "Kvinner"]
+
+cannYngKjonn <- data.table::rbindlist(list(cannYngMenn, cannYngKvinner, cannYng),
+                                      use.names = TRUE, fill = TRUE)
 
 ## ==================================
 ## Age regoups for those below 30

@@ -147,11 +147,11 @@ plot_trend_lmp
 
 ### Cannabisbruk blant menn og kvinner
 
-Når vi ser på cannabisbruk det siste året blant menn og kvinner, finner vi tydelige kjønnsforskjeller gjennom hele perioden 2013–2025. Det eneste unntaket er i 2020, hvor forskjellen mellom gruppene var noe mindre. Dette vises i figuren nedenfor.
+Når vi ser på cannabisbruk det siste året blant menn og kvinner, finner vi tydelige kjønnsforskjeller gjennom hele perioden 2013–2025. Det eneste unntaket er i 2022, hvor forskjellen mellom gruppene var noe mindre. Dette vises i figuren nedenfor.
 
 
 ```{r}
-#| label: lyp-kjonn
+#| label: cann-lyp-kjonn
 
 ## source(here::here("reports/pub-2026/analysis_2013_2026/cannabis_trend.R"))
 
@@ -161,7 +161,7 @@ make_hist(
   y = "percentage",
   n = "n_level",
   ylim = c(0,20),
-  yint = 2,
+  yint = 5,
   group = "kjonn",
   type = "line",
   title = "Figur 34: Andel cannabisbruk siste 12 måneder i alderen 16-64, etter kjønn: 2013-2025",
@@ -263,6 +263,31 @@ make_hist(
   caption = "Tall om illegale rusmidler"
 )
 
+```
+
+### Cannabisbruk blant menn og kvinner 16-30 år
+
+Blant unge voksne ser vi de samme kjønnsforskjellene i cannabisbruk gjennom perioden 2013–2025, men i 2022 var forskjellen mellom kvinner og menn mindre enn ellers.
+
+
+```{r}
+#| label: cann-lyp-kjonn-yngre
+
+source(here::here("reports/pub-2026/analysis_2013_2026/cannabis_trend.R"))
+
+make_hist(
+  d = cannYngKjonn[grp %like% "Siste 12 måneder"],
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  ylim = c(0,20),
+  yint = 5,
+  group = "kjonn",
+  type = "line",
+  title = "Figur 35: Andel cannabisbruk siste 12 måneder i alderen 16-30, etter kjønn: 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+  
 ```
 
 
