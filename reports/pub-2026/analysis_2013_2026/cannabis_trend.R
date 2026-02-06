@@ -58,6 +58,17 @@ cannYng <- cannabis_trend(DTT[alder <= 30]) #16-30
 cannYngMenn <- cannabis_trend(DTT[alder <= 30 & kjonn == 1]) #16-30 og menn
 cannYngKvinner <- cannabis_trend(DTT[alder <= 30 & kjonn == 2]) #16-30 og kvinner
 
+## ---------------------------------
+## Cannabis trend by gender
+## ---------------------------------
+
+cannAll[, kjonn := "Alle"]
+cannAllMenn[, kjonn := "Menn"]
+cannAllKvinner[, kjonn := "Kvinner"]
+
+cannKjonn <- data.table::rbindlist(list(cannAllMenn, cannAllKvinner, cannAll), use.names = TRUE, fill = TRUE)
+
+
 ## ==================================
 ## Age regoups for those below 30
 ## ---------------------------------

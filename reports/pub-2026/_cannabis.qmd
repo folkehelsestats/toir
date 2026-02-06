@@ -145,8 +145,30 @@ source(here::here("reports/pub-2026/analysis_2013_2026/cannabis-lmp-trend-analys
 plot_trend_lmp
 ```
 
+### Cannabisbruk blant menn og kvinner
 
-Kjønnsforskjeller vises i figurene nedenfor.
+Når vi ser på cannabisbruk det siste året blant menn og kvinner, finner vi tydelige kjønnsforskjeller gjennom hele perioden 2013–2025. Det eneste unntaket er i 2020, hvor forskjellen mellom gruppene var noe mindre. Dette vises i figuren nedenfor.
+
+
+```{r}
+#| label: lyp-kjonn
+
+## source(here::here("reports/pub-2026/analysis_2013_2026/cannabis_trend.R"))
+
+make_hist(
+  d = cannKjonn[grp %like% "Siste 12 måneder"],
+  x = "year",
+  y = "percentage",
+  n = "n_level",
+  ylim = c(0,20),
+  yint = 2,
+  group = "kjonn",
+  type = "line",
+  title = "Figur 34: Andel cannabisbruk siste 12 måneder i alderen 16-64, etter kjønn: 2013-2025",
+  caption = "Tall om illegale rusmidler"
+)
+```
+
 
 ```{r}
 #| label: cann_menn
@@ -181,6 +203,8 @@ make_hist(
 )
 
 ```
+
+
 
 ## Cannabis bruk og kjønnsforskjeller i alderen 16-64 i 2025 
 
