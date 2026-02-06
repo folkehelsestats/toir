@@ -267,7 +267,7 @@ make_hist(
 
 ### Cannabisbruk blant menn og kvinner 16-30 år
 
-Blant unge voksne ser vi de samme kjønnsforskjellene i cannabisbruk gjennom perioden 2013–2025, men i 2022 var forskjellen mellom kvinner og menn mindre enn ellers.
+Blant unge voksne ser vi de samme kjønnsforskjellene i cannabisbruk gjennom perioden 2013–2025, men i 2022 og 2025 var forskjellen mellom kvinner og menn mindre enn ellers.
 
 
 ```{r}
