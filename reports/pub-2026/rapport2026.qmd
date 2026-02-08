@@ -92,6 +92,7 @@ over tid i cannabisbruk er justert for alder og kjønn. Det
 
 ## Styrker og svakheter
 Styrker ved Rus- og tobakksundersøkelsen er at den:
+
  - er stor og landsrepresentativ
  - gjennomføres årlig og dermed egner seg til trendanalyser
  - dekker hele voksenbefolkningen 16–79 år
