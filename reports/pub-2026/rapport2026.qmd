@@ -85,7 +85,9 @@ etter alder, kjønn, utdanning og landsdel. Dette gjør resultatene mer
 representative for den norske befolkningen og gjør det lettere å sammenligne
 utviklingen mellom år. Vektingen tar hensyn både til forskjeller og til
 endringer i befolkningens sammensetning, slik at resultatene gir et mer
-rettferdig og pålitelig bilde av utviklingen.
+rettferdig og pålitelig bilde av utviklingen. Statistiske tester av utvikling
+over tid i cannabisbruk er justert for alder og kjønn. Det
+
 
 
 ## Styrker og svakheter
@@ -99,7 +101,7 @@ Samtidig har undersøkelsen noen kjente begrensninger. Som i andre
 befolkningsundersøkelser er det sannsynlig at tunge brukere av både alkohol og
 illegale rusmidler er underrepresentert, og enkelte grupper har lavere
 svarvillighet. Selvrapportering kan innebære både under- og overrapportering.
-Undersøkelsen fanger heller ikke opp helt nye stoffer som kommer på markedet,
-ettersom skjemaet består av forhåndsdefinerte spørsmål. Se dokumentasjonsrapport
-(SSB) for mer informasjon om metoden som er brukt i undersøkelsen;
-Rusundersøkelsen 2025 – SSB
+Undersøkelsen baserer seg på et skjema som består av forhåndsdefinerte spørsmål
+med begrenset muligheter for å fange nye rusmidler som kommer på markedet. Se
+dokumentasjonsrapport (SSB) for mer informasjon om metoden og spørreskjemaet som
+er brukt i undersøkelsen; Rusundersøkelsen 2025 – SSB
