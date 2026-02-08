@@ -31,7 +31,9 @@ gjennomsnitt var debutalderen `r round(debutAge[["mean"]], digits = 0)` år av d
 
 # Basic line chart (continuous x)
 highcharter::hchart(debut, type = "line", hcaes(x = can3, y = pros)) %>%
-  highcharter::hc_title(text = "Figur 2: Debutalder for cannabis") %>%
+  highcharter::hc_title(text = "Figur 2: Debutalder for cannabisbruk, 2025") %>%
+  highcharter::hc_caption(text = "Tall om illegale rusmidler") %>%
+  highcharter::hc_subtitle(text = "Fordeling av alder ved første cannabisbruk, i alderen 16 – 64 år") %>%
   highcharter::hc_xAxis(title = list(text = "Alder")) %>%
   highcharter::hc_yAxis(title = list(text = "Prosent")) %>%
   highcharter::hc_colors("#2C7FB8") %>%
@@ -70,6 +72,7 @@ make_hist(
  group = "cat",
  flip = TRUE,
  title = "Figur 3: Frekvens bruk av cannabis",
+ subtitle = "Fordeling av frekvens (antall ganger) blant dem som har brukt cannabis siste 12 måneder, i alderen 16–64 år",
  caption = "Tall om illegale rusmidler"
 )
 
@@ -100,7 +103,8 @@ make_hist(
   ylim = c(0,50),
   group = "grp",
   type = "line",
-  title = "Figur 4: Andel cannabisbruk i alderen 16-64, 2013-2025 ",
+  title = "Figur 4: Utvikling i cannabisbruk, 2013–2025",
+  subtitle = "Andel som har brukt cannabis noen gang, de siste 12 måneder og de siste 4 uker, i alderen 16–64 år",
   caption = "Tall om illegale rusmidler"
 )
 
