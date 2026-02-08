@@ -24,7 +24,7 @@ debut[, pros := round(N/sum(N)*100, digits = 1)]
 Blant dem som har brukt cannabis i 2025, spurte vi om hvor gamle de var da de prøvde
 stoffet for første gang. De fleste hadde sin første erfaring i `r debutAge[["median"]]`‑årsalderen.
 Den yngste som rapporterte debut, var `r debutAge[["min"]]` år, og den eldste var `r debutAge[["max"]]` år. I
-gjennomsnitt var debutalderen `r round(debutAge[["mean"]], digits = 0)` år.
+gjennomsnitt var debutalderen `r round(debutAge[["mean"]], digits = 0)` år av de som har svart.
 
 ```{r}
 #| label: debut-fig
@@ -48,7 +48,15 @@ source(here::here("reports/pub-2026/analysis_2026/cann-hyppighet.R"))
 data.table::setorder(canNo, cat, count)
 ```
 
-Figuren nedenfor viser fordelingen av brukshyppighet blant personer i alderen 16 til 64 år som har brukt cannabis noen gang og blant dem som har brukt cannabis i løpet av de siste 12 månedene. Flertallet rapporterer bruk fem ganger eller færre. Andelen som har brukt cannabis mer enn 50 ganger, er imidlertid høyere i gruppen som oppgir bruk de siste 12 månedene. Videre rapporterte `r canBruk3[["pros"]][4]` prosent at de hadde brukt cannabis en til tre dager i løpet av de siste fire ukene, mens `r canBruk3[["pros"]][1]` prosent brukte 20 dager eller mer. Det samme mønsteret finner vi også når vi kun ser på personer mellom 16 og 30 år.
+Figuren nedenfor viser fordelingen av bruksfrekvensen blant personer i alderen
+16 til 64 år som har brukt cannabis noen gang og blant dem som har brukt
+cannabis i løpet av de siste 12 månedene. Flertallet rapporterer bruk fem ganger
+eller færre. Andelen som har brukt cannabis mer enn 50 ganger, er imidlertid
+høyere i gruppen som oppgir bruk de siste 12 månedene. Videre rapporterte 
+`r canBruk3[["pros"]][4]` prosent at de hadde brukt cannabis en til tre dager i
+løpet av de siste fire ukene, mens `r canBruk3[["pros"]][1]` prosent brukte 20
+dager eller mer. Det samme mønsteret finner vi også når vi kun ser på personer
+mellom 16 og 30 år.
 
 ```{r}
 #| label: cann-hyggpig-fig
@@ -115,7 +123,9 @@ plot_trend_ltp
 
 ### Test for trend for cannabisbruk siste 12 måneder
 
-Figuren nedenfor viser en liten, men statistisk signifikant økning i andelen som har brukt cannabis de siste 12 månedene, etter at det er tatt hensyn til forskjeller i alder og kjønn.
+Figuren nedenfor viser en liten, men statistisk signifikant økning i andelen som
+har brukt cannabis de siste 12 månedene, etter at det er tatt hensyn til
+forskjeller i alder og kjønn.
 
 ```{r}
 #| label: trend_cannabis
@@ -147,7 +157,10 @@ plot_trend_lmp
 
 ### Cannabisbruk blant menn og kvinner
 
-Når vi ser på cannabisbruk det siste året blant menn og kvinner, finner vi tydelige kjønnsforskjeller gjennom hele perioden 2013–2025. Det eneste unntaket er i 2022, hvor forskjellen mellom gruppene var noe mindre. Dette vises i figuren nedenfor.
+Når vi ser på cannabisbruk det siste året blant menn og kvinner, finner vi
+tydelige kjønnsforskjeller gjennom hele perioden 2013–2025. Det eneste unntaket
+er i 2022, hvor forskjellen mellom gruppene var noe mindre. Dette vises i
+figuren nedenfor.
 
 
 ```{r}
@@ -267,7 +280,9 @@ make_hist(
 
 ### Cannabisbruk blant menn og kvinner 16-30 år
 
-Blant unge voksne ser vi de samme kjønnsforskjellene i cannabisbruk gjennom perioden 2013–2025, men i 2022 og 2025 var forskjellen mellom kvinner og menn mindre enn ellers.
+Blant unge voksne ser vi de samme kjønnsforskjellene i cannabisbruk gjennom
+perioden 2013–2025, men i 2022 og 2025 var forskjellen mellom kvinner og menn
+mindre enn ellers.
 
 
 ```{r}
