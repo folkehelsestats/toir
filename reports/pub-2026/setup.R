@@ -195,7 +195,7 @@ DTT[ans2_c == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
 DTT[ans2_e == 1, ltp_heroin := 1] #Heroin
 DTT[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 DTT[ans2_g == 1, ltp_lsd := 1] #LSD
-DTT[ans2_h == 1, ltp_other := 1] #Andre stoffer noen gang
+DTT[ans2_h == 1, ltp_other := 1] #Andre rusmidler noen gang
 
 DTT[ans3_1 == 1, lyp_cocaine := 1]
 DTT[ans3_2 == 1, lyp_mdma := 1]

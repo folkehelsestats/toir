@@ -1,4 +1,4 @@
-## How many use sentralstimulerende stoffer
+## How many use sentralstimulerende rusmidler 
 
 
 append_total_row <- function(DT,

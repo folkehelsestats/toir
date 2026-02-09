@@ -1,4 +1,4 @@
-## Bruk av sentralstimulerende stoffer 16-64 år i 2025 
+## Bruk av sentralstimulerende rusmidler 16-64 år i 2025 
 
 ```{r}
 #| label: sentral-all
@@ -9,10 +9,10 @@ source(here::here("reports/pub-2026/analysis_2026/sentral-narko.R"))
 
 Resultater fra rus- og tobakksundersøkelsen 2025 viser at 
 `r round(sentralDT[["percentage"]][3], 1)` % i aldersgruppen 16-64 år rapporterte
-at de hadde brukt sentralstimulerende stoffer noen gang (livstidsprevalens) hvor
+at de hadde brukt sentralstimulerende rusmidler noen gang (livstidsprevalens) hvor
 av dem `r round(sentralDT[["percentage"]][1], 1)` % er menn og 
 `r round(sentralDT[["percentage"]][2], 1)` % kvinner. Kokain, ecstasy/MDMA og
-amfetaminer er de stoffene som flest rapporterer at de har brukt.
+amfetaminer er de rusmidlene som flest rapporterer at de har brukt.
 
 
 ```{r}
@@ -48,7 +48,7 @@ make_hist(
 )
 ```
 
-## Bruk noen gang av andre sentralstimulerende stoffer 16-64 år: Trender fra 2013 til 2025 
+## Bruk noen gang av andre sentralstimulerende rusmidler 16-64 år: Trender fra 2013 til 2025 
 
 
 ```{r nark_alle}
@@ -67,7 +67,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 20: Andel har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  title = "Figur 20: Andel har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -85,7 +85,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 21: Andel menn har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  title = "Figur 21: Andel menn har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -103,13 +103,13 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 22: Andel kvinner har noen gang brukt andre sentralstimulerende stoffer i alderen 16-64, 2013-2025 ",
+  title = "Figur 22: Andel kvinner har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
 
-## Bruk av sentralstimulerende stoffer 16 - 30 år
+## Bruk av sentralstimulerende rusmidler 16 - 30 år
 
 
 ```{r}
@@ -145,7 +145,7 @@ make_hist(
 )
 ```
 
-## Bruk av sentralstimulerende stoffer 16-30 år: Trender fra 2013 til 2025 
+## Bruk av sentralstimulerende rusmidler 16-30 år: Trender fra 2013 til 2025 
 
 
 ```{r nark_alle_yng}
@@ -159,7 +159,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 23: Andel har noen gang brukt andre sentralstimulerende stoffer i alderen 16-30, 2013-2025 ",
+  title = "Figur 23: Andel har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -177,7 +177,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 24: Andel menn har noen gang brukt andre sentralstimulerende stoffer i alderen 16-30, 2013-2025 ",
+  title = "Figur 24: Andel menn har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -195,14 +195,14 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 25: Andel kvinner har noen gang brukt andre sentralstimulerende stoffer i alderen 16-30, 2013-2025 ",
+  title = "Figur 25: Andel kvinner har noen gang brukt andre sentralstimulerende rusmidler i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
 
 
-## Bruk av andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64 år: Trender fra 2013 til 2025 
+## Bruk av andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-64 år: Trender fra 2013 til 2025 
 
 ```{r lyp_alle}
 
@@ -215,7 +215,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 26: Andel har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  title = "Figur 26: Andel har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -233,7 +233,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 27: Andel menn har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  title = "Figur 27: Andel menn har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -251,13 +251,13 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 28: Andel kvinner har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-64, 2013-2025 ",
+  title = "Figur 28: Andel kvinner har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-64, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
 ```
 
-## Bruk av andre sentralstimulerende stoffer siste 12 måneder i alderen 16-30 år: Trender fra 2013 til 2025 
+## Bruk av andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-30 år: Trender fra 2013 til 2025 
 
 
 ```{r lyp_alle_yng}
@@ -271,7 +271,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 29: Andel har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-30, 2013-2025 ",
+  title = "Figur 29: Andel har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -289,7 +289,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 30: Andel menn har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-30, 2013-2025 ",
+  title = "Figur 30: Andel menn har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 
@@ -307,7 +307,7 @@ make_hist(
   ylim = c(0,15),
   group = "substance",
   type = "line",
-  title = "Figur 31: Andel kvinner har brukt andre sentralstimulerende stoffer siste 12 måneder i alderen 16-30, 2013-2025 ",
+  title = "Figur 31: Andel kvinner har brukt andre sentralstimulerende rusmidler siste 12 måneder i alderen 16-30, 2013-2025 ",
   caption = "Tall om illegale rusmidler"
 )
 

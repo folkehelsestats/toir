@@ -1,4 +1,4 @@
-## Andre stoffer og narkotika
+## Andre rusmidler og narkotika
 ## ---------------------------------
 
 ## DTT[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
@@ -7,7 +7,7 @@
 ## DTT[ans2_e == 1, ltp_heroin := 1] #Heroin
 ## DTT[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 ## DTT[ans2_g == 1, ltp_lsd := 1] #LSD
-## DTT[ans2_h == 1, ltp_other := 1] #Andre stoffer noen gang
+## DTT[ans2_h == 1, ltp_other := 1] #Andre rusmidler noen gang
 
 
 ## DTT[ans3_1 == 1, lyp_cocaine := 1]

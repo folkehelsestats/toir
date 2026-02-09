@@ -53,7 +53,7 @@ make_hist(
 
 {{< include _cannabis.qmd >}}
   
-# Sentralstimulerende stoffer
+# Sentralstimulerende rusmidler
 
 {{< include _andre_narko.qmd >}}
 
