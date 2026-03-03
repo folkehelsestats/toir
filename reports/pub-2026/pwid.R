@@ -27,6 +27,13 @@ wide_dt <- dcast(
 
 ## wide_dt[, year := as.numeric(year)]
 
+wide_dt[, sproy := round(sproy)]
+
+vals <- names(wide_dt)[-1]
+for (j in vals)
+  set(wide_dt, j=j , value=round(wide_dt[[j]]))
+
+
 title1 <- "Beregnet antall PWID blant rusmiddelbrukere i Norge"
 subtitle1 <- "Data fra 2019-2024. En rullerende gjennomsnitt over 3 år"
 
@@ -47,23 +54,42 @@ x_col <- "year"
 y_col <- "sproy"
 line_color = "#206276"
 
+xVal <- min(wide_dt$year):max(wide_dt$year)
+
 ## Add main line series
 hc0 <- hcx |>
-  highcharter::hc_add_series(
-                 data = wide_dt,
-                 name = "PWID",
-                 type = "line",
-                 id = "ci",
-                 highcharter::hcaes(x = .data[[x_col]], y = .data[[y_col]]),
-                 lineWidth = 2,
-                 showInLegend = FALSE,
-                 color = highcharter::hex_to_rgba(line_color),
-                 marker = list(
-                   symbol = "circle" ,
-                   enabled = TRUE,
-                   radius = 4
-                 )
+    highcharter::hc_add_series(
+        data = wide_dt,
+        name = "PWID",
+        type = "line",
+        id = "ci",
+        highcharter::hcaes(x = .data[[x_col]], y = .data[[y_col]]),
+        lineWidth = 2,
+        showInLegend = FALSE,
+        color = highcharter::hex_to_rgba(line_color),
+        marker = list(
+            symbol = "circle",
+            enabled = TRUE,
+            radius = 4
+        )
+    ) |>
+  highcharter::hc_xAxis( # Sikre på x-axis vises år ikke desimaler
+                 type = "linear",
+                 tickInterval = 1,
+                 allowDecimals = FALSE
                )
+
+## if (is.numeric(dt$year)) {
+##   hc_xAxis(
+##     type = "linear",
+##     tickInterval = 1,
+##     allowDecimals = FALSE
+##   )
+## } else {
+##   hc_xAxis(
+##     categories = xVal
+##   )
+## }
 
 
 y_axis_title = "Glidende gjennomsnitt sprøytebrukere"
@@ -117,24 +143,24 @@ caption = "Kilde: bla.. bla.."
 credits_text = "Hdir"
 credits_href = "https://www.hdir.no"
 ## Add axes, caption, and credits
-  hc3 <- hc2 |>
-    highcharter::hc_xAxis(
-                   title = list(text = x_axis_title),
-                   accessibility = list(
-                     enabled = TRUE,
-                     ## description = paste0("årgangene fra ", min(data[[x_col]]), " til ", max(data[[x_col]]))
-                     description = "Data fra 2019 - 2024",
-                     tickInterval = 1,
-                     allowDecimals = FALSE
-                   )
-                 ) |>
-    highcharter::hc_caption(text = caption,
-                            align = "right") |>
-    highcharter::hc_credits(
-                   enabled = FALSE,
-                   text = credits_text,
-                   href = credits_href
+hc3 <- hc2 |>
+  highcharter::hc_xAxis(
+                 title = list(text = x_axis_title),
+                 accessibility = list(
+                   enabled = TRUE,
+                   ## description = paste0("årgangene fra ", min(data[[x_col]]), " til ", max(data[[x_col]]))
+                   description = "Data fra 2019 - 2024"
+                   ## tickInterval = 1,
+                   ## allowDecimals = FALSE
                  )
+               ) |>
+  highcharter::hc_caption(text = caption,
+                          align = "right") |>
+  highcharter::hc_credits(
+                 enabled = FALSE,
+                 text = credits_text,
+                 href = credits_href
+               )
 
 
 ## Add tooltip, exporting, and accessibility
