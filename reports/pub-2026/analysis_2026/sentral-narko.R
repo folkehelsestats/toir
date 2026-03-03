@@ -67,3 +67,16 @@ sentralDT <- calc_percentage_total_ci(
 )
 
 ## sentralDT <- append_total_row(sentralDT)
+
+sentralDT24 <- calc_percentage_total_ci(
+  DTT[year == 2024],
+  outcome_var = "ltp_sentral",
+  group_vars = "kjonnSTR",
+  weight_var = "vekt",
+  denominator_var = "ltpPop_sentral",
+  na_treatment = "as_zero",
+  round_digits = 1,
+  include_diagnostics = TRUE,
+  include_total = TRUE,
+  total_label = "Alle"
+)
