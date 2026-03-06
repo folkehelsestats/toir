@@ -128,7 +128,7 @@ dtx <- ddt[, lapply(.SD, \(col) {
 ## -------------
 ## only those 16-64 years old being asked about drug use 2012-2024
 dtx <- dtx[alder <= 64] #Only 16-64 years old included
-DD <- rbindlist(list(dtx[, ..commonCols], DT25[, ..commonCols]), use.names = TRUE, fill = TRUE)
+DD <- rbindlist(list(dtx[, ..commonCols], DT25[, ..commonCols]), use.names = TRUE) #, fill = TRUE
 
 DD <- torr::group_age_standard(DD,
                                 var = "alder",
@@ -158,10 +158,10 @@ create_population <- function(dt) {
 DD <- create_population(DD)
 
 CanVars = c("can1", "can6", "can10")
-DTT <- torr::create_cann_pop(DD, vars = CanVars )
+DTT <- torr::create_cann_pop(DD, vars = CanVars ) #Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
 
-DTT <- torr::create_narko_pop(DTT, vars = c("ans2_a", "ans3_1"), val = "kokain")
-DTT <- torr::create_narko_pop(DTT, vars = c("ans2_b", "ans3_2"), val = "mdma")
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_a", "ans3_1"), val = "kokain") #ltpPop_kokain og lypPop_kokain
+DTT <- torr::create_narko_pop(DTT, vars = c("ans2_b", "ans3_2"), val = "mdma") #ltpPop_mdma og lypPop_mdma
 DTT <- torr::create_narko_pop(DTT, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
 DTT <- torr::create_narko_pop(DTT, vars = c("ans2_e", "ans3_5"), val = "heroin")
 DTT <- torr::create_narko_pop(DTT, vars = c("ans2_f", "ans3_6"), val = "ghb")
@@ -207,3 +207,23 @@ DTT[ans3_8 == 1, lyp_other := 1]
 
 
 
+## ## List of population
+## ## -----------------------
+## stiVar <- c("ltpPop_cannabis", "lypPop_cannabis","lmpPop_cannabis")
+
+## stiVar <- c("ltpPop_kokain", "lypPop_kokain", "ltpPop_annet", "lypPop_annet",
+##             "ltpPop_mdma", "lypPop_mdma", "ltpPop_amfetaminer", "lypPop_amfetaminer")
+## # Assuming DTT is a data.table
+
+## res_tidy <- DTT[,
+##   melt(.SD, measure.vars = stiVar,
+##        variable.name = "variable", value.name = "value")
+## ][, .N, keyby = .(year, variable, value)]
+
+## stiDT <- res_tidy[value == 1]
+## stiWide <- dcast(stiDT, year ~ variable, value.var = "N")
+
+## fwrite(stiDT, "cannabis-long.csv")
+## fwrite(stiWide, "cannabis-wide.csv")
+
+## rio::export(stiWide, "narko.xlsx")
