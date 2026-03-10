@@ -52,6 +52,7 @@ vann_data <- function(vannFil, sheet = c("thca", "kokain", "amfetaminer", "metam
          )]
 
   long[, t2 := data.table::fifelse(s == "V", "Vår", "Høst")]
+  long[, kort := tid]
   long[, tid := paste0(t2, " 20", t)]
 
   # --- Rens Ukedag (fjern 'Gjennomsnitt') -----------------------------------
@@ -69,5 +70,10 @@ vann_data <- function(vannFil, sheet = c("thca", "kokain", "amfetaminer", "metam
   colx <- c("by_tid", "value", "s", "t", "t2", "prev")
   long[, (colx) := NULL]
 
+  colN <- names(long)
+  data.table::setnames(long, colN, tolower(colN))
+
   return(long[])
 }
+
+
