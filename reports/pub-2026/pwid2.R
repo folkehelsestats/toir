@@ -12,7 +12,7 @@ dt <- rio::import(fwid, sheet = "Ark1") |> as.data.table()
 years <- as.character(2012:2024)
 
 long <- data.table::melt(
-  dt_narrow,
+  dt,
   id.vars = "col",
   measure.vars = years_present,
   variable.name = "year",
