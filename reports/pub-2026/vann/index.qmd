@@ -71,6 +71,7 @@ opts <- hd_opts(title = "Funn av cannabis i avløpsvann 2024 og 2025",
                             "om våren og én ukes prøvetaking om høsten."), 
                 ylab = "mg THCA/1000p/dag",
                 xlab = NULL,
+                yint = 50,
                 ylim = c(0,200),
                 caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
                 )
@@ -145,6 +146,126 @@ title = "Funn av THC – syre fordelt på ukedager i Trondheim, 2024 og 2025"
 
 d <- dtThca[by == "Trondheim"]
 spec  <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+### Kokain
+
+I avløpsvannanalyser måles kokain via metabolitten benzoylekgonin (BE), som
+dannes når kokain brytes ned i kroppen. Resultater fra analysene viser følgende,
+se figur nedenfor:
+
+Det var ingen signifikante endringer i gjennomsnittlig mengde av
+kokainmetabolitten BE fra 2024 til 2025 (vår og høstdata samlet) i noen av de
+tre byene.
+
+I Trondheim var mengden av BE signifikant lavere enn i Oslo og Bergen både i
+2024 og 2025 (vår og høstdata samlet). Overordnet ble det funnet mer
+benzoylekgonin (BE) i Oslo enn i Bergen både i 2024 og 2025 (vår og høstdata
+samlet), men forskjellen mellom byene var ikke signifikant.
+
+
+```{r}
+#| label: kokain-uke
+
+DT <- vann_data(vannFil, "kokain")
+
+title = "Funn av kokain i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde kokainmetabolitten benzoylekgonin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 100,
+                ylim = c(0,700),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+Figurene under viser daglig målt mengde kokain metabolitt i avløpsvann per 1000
+innbyggere gjennom prøvetakingsukene om våren og høsten. Funn fra analysene
+indikerer at kokainbruk er mer utbredt i helgene sammenlignet med hverdagene.
+
+
+```{r}
+#| label: kokain-dager
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for Cannabis ----------------------------
+subtitle = "Daglig mengde kokainmetabolitten benzoylekgonin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,900)
+yint = 100
+
+```
+
+```{r}
+#| label: kokain-bergen
+#| message: FALSE
+
+title = "Funn av kokain fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: kokain-oslo
+#| message: FALSE
+
+title = "Funn av kokain fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: kokain-thrm
+#| message: FALSE
+
+title = "Funn av kokain fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
 opts <- hd_opts(title = title,
                 subtitle = subtitle,
                 caption = caption,

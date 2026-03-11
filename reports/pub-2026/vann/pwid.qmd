@@ -56,8 +56,10 @@ long <- data.table::melt(
 
 long[, year := as.integer(year)]
 # Endre legend -------------------------------------------------------
-sproy <- c("N" = "Estimat antall sprøytebrukere",
-           "roll" = "Glidende estimat antall sprøytebrukere")
+sproy <- c(
+  N    = "Estimert antall sprøytebrukere",
+  roll = "Glidende estimat av antall sprøytebrukere"
+)
 
 long[, cols := sproy[col]]
 
