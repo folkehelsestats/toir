@@ -1,22 +1,30 @@
 ## remotes::install_github("folkehelsestats/highdir")
-remotes::install_github("folkehelsestats/highdir@dev")
+## remotes::install_github("folkehelsestats/highdir@dev") ##
 
 ## Skal ikke publiseres før 18.mars
 ## --------------------------------------------
 pkgs <- c("data.table", "rio", "highdir", "highcharter")
 sapply(pkgs, require, character.only = TRUE)
 
-vannFil <- "O:\\Prosjekt\\Rusdata\\illegale_rus/avlopvann_20260304.xlsx"
-source("~/Git-hdir/toir/reports/pub-2026/fun-avlopvann.R")
+vannFil <- "O:\\Prosjekt\\Rusdata\\illegale_rus/avlopsvann20260211.xlsx"
+source("~/Git-hdir/toir/reports/pub-2026/vann/fun-avlopvann.R")
 
+sti <- "~/Git-hdir/toir/reports/pub-2026/vann"
+
+## -- THCA --------------------------
 thca <- vann_data(vannFil, "thca")
+
 
 thcaUke <- thca[ukedag == "uke"]
 spec <- hd_spec(thcaUke, x = "by", y = "val", group = "tid")
 opts <- hd_opts(title = "THCA", ylab = "mg THCA/1000p/dag")
 fg <- hd_make(spec, "column", opts, use_js = F)
-fg
+hd_save(fg, file = file.path(sti, "thca-uke.html"))
 
+
+
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
 week <- c("Tir", "Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
 wDT <- thca[ukedag %chin% week]
 wDT[, id := seq_len(.N), by = .(by, tid)]
@@ -32,7 +40,6 @@ hd_make(specBgn, "line", optsBgn)
 kokain <- vann_data(vannFil, "kokain")
 
 kokainUke <- kokain[ukedag == "uke"]
-
 
 
 
