@@ -6,7 +6,7 @@
 pkgs <- c("data.table", "rio", "highdir", "highcharter")
 sapply(pkgs, require, character.only = TRUE)
 
-vannFil <- "O:\\Prosjekt\\Rusdata\\illegale_rus/avlopsvann20260211.xlsx"
+vannFil <- "O:\\Prosjekt\\Rusdata\\avlopsvann/avlopsvann20260211.xlsx"
 source("~/Git-hdir/toir/reports/pub-2026/vann/fun-avlopvann.R")
 
 sti <- "~/Git-hdir/toir/reports/pub-2026/vann"

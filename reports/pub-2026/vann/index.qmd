@@ -15,7 +15,7 @@
 pkgs <- c("data.table", "rio", "highdir", "highcharter")
 sapply(pkgs, require, character.only = TRUE)
 
-vannFil <- "O:\\Prosjekt\\Rusdata\\illegale_rus/avlopsvann20260211.xlsx"
+vannFil <- "O:\\Prosjekt\\Rusdata\\avlopsvann/avlopsvann20260211.xlsx"
 source("~/Git-hdir/toir/reports/pub-2026/vann/fun-avlopvann.R")
 ```
 
@@ -77,3 +77,82 @@ opts <- hd_opts(title = "Funn av cannabis i avløpsvann 2024 og 2025",
 hd_make(spec, "column", opts)
 ```
 
+Figurene under viser mengde THC-syre målt i avløpsvannet per dag gjennom de ulike prøvetakingsukene. 
+
+```{r}
+#| label: cannabis-dager
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtThca <- thca[ukedag %chin% week]
+dtThca[, id := seq_len(.N), by = .(by, tid)]
+dtThca[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for Cannabis ----------------------------
+subtitle = "Daglig mengde THC-syre i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene."
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,200)
+yint = 20
+
+```
+
+```{r}
+#| label: cannabis-bergen
+#| message: FALSE
+
+title = "Daglige funn av cannabis i Bergen, 2024 og 2025"
+
+d <- dtThca[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: cannabis-oslo
+#| message: FALSE
+
+title = "Funn av Cannabis fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtThca[by == "Oslo"]
+spec  <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: cannabis-thrm
+#| message: FALSE
+
+title = "Funn av THC – syre fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtThca[by == "Trondheim"]
+spec  <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
