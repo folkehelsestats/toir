@@ -1,9 +1,9 @@
 library(data.table)
 library(rio)
 
-vann_data <- function(vannFil, sheet = c("thca", "kokain", "amfetaminer", "metamfetamin", "mdma", "ketamin")) {
+sht <- c("thca", "kokain", "amfetamin", "metamfetamin", "mdma", "ketamin")
 
-  sheet <- match.arg(sheet)
+vann_data <- function(vannFil, sheet = NULL) {
 
   # --- Import og grunnoppsett ----------------------------------------------
   dt <- suppressMessages(
