@@ -215,7 +215,6 @@ subtitle = "Daglig mengde kokainmetabolitten benzoylekgonin i avløpsvann per 10
 caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
 ylim = c(0,900)
 yint = 100
-
 ```
 
 ```{r}
@@ -280,11 +279,31 @@ hd_make(spec , "line", opts)
 
 ### Amfetamin og metamfetamin
 
-Mengden amfetamin og metamfetamin i avløpsvannet er relativt jevnt fordelt
-gjennom uken. Dette indikerer at bruken av disse rusmidlene i mindre grad er
-tilknyttet helg og sosiale aktiviteterso.
+Amfetamin og metamfetamin er to nært beslektede sentralstimulerende stoffer, men
+metamfetamin er et mer potent rusmiddel enn amfetamin og dermed knyttet til et
+mer risikofylt bruk. I Norge er amfetamin det vi finner mest av– både i beslag,
+bruk og i avløpsvannsanalyser. Siden amfetamin ble oppdaget for over 100 år
+siden, er ulike varianter av stoffet også blitt brukt til behandling av en rekke
+medisinske tilstander.
 
-Over tid viser analysene en stabil utskillelse av amfetamin i Oslo i perioden 2024 – 2025. 
+#### Amfetamin 
+
+Amfetamin skilles i stor grad ut i uforandret form i urinen, og det er dermed
+denne formen (modersubstans) som dominerer i avløpsvannet. Resultater fra
+analysene viser følgende, se figur nedenfor:
+
+I Bergen var det en signifikant nedgang i mengden av amfetamin i avløpsvannet
+fra våren 2024 til våren 2025. Nivået økte igjen høsten 2025. Nedgangen i
+amfetamin fra våren 2024 til våren 2025 sammenfalt med en økning i mengden
+metamfetamin målt i avløpsvannet våren 2025, se nærmere omtale av dette i
+avsnittet om metamfetamin i avsnittet under. I Trondheim var det en signifikant
+nedgang i mengden amfetamin fra 2024 til 2025 (vår og høstdata samlet). Dette
+skyldes i hovedsak en signifikant nedgang høsten 2025. I Oslo holdt nivået av
+amfetamin seg relativt stabilt begge årene.
+
+I 2024 hadde Bergen og Trondheim et signifikant høyere nivå av amfetamin i
+avløpsvannet sammenlignet med Oslo (vår og høstdata samlet). Det var kun Bergen
+som hadde et signifikant høyere nivå enn Oslo i 2025.
 
 
 ```{r}
@@ -309,22 +328,102 @@ opts <- hd_opts(title = title,
 hd_make(spec, "column", opts)
 ```
 
-Amfetamin brukes både lovlig i behandling av ADHD og illegalt i Norge. Den
-totale mengden amfetamin målt i avløpsvannet kan med andre ord ha både legale og
-illegale kilder. I Bergen ble det observert en nedgang i mengden amfetamin i
-avløpsvannet fra våren 2024 til våren 2025, hvor summen av amfetamin og
-metamfetamin holdt seg konstant. Høsten 2025 var mengden amfetamin igjen på nivå
-med 2024, samtidig som mengden metamfetamin i avløpsvannet gikk ned. Disse
-endringene kan indikere variasjoner i tilgjengelighet eller bruksmønster i
-markedet i Bergen.
+Figurene under viser mengde amfetamin målt i avløpsvannet per dag gjennom de
+ulike prøvetakingsukene. Resultatene viser ingen trend mot økt forbruk i helgene
+sammenlignet med hverdagene.
 
-I Trondheim ble det målt lavere mengder amfetamin høsten 2025 enn sammenlignet
-med 2024 (høst og vår). I motsetning til Bergen ble dette ikke fulgt av en
-tilsvarende økning i mengden metamfetamin.
+```{r}
+#| label: amfetamin-day
 
-Et kort avsnitt om at brukere i liten grad skiller på bruk av amfetamin og
-metamfetamin
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
 
+# Felles objects for Amfetamin ----------------------------
+subtitle = "Daglig mengde amfetamin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,600)
+yint = 100
+```
+
+
+```{r}
+#| label: amfetamin-bgn
+#| message: FALSE
+
+title = "Figur X: Funn av amfetamin fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: amfetamin-oslo
+#| message: FALSE
+
+title = "Figur X: Funn av amfetamin fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: amfetamin-thrm
+#| message: FALSE
+
+title = "Figur X: Funn av amfetamin fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec, "line", opts)
+```
+
+### Legalt og illegalt amfetamin
+
+Amfetamin i avløpsvann kan komme både fra legemidler og fra illegalt produsert amfetamin. Amfetamin eksisterer i to former, dekstro-amfetamin og levo-amfetamin. Legemidler inneholder nesten bare dekstro-amfetamin, mens illegalt produsert amfetamin som oftest består av en blanding av begge formene. Vi kan foreløpig ikke tallfeste hvor stor andel av den totale amfetaminmengden som stammer fra illegal bruk, men forholdet mellom de ulike amfetaminformene gir likevel nyttig informasjon. 
+
+Resultatene fra høsten 2025 viste at andelen levo-amfetamin av total mengde amfetamin var gjennomsnittlig 42 % i Bergen, 43 % i Trondheim og 52 % i Oslo. Dette resultatet indikerer at amfetaminet kommer både fra legalt og illegalt bruk. 
+
+#### Metamfetamin
+
+I likhet med amfetamin er det primærrusmiddelet som måles i avløpsvannet. 
+Resultater fra analysene viser følgende, se figur nedenfor: 
+
+Nedgangen i amfetaminfunn i Bergen våren 2025, se figur over, sammenfalt med en tydelig økning i nivåene av metamfetamin samme vår, se figur under. Økningen var markant sammenlignet med både vår og høst 2024, da det var så lave nivåer av metamfetamin at det ikke kunne måles. Selv om tre av dagene lå under nedre målegrense, viser resultatene at nivåene samlet sett var høye denne høsten. 
+
+I Trondheim var det kun én dag våren 2024 hvor nivåene av metamfetamin i avløpsvann lå over målegrensen. Analysene viser at metamfetamin i størst grad benyttes i Oslo. 
 
 ```{r}
 #| label: metamfetamin-uke
@@ -361,7 +460,7 @@ produsert amfetamin til den totale amfetaminmengden er større i Bergen og
 Trondheim enn i Oslo.
 
 
-### MDMA
+### Ecstacy/MDMA
 
 Mengden MDMA i avløpsvannet gjennom uken viser høyere nivåer i helgene
 sammenlignet med hverdager. Mengden per innbygger er mellom 1,4 og 2,3 ganger
@@ -376,6 +475,7 @@ målt høsten 2025.
 
 ```{r}
 #| label: mdma-uke
+#| warning: FALSE
 
 DT <- vann_data(vannFil, "mdma")
 
@@ -396,6 +496,89 @@ opts <- hd_opts(title = title,
 hd_make(spec, "column", opts)
 ```
 
+
+```{r}
+#| label: mdma-day
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for mdma ----------------------------
+subtitle = "Daglig mengde mdma i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,90)
+yint = 10
+```
+
+
+```{r}
+#| label: mdma-bgn
+#| message: FALSE
+
+title = "Figur X: Funn av mdma fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: mdma-oslo
+#| message: FALSE
+
+title = "Figur X: Funn av mdma fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: mdma-thrm
+#| message: FALSE
+
+title = "Figur X: Funn av mdma fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+### Ketamin
+ 
 Ketamin brukes både medisinsk og illegalt i Norge. Resultatene fra
 avløpsvannanalysene skiller ikke mellom legalt og illegalt bruk av ketamin.
 Mengden ketamin i avløpsvannet per innbygger var høyest i Oslo, etterfulgt av
@@ -404,6 +587,7 @@ byene.
 
 ```{r}
 #| label: ketamin-uke
+#| warning: FALSE
 
 DT <- vann_data(vannFil, "ketamin")
 
@@ -431,3 +615,81 @@ enkeltobservasjonene antas å skyldes dumping av rent stoff i avløpssystemet, o
 ikke et uvanlig høyt forbruk i befolkningen.
 
 
+```{r}
+#| label: ketamin-day
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for ketamin ----------------------------
+subtitle = "Daglig mengde ketamin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,600)
+yint = 100
+```
+
+
+```{r}
+#| label: ketamin-bgn
+#| message: FALSE
+
+title = "Figur X: Funn av ketamin fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: ketamin-oslo
+#| message: FALSE
+
+title = "Figur X: Funn av ketamin fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: ketamin-thrm
+#| message: FALSE
+
+title = "Figur X: Funn av ketamin fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
