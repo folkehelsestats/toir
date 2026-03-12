@@ -353,7 +353,7 @@ yint = 100
 #| label: amfetamin-bgn
 #| message: FALSE
 
-title = "Figur X: Funn av amfetamin fordelt på ukedager i Bergen, 2024 og 2025"
+title = "Figur 10: Funn av amfetamin fordelt på ukedager i Bergen, 2024 og 2025"
 
 d <- dtDay[by == "Bergen"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -373,7 +373,7 @@ hd_make(spec , "line", opts)
 #| label: amfetamin-oslo
 #| message: FALSE
 
-title = "Figur X: Funn av amfetamin fordelt på ukedager i Oslo, 2024 og 2025"
+title = "Figur 11: Funn av amfetamin fordelt på ukedager i Oslo, 2024 og 2025"
 
 d <- dtDay[by == "Oslo"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -394,7 +394,7 @@ hd_make(spec , "line", opts)
 #| label: amfetamin-thrm
 #| message: FALSE
 
-title = "Figur X: Funn av amfetamin fordelt på ukedager i Trondheim, 2024 og 2025"
+title = "Figur 12: Funn av amfetamin fordelt på ukedager i Trondheim, 2024 og 2025"
 
 d <- dtDay[by == "Trondheim"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -430,7 +430,7 @@ I Trondheim var det kun én dag våren 2024 hvor nivåene av metamfetamin i avl�
 
 DT <- vann_data(vannFil, "metamfetamin")
 
-title = "Figur 10: Funn av metamfetamin i avløpsvann i 2024 og 2025"
+title = "Figur 13: Funn av metamfetamin i avløpsvann i 2024 og 2025"
 subtitle = "Gjennomsnittlig daglig mengde metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
 
 DTuke <- DT[ukedag == "uke"]
@@ -479,7 +479,7 @@ målt høsten 2025.
 
 DT <- vann_data(vannFil, "mdma")
 
-title = "Figur 11: Funn av MDMA i avløpsvann i 2024 og 2025"
+title = "Figur 14: Funn av MDMA i avløpsvann i 2024 og 2025"
 subtitle = "Gjennomsnittlig daglig mengde MDMA metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
 
 DTuke <- DT[ukedag == "uke"]
@@ -518,7 +518,7 @@ yint = 10
 #| label: mdma-bgn
 #| message: FALSE
 
-title = "Figur X: Funn av mdma fordelt på ukedager i Bergen, 2024 og 2025"
+title = "Figur 15: Funn av mdma fordelt på ukedager i Bergen, 2024 og 2025"
 
 d <- dtDay[by == "Bergen"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -539,7 +539,7 @@ hd_make(spec , "line", opts)
 #| label: mdma-oslo
 #| message: FALSE
 
-title = "Figur X: Funn av mdma fordelt på ukedager i Oslo, 2024 og 2025"
+title = "Figur 16: Funn av mdma fordelt på ukedager i Oslo, 2024 og 2025"
 
 d <- dtDay[by == "Oslo"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -560,7 +560,7 @@ hd_make(spec , "line", opts)
 #| label: mdma-thrm
 #| message: FALSE
 
-title = "Figur X: Funn av mdma fordelt på ukedager i Trondheim, 2024 og 2025"
+title = "Figur 17: Funn av mdma fordelt på ukedager i Trondheim, 2024 og 2025"
 
 d <- dtDay[by == "Trondheim"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -591,7 +591,7 @@ byene.
 
 DT <- vann_data(vannFil, "ketamin")
 
-title = "Figur 12: Funn av ketamin i avløpsvann i 2024 og 2025"
+title = "Figur 18: Funn av ketamin i avløpsvann i 2024 og 2025"
 subtitle = "Gjennomsnittlig daglig mengde ketamin metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
 
 DTuke <- DT[ukedag == "uke"]
@@ -636,7 +636,7 @@ yint = 100
 #| label: ketamin-bgn
 #| message: FALSE
 
-title = "Figur X: Funn av ketamin fordelt på ukedager i Bergen, 2024 og 2025"
+title = "Figur 19: Funn av ketamin fordelt på ukedager i Bergen, 2024 og 2025"
 
 d <- dtDay[by == "Bergen"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -657,7 +657,7 @@ hd_make(spec , "line", opts)
 #| label: ketamin-oslo
 #| message: FALSE
 
-title = "Figur X: Funn av ketamin fordelt på ukedager i Oslo, 2024 og 2025"
+title = "Figur 20: Funn av ketamin fordelt på ukedager i Oslo, 2024 og 2025"
 
 d <- dtDay[by == "Oslo"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
@@ -678,7 +678,7 @@ hd_make(spec , "line", opts)
 #| label: ketamin-thrm
 #| message: FALSE
 
-title = "Figur X: Funn av ketamin fordelt på ukedager i Trondheim, 2024 og 2025"
+title = "Figur 21: Funn av ketamin fordelt på ukedager i Trondheim, 2024 og 2025"
 
 d <- dtDay[by == "Trondheim"]
 spec <- hd_spec(d, x = "id", y = "val", group ="tid")
