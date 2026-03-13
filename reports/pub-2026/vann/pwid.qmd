@@ -62,6 +62,7 @@ sproy <- c(
 )
 
 long[, cols := sproy[col]]
+long[, value := round(value, digits = 0) ]
 
 title1 <- "Estimert antall personer som injiserer rusmidler (PWID) i Norge"
 subtitle1 <- "Basert på data 2019–2024 • 3-årig glidende gjennomsnitt"
