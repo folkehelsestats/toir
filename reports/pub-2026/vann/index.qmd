@@ -440,7 +440,7 @@ opts <- hd_opts(title = title,
                 ylab = "mg THCA/1000p/dag",
                 xlab = NULL,
                 yint = 5,
-                ylim = c(0,35),
+                ylim = c(0,70),
                 caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
                 )
 
