@@ -1,0 +1,695 @@
+# Illegale rusmidler i avløpsvann
+
+**Sist oppdatert:** `r format(Sys.Date(), "%d. %B %Y")`
+
+**NB!** Resultatene som vises er midlertidige og kan endres. Vennligst ikke referer til disse før endelig publisering.
+
+
+```{r}
+#| label: setup-index
+#| echo: false
+#| warning: false
+#| include: false
+
+
+pkgs <- c("data.table", "rio", "highdir", "highcharter")
+sapply(pkgs, require, character.only = TRUE)
+
+vannFil <- "O:\\Prosjekt\\Rusdata\\avlopsvann/avlopsvann20260211.xlsx"
+source("~/Git-hdir/toir/reports/pub-2026/vann/fun-avlopvann.R")
+```
+
+## Hovedpunkter
+- I Oslo ble det observert en signifikant nedgang av cannabismetabolitten THC-syre i avløpsvann fra 2024 til 2025. I Bergen og Trondheim var det stabile nivåer.
+- Det var ingen signifikante endringer i gjennomsnittlig mengde av kokainmetabolitten benzoylekgonin (BE) i avløpsvannet fra 2024 til 2025, hverken i Oslo, Bergen eller Trondheim. 
+- Trondheim hadde et signifikant lavere nivå av BE sammenlignet med Oslo og Bergen både i 2024 og 2025.
+- Bergen hadde et signifikant høyere nivå av amfetamin i avløpsvannet sammenlignet med Oslo i 2025.
+- Funn fra analysene indikerer at kokainbruk er mer utbredt i helgene sammenlignet med hverdagene. Det samme gjelder for ecstacy/MDMA.
+- Det var ingen trend mot økt forbruk av cannabis eller amfetamin i helgene sammenlignet med hverdagene. 
+ 
+## Bakgrunn
+
+På oppdrag fra Helsedirektoratet har avdeling for farmakologi ved st. Olavs Hospital i Trondheim samlet inn og analysert avløpsvann for spor av rusmidler fra Oslo, Bergen og Trondheim i 2024 og 2025.Prøvene er hentet fra to renseanlegg i hver by og dekker til sammen en bakgrunnspopulasjon på 1,26 millioner innbyggere (ca. 22 % av landets befolkning). Det ble tatt analyser av avløpsvann i 7 dager vår 2024 og 2025, og 7 dager høst 2024 og 2025. 
+
+Avløpsvannanalyser gir ikke informasjon om hvor mange eller hvem som har brukt rusmidlene, ei heller hvordan de er inntatt (intravenøst, nasalt, oralt osv.). Analysene viser kun nivåene av ulike rusmidler i avløpsvann og er dermed et indirekte mål på bruk i befolkningen som helhet. Metoden gir informasjon på et overordnet nivå for hele avløpssoner og kan ikke brukes til å identifisere enkeltpersoner eller mindre grupper.
+
+Resultatene fra analyser av illegale rusmidler i avløpsvann inngår som ett av flere kunnskapsgrunnlag som samlet kan bidra til å belyse forekomsten av illegale rusmidler i den norske befolkningen. Analysene gir et øyeblikksbilde av rusmiddelbruken i befolkningen i et gitt område og tidsrom, og resultatene kan bidra i arbeidet med å iverksette målrettede forebyggende tiltak. 
+
+## Funn av Illegale rusmidler i avløpsvann 2024 og 2025 
+
+I prøvene fra 2024 og 2025 er det analysert markører for cannabis, kokain, amfetamin, metamfetamin, ecstacy/MDMA og ketamin. Analysene baserer seg på biomarkører, det vil si enten selve rusmiddelet (modersubstansen) eller nedbrytningsprodukter (metabolitter) som dannes når kroppen bryter det ned etter inntak. De fleste illegale rusmidler skilles ut av kroppen i løpet av få timer.
+Konsentrasjonene av ulike rusmidler kan imidlertid ikke sammenlignes direkte med hverandre. Stoffene har ulike brukerdoser, nedbrytning og utskillelsesmønstre. For eksempel har cannabis et mer variabelt og lengre utskillelsesvindu enn flere andre rusmidler. Det at det i tillegg måles metabolitter for noen stoffer, mens det for andre analyseres for modersubstansen gjør også sammenligning mellom stoffene vanskelig. 
+Det finnes mer avanserte metoder som kan anslå hvor mye av et stoff befolkningen faktisk bruker basert på data fra avløpsvannanalyser. I denne rapporten presenteres imidlertid primært mengder normalisert til befolkningen, som gir et godt grunnlag for å sammenligne nivåene av et stoff mellom byer og følge utviklingen over tid.
+
+Den viktigste kilden til rusmidler i avløpsvann er faktisk bruk i befolkningen. Direkte utslipp, som ved for eksempel dumping, vil som regel fremstå som uvanlige topper som avviker fra forventet bruksmønster.
+Funn basert på gjennomsnittlige daglige utskillelsesnivåer per innbygger gir et samlet overordnet bilde av hvordan illegale rusmidler avspeiles i avløpsvann over tid og mellom byer.
+
+I tillegg til å vise overordnede nivåer kan analysene gi indikasjoner på bruksmønstre og trender gjennom uken. Enkelte rusmidler forekommer typisk i høyere konsentrasjoner i helgene, noe som kan tyde på økt bruk i sosiale sammenhenger og fritid. Et slikt mønster skiller seg fra mer stabil, jevn bruk gjennom uken, som gjerne kan være uttrykk for mer etablert eller daglig bruk.
+Avløpsvannprøvene blir hentet ut i såkalte normaluker i april og september, noe som vil si at man unngår helligdager og andre eventer som kan påvirke funnene, så langt det lar seg gjøre. Det er hentet ut en samleprøve for hvert døgn i syv dager i hver periode. Funnene er oppgitt i milligram per 1000 innbygger pr dag (mg/1000 p/dag) og er statistisk testet. Analysemetoder og statistiske vurderinger er nærmere beskrevet i metodekapittelet.
+
+### Cannabis
+
+I analyser av avløpsvann blir cannabisbruk estimert ved å måle hovedmetabolitten THC COOH, som så langt er den eneste egnede biomarkøren. THC-COOH blir her omtalt som THC-syre. 
+
+Resultater fra analysene viser følgende, se figur nedenfor: 
+
+Cannabismetabolitten THC-syre var stabil fra 2024 til 2025 både i Bergen og Trondheim (vår og høstdata samlet). I Oslo ble det observert en signifikant nedgang fra 2024 til 2025. 
+
+Mengden THC-syre i avløpsvann var høyere i Oslo enn Bergen i 2024 (vår  og høstdata samlet). I 2025 fremkom det ikke lenger signifikante forskjeller mellom disse to byene. Dette skyldes at nivåene i Oslo har gått ned fra 2024 til 2025, samtidig som nivåene i Bergen holder seg relativt stabile over perioden. For Trondheim viser resultatene et lavere nivå av THC-syre sammenlignet med Oslo begge årene. 
+
+```{r}
+#| label: cannabis-uke
+
+thca <- vann_data(vannFil, "thca")
+
+
+thcaUke <- thca[ukedag == "uke"]
+spec <- hd_spec(thcaUke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = "Figur 1: Funn av cannabis i avløpsvann 2024 og 2025",
+                subtitle = paste0("Gjennomsnittlig daglig mengde av cannabismetabolitten",
+                            "THC syre per 1000 innbyggere, basert på én ukes prøvetaking",
+                            "om våren og én ukes prøvetaking om høsten."), 
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 50,
+                ylim = c(0,200),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+hd_make(spec, "column", opts)
+```
+
+Figurene under viser mengde THC-syre målt i avløpsvannet per dag gjennom de ulike prøvetakingsukene. 
+
+```{r}
+#| label: cannabis-dager
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtThca <- thca[ukedag %chin% week]
+dtThca[, id := seq_len(.N), by = .(by, tid)]
+dtThca[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for Cannabis ----------------------------
+subtitle = "Daglig mengde THC-syre i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene."
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,200)
+yint = 20
+
+```
+
+```{r}
+#| label: cannabis-bergen
+#| message: FALSE
+
+title = "Figur 2: Daglige funn av cannabis i Bergen, 2024 og 2025"
+
+d <- dtThca[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: cannabis-oslo
+#| message: FALSE
+
+title = "Figur 3: Funn av Cannabis fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtThca[by == "Oslo"]
+spec  <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: cannabis-thrm
+#| message: FALSE
+
+title = "Figur 4: Funn av THC – syre fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtThca[by == "Trondheim"]
+spec  <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+### Kokain
+
+I avløpsvannanalyser måles kokain via metabolitten benzoylekgonin (BE), som
+dannes når kokain brytes ned i kroppen. Resultater fra analysene viser følgende,
+se figur nedenfor:
+
+Det var ingen signifikante endringer i gjennomsnittlig mengde av
+kokainmetabolitten BE fra 2024 til 2025 (vår og høstdata samlet) i noen av de
+tre byene.
+
+I Trondheim var mengden av BE signifikant lavere enn i Oslo og Bergen både i
+2024 og 2025 (vår og høstdata samlet). Overordnet ble det funnet mer
+benzoylekgonin (BE) i Oslo enn i Bergen både i 2024 og 2025 (vår og høstdata
+samlet), men forskjellen mellom byene var ikke signifikant.
+
+
+```{r}
+#| label: kokain-uke
+
+DT <- vann_data(vannFil, "kokain")
+
+title = "Figur 5: Funn av kokain i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde kokainmetabolitten benzoylekgonin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 100,
+                ylim = c(0,700),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+Figurene under viser daglig målt mengde kokain metabolitt i avløpsvann per 1000
+innbyggere gjennom prøvetakingsukene om våren og høsten. Funn fra analysene
+indikerer at kokainbruk er mer utbredt i helgene sammenlignet med hverdagene.
+
+
+```{r}
+#| label: kokain-dager
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for Cannabis ----------------------------
+subtitle = "Daglig mengde kokainmetabolitten benzoylekgonin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,900)
+yint = 100
+```
+
+```{r}
+#| label: kokain-bergen
+#| message: FALSE
+
+title = "Figur 6: Funn av kokain fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: kokain-oslo
+#| message: FALSE
+
+title = "Figur 7: Funn av kokain fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: kokain-thrm
+#| message: FALSE
+
+title = "Figur 8: Funn av kokain fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+### Amfetamin og metamfetamin
+
+Amfetamin og metamfetamin er to nært beslektede sentralstimulerende stoffer, men
+metamfetamin er et mer potent rusmiddel enn amfetamin og dermed knyttet til et
+mer risikofylt bruk. I Norge er amfetamin det vi finner mest av– både i beslag,
+bruk og i avløpsvannsanalyser. Siden amfetamin ble oppdaget for over 100 år
+siden, er ulike varianter av stoffet også blitt brukt til behandling av en rekke
+medisinske tilstander.
+
+#### Amfetamin 
+
+Amfetamin skilles i stor grad ut i uforandret form i urinen, og det er dermed
+denne formen (modersubstans) som dominerer i avløpsvannet. Resultater fra
+analysene viser følgende, se figur nedenfor:
+
+I Bergen var det en signifikant nedgang i mengden av amfetamin i avløpsvannet
+fra våren 2024 til våren 2025. Nivået økte igjen høsten 2025. Nedgangen i
+amfetamin fra våren 2024 til våren 2025 sammenfalt med en økning i mengden
+metamfetamin målt i avløpsvannet våren 2025, se nærmere omtale av dette i
+avsnittet om metamfetamin i avsnittet under. I Trondheim var det en signifikant
+nedgang i mengden amfetamin fra 2024 til 2025 (vår og høstdata samlet). Dette
+skyldes i hovedsak en signifikant nedgang høsten 2025. I Oslo holdt nivået av
+amfetamin seg relativt stabilt begge årene.
+
+I 2024 hadde Bergen og Trondheim et signifikant høyere nivå av amfetamin i
+avløpsvannet sammenlignet med Oslo (vår og høstdata samlet). Det var kun Bergen
+som hadde et signifikant høyere nivå enn Oslo i 2025.
+
+
+```{r}
+#| label: amfetamin-uke
+
+DT <- vann_data(vannFil, "amfetamin")
+
+title = "Figur 9: Funn av amfetamin i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde amfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 50,
+                ylim = c(0,500),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+Figurene under viser mengde amfetamin målt i avløpsvannet per dag gjennom de
+ulike prøvetakingsukene. Resultatene viser ingen trend mot økt forbruk i helgene
+sammenlignet med hverdagene.
+
+```{r}
+#| label: amfetamin-day
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for Amfetamin ----------------------------
+subtitle = "Daglig mengde amfetamin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,600)
+yint = 100
+```
+
+
+```{r}
+#| label: amfetamin-bgn
+#| message: FALSE
+
+title = "Figur 10: Funn av amfetamin fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+```{r}
+#| label: amfetamin-oslo
+#| message: FALSE
+
+title = "Figur 11: Funn av amfetamin fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: amfetamin-thrm
+#| message: FALSE
+
+title = "Figur 12: Funn av amfetamin fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec, "line", opts)
+```
+
+### Legalt og illegalt amfetamin
+
+Amfetamin i avløpsvann kan komme både fra legemidler og fra illegalt produsert amfetamin. Amfetamin eksisterer i to former, dekstro-amfetamin og levo-amfetamin. Legemidler inneholder nesten bare dekstro-amfetamin, mens illegalt produsert amfetamin som oftest består av en blanding av begge formene. Vi kan foreløpig ikke tallfeste hvor stor andel av den totale amfetaminmengden som stammer fra illegal bruk, men forholdet mellom de ulike amfetaminformene gir likevel nyttig informasjon. 
+
+Resultatene fra høsten 2025 viste at andelen levo-amfetamin av total mengde amfetamin var gjennomsnittlig 42 % i Bergen, 43 % i Trondheim og 52 % i Oslo. Dette resultatet indikerer at amfetaminet kommer både fra legalt og illegalt bruk. 
+
+#### Metamfetamin
+
+I likhet med amfetamin er det primærrusmiddelet som måles i avløpsvannet. 
+Resultater fra analysene viser følgende, se figur nedenfor: 
+
+Nedgangen i amfetaminfunn i Bergen våren 2025, se figur over, sammenfalt med en tydelig økning i nivåene av metamfetamin samme vår, se figur under. Økningen var markant sammenlignet med både vår og høst 2024, da det var så lave nivåer av metamfetamin at det ikke kunne måles. Selv om tre av dagene lå under nedre målegrense, viser resultatene at nivåene samlet sett var høye denne høsten. 
+
+I Trondheim var det kun én dag våren 2024 hvor nivåene av metamfetamin i avløpsvann lå over målegrensen. Analysene viser at metamfetamin i størst grad benyttes i Oslo. 
+
+```{r}
+#| label: metamfetamin-uke
+
+DT <- vann_data(vannFil, "metamfetamin")
+
+title = "Figur 13: Funn av metamfetamin i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 5,
+                ylim = c(0,70),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+I 2025 ble det gjennomført analyser for å skille mellom reseptbelagt amfetamin –
+(dekstroamfetamin) og amfetamin fra det illegale markedet (levoamfetamin). Ved å
+måle forholdet mellom de to formene, kalt enantiomerisk faktoren (EF), som er
+andelen levo-amfetamin av total mengde amfetamin, kan det gis en indikasjon på
+kilden(e) til amfetamin. Dersom amfetamin hovedsakelig stammer fra illegalt
+produsert stoff, forventes EF ≥ 0,5 (Castrignanò, 2018)*.
+
+Gjennomsnittlig EF i de tre byene var 0,42, 0,43 og 0,52 for hhv. Bergen,
+Trondheim og Oslo høsten 2025. Resultatene indikerer at bidraget fra medisinsk
+produsert amfetamin til den totale amfetaminmengden er større i Bergen og
+Trondheim enn i Oslo.
+
+
+### Ecstacy/MDMA
+
+Mengden MDMA i avløpsvannet gjennom uken viser høyere nivåer i helgene
+sammenlignet med hverdager. Mengden per innbygger er mellom 1,4 og 2,3 ganger
+høyere i helgen (fredag – søndag) enn på hverdager (mandag – torsdag). Dette
+samsvarer med bruksmønsteret til MDMA, som er kjent at i større grad benyttes i
+helger og i forbindelse med fest og uteliv.
+
+I Oslo og Trondheim har nivåene av MDMA per innbygger vært stabilt fra 2024
+– 2025. I Bergen ble høyeste nivå målt høsten 2024, mens det laveste nivået ble
+målt høsten 2025.
+
+
+```{r}
+#| label: mdma-uke
+#| warning: FALSE
+
+DT <- vann_data(vannFil, "mdma")
+
+title = "Figur 14: Funn av MDMA i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde MDMA metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 5,
+                ylim = c(0,60),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+
+```{r}
+#| label: mdma-day
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for mdma ----------------------------
+subtitle = "Daglig mengde mdma i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,90)
+yint = 10
+```
+
+
+```{r}
+#| label: mdma-bgn
+#| message: FALSE
+
+title = "Figur 15: Funn av mdma fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: mdma-oslo
+#| message: FALSE
+
+title = "Figur 16: Funn av mdma fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: mdma-thrm
+#| message: FALSE
+
+title = "Figur 17: Funn av mdma fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+### Ketamin
+ 
+Ketamin brukes både medisinsk og illegalt i Norge. Resultatene fra
+avløpsvannanalysene skiller ikke mellom legalt og illegalt bruk av ketamin.
+Mengden ketamin i avløpsvannet per innbygger var høyest i Oslo, etterfulgt av
+Bergen og Trondheim. Nivåene i Trondheim var merkbart lavere enn i de to øvrige
+byene.
+
+```{r}
+#| label: ketamin-uke
+#| warning: FALSE
+
+DT <- vann_data(vannFil, "ketamin")
+
+title = "Figur 18: Funn av ketamin i avløpsvann i 2024 og 2025"
+subtitle = "Gjennomsnittlig daglig mengde ketamin metamfetamin per 1000 innbyggere, basert på én ukes prøvetaking om våren og én ukes prøvetaking om høsten."
+
+DTuke <- DT[ukedag == "uke"]
+spec <- hd_spec(DTuke, x = "by", y = "val", group = "tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                ylab = "mg THCA/1000p/dag",
+                xlab = NULL,
+                yint = 5,
+                ylim = c(0,70),
+                caption = "St. Olavs Hospital, avd. for Klinisk Farmokologi"
+                )
+
+hd_make(spec, "column", opts)
+```
+
+Det ble ikke observert noen tydelig forskjell i mengden ketamin mellom helger og
+hverdager. I både Bergen og Oslo ble det høsten 2024 registrert én dag i
+prøvetakingsuken med svært høye ketaminkonsentrasjoner i avløpsvannet. Disse
+enkeltobservasjonene antas å skyldes dumping av rent stoff i avløpssystemet, og
+ikke et uvanlig høyt forbruk i befolkningen.
+
+
+```{r}
+#| label: ketamin-day
+
+## Dager har to tirsdager.. må ha indeks for å kunne vise riktig i x-aksen
+week <- c("Ons", "Tor", "Fre", "Lør", "Søn", "Man", "Tir")
+dtDay <- DT[ukedag %chin% week]
+dtDay[, id := seq_len(.N), by = .(by, tid)]
+dtDay[, id := id - 1L] #highcart index starts from 0
+
+# Felles objects for ketamin ----------------------------
+subtitle = "Daglig mengde ketamin i avløpsvann per 1000 innbyggere gjennom uken i vår  og høstperiodene"
+caption = "St. Olavs Hospital, avdeling for Klinisk Farmakologi "
+ylim = c(0,600)
+yint = 100
+```
+
+
+```{r}
+#| label: ketamin-bgn
+#| message: FALSE
+
+title = "Figur 19: Funn av ketamin fordelt på ukedager i Bergen, 2024 og 2025"
+
+d <- dtDay[by == "Bergen"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: ketamin-oslo
+#| message: FALSE
+
+title = "Figur 20: Funn av ketamin fordelt på ukedager i Oslo, 2024 og 2025"
+
+d <- dtDay[by == "Oslo"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```
+
+
+```{r}
+#| label: ketamin-thrm
+#| message: FALSE
+
+title = "Figur 21: Funn av ketamin fordelt på ukedager i Trondheim, 2024 og 2025"
+
+d <- dtDay[by == "Trondheim"]
+spec <- hd_spec(d, x = "id", y = "val", group ="tid")
+opts <- hd_opts(title = title,
+                subtitle = subtitle,
+                caption = caption,
+                xtick = "ukedag",
+                xlab = NULL,
+                ylab = "mg THCA/1000p/dag",
+                ylim = ylim,
+                yint = yint)
+
+hd_make(spec , "line", opts)
+```

@@ -1,0 +1,74 @@
+# PWID
+
+## Injisering av rusmidler  i Norge
+
+Inntak av rusmidler ved bruk av sprøyte er forbundet med økt risiko for overdose. I årene fra 2012 til 2024 økte den aldersstandardiserte raten av narkotikautløste dødsfall i Norge fra 5 til 6.1 personer per 100 000 innbyggere, se kapittelet om Narkotikautløste dødsfall i Norge. Antall dødsfall har gjennom denne perioden variert fra år til år, der gjennomsnittet ligger i underkant av 300 dødsfall per år. 
+
+Injisering innebærer også en økt risiko for overføring av blodbårne virus som hepatitt B og C og HIV ved bruk av ikke-sterile sprøyter. Inntak gjennom injisering øker i tillegg risikoen for akutte skader som abscesser, hudinfeksjoner, blodforgiftning og blodpropp. Injisering over lang tid kan også gi skader på blodårene, organskader og nevrologiske skader (EDR 2025, SNL 2025). I arbeidet med forebygging av narkotikautløste dødsfall, samt forebygging av sykdom blant brukere av illegale rusmidler, er det derfor viktig å kjenne til omfanget av injisering av rusmidler. 
+
+Av rusmidler som injiseres i Norge og Europa for øvrig, har tradisjonelt heroin og amfetamin (illegale) vært de vanligste (EDR 2025), men i løpet av de siste årene har en sett en nedgang i bruk av heroin og en økning i andre opioider, som morfin, kodein og oksykodon (lovlige medikamenter). Denne utviklingen gjenspeiles også i tallene over narkotikautløste dødsfall.
+
+## Beregningsmetode
+
+Det finnes ikke et register over personer som injiserer rusmidler i Norge, og tallet må derfor beregnes. Beregningsmetoden som er brukt for å beregne tallene som framkommer i denne rapporten kalles Dødelighetsmultiplikatoren  (Mortality Multiplier Method). Denne metoden er en av flere metoder som EUDA foreslår i sine retningslinjer for beregning av antall sprøytebrukere eller personer som bruker rusmidler på en risikofylt måte. Ulike land bruker forskjellige metoder, noe som gjør at beregnede tall ikke kan sammenliknes direkte. Dersom datagrunnlaget er tilstrekkelig godt og antagelsene ligger nær de faktiske forholdene, vil likevel anslagene være pålitelige. Faktorene som er brukt i beregningene i denne rapporten, er: 
+
+•	Oppdaterte tall fra Dødsårsaksregisteret (DÅR) om narkotikautløste dødsfall. 
+•	Indikatorer på omfang av risikofylt bruk av psykoaktive substanser innen hver dødsårsak for narkotikautløste dødsfall, basert på et gjennomsnitt fra registerstudier i perioden 2010 til 2018. 
+•	Omfang av injisering av psykoaktive substanser basert på en spørreundersøkelse fra 2013 på gateplan. 
+
+Dødsrater for narkotikautløste dødsfall er basert på samme gateplanundersøkelse. Dødsraten ble beregnet både for de som injiserte psykoaktive substanser og de som ikke injiserte slike substanser.
+
+Hver av faktorene som inngår i beregningen av antall sprøytebrukere er beheftet med usikkerhet. Denne usikkerheten kan føre til tilsynelatende endringer fra år til år som ikke er reelle, og derfor presenterer vi 3 årig glidende gjennomsnitt for å beregne antall personer som bruker sprøyte som inntaksmetode for rusmidler i Norge for årene 2010 til 2024. Et glidende gjennomsnitt jevner ut tall som varierer mye fra år til år. Det beregnes ved å ta gjennomsnittet av flere etterfølgende år, f.eks. 3 år, og flytte perioden ett år fram for hvert nytt punkt. Slik blir det lettere å se den underliggende trenden i utviklingen. 
+
+Estimert antall som presenteres her inkorporerer heller ikke nyere endringer i rusbehandling eller introduksjonen av psykoaktive substanser, ettersom det tilgjengelige grunnlagsmaterialet er utilstrekkelig oppdatert.
+
+Beregnet antall som injiserer i perioden 2012 til 2024 er antall personer som bruker sprøyte som inntaksmetode beregnet til å variere mellom om lag 10 500 og 16 000. Beregningene tyder på at det er en økende andel som benytter denne inntaksmetoden, se figur.
+
+```{r}
+#| label: pwid-setup
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| output: FALSE
+
+pkgs <- c("data.table", "rio", "highdir")
+sapply(pkgs, require, character.only = TRUE)
+
+fwid <- "O:\\Prosjekt\\Rusdata\\PWID\\pwid_rolling_mean.xlsx"
+dt <- rio::import(fwid, sheet = "Ark1") |> as.data.table()
+```
+
+```{r}
+#| label: pwid
+#| message: FALSE
+
+# Data med N og rolling # --------------------------------------------
+years <- as.character(2012:2024)
+
+long <- data.table::melt(
+  dt,
+  id.vars = "col",
+  measure.vars = years,
+  variable.name = "year",
+  value.name = "value",
+  variable.factor = FALSE
+)
+
+long[, year := as.integer(year)]
+# Endre legend -------------------------------------------------------
+sproy <- c(
+  N    = "Estimert antall sprøytebrukere",
+  roll = "Glidende estimat av antall sprøytebrukere"
+)
+
+long[, cols := sproy[col]]
+
+title1 <- "Estimert antall personer som injiserer rusmidler (PWID) i Norge"
+subtitle1 <- "Basert på data 2019–2024 • 3-årig glidende gjennomsnitt"
+specpwid <- hd_spec(data = long, x = "year", y = "value", group = "cols")
+optspwid <- hd_opts(xlab = NULL, ylab = "Antall", yint = 2000, title = title1,
+                    subtitle = subtitle1)
+
+hd_make(specpwid, "line", optspwid)
+
+```
