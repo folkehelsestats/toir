@@ -477,7 +477,7 @@ calc_percentage_total_ci <- function(dt,
     total_row[, percentage := round(percentage, round_digits)]
 
     # Combine results with total row
-    results <- rbindlist(list(results, total_row), use.names = TRUE, fill = TRUE)
+    results <- rbindlist(list(results, total_row), use.names = TRUE, fill = TRUE, ignore.attr = TRUE)
   }
 
   # Clean up and reorder columns
