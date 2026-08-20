@@ -21,6 +21,7 @@ grep("Ans", names(dt), value = T)
 dt <- group_age_standard(dt, var = "Alder", type = "unodc",
                          new_var = "agecat")
 
+
 ## Denominator
 ## ------------
 dt[, canpop := fcase(Can1 %in% 1:2, 1,
@@ -73,6 +74,10 @@ dt[Ans2_d == 1, ltp_relevin := 1]
 dt[Ans2_e == 1, ltp_heroin := 1] #Heroin
 dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
 dt[Ans2_g_ny == 1, ltp_lsd := 1] #LSD
+
+## Kjonn codebook
+## ------------
+kjonnKB <- data.table::data.table(v1 = 0:1, v2 = c("Male", "Female"))
 
 get_prev(dt, "ltp_any", "anypop") #Anyrug
 get_prev(dt, "ltp_cannabis", "canpop") #Cannabis-type drugs
