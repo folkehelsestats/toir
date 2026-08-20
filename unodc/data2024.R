@@ -1,7 +1,7 @@
 
 source(file.path(here::here(), "setup.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
-source(file.path(here::here(), "unodc","fun-weighted-unweighted.R"))
+source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
 source(file.path(here::here(), "unodc","fun-prevalence.R"))
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 
@@ -10,7 +10,7 @@ source(file.path(here::here(), "unodc","fun-pct-change.R"))
 mainpath <- "O:\\Prosjekt\\Rusdata"
 ## DT <- haven::read_dta(file.path("Rusundersøkelsen", "Rusus 2024", "nytt forsøk februar 25 rus24.dta"))
 ## saveRDS(DT, file.path("Rusundersøkelsen", "Rusus 2024","rus2024.rds"))
-DT <- readRDS(file.path(mainpath, "Rusundersøkelsen", "Rusus 2024","rus2024.rds"))
+DT <- readRDS(file.path(mainpath, "Rusundersokelsen", "Datasets", "Rusus_2024","rus2024.rds"))
 dt <- as.data.table(DT)
 
 ## Columnames for andre narkotiske stoffer
