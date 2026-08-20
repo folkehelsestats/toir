@@ -8,36 +8,41 @@ source("https://github.com/folkehelsestats/toir/blob/main/reports/pub-2026/setup
 source(file.path(here::here(), "setup.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
-source(file.path(here::here(), "unodc","fun-prevalence.R"))
+source(file.path(here::here(), "unodc","fun-prevalence02.R"))
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 
 
 ## Data 2024
 ## --------------
-mainpath <- "O:\\Prosjekt\\Rusdata\\Rusundersokelsen\\Datasets\\Rusus_2025"
-dt <- readRDS(file.path(mainpath, "rusus2025_20251126.rds"))
-setDT(dt)
+# mainpath <- "O:\\Prosjekt\\Rusdata\\Rusundersokelsen\\Datasets\\Rusus_2025"
+# dt <- readRDS(file.path(mainpath, "rusus2025_20251126.rds"))
+# setDT(dt)
+
+### Data 2025 from pub-2026 setup.R file
+### Only for 16-64 yrs old
+### -----------------------------
+dt <- data.table::copy(DT25)
 
 ## Columnames for andre narkotiske stoffer
-grep("Ans", names(dt), value = T)
+grep("ans", names(dt), value = T)
 
 ## Age groups
 ## -------------
-dt <- group_age_standard(dt, var = "Alder", type = "unodc",
+dt <- group_age_standard(dt, var = "alder", type = "unodc",
                          new_var = "agecat")
 
 ## Denominator
 ## ------------
-dt[, canpop := fcase(Can1 %in% 1:2, 1,
+dt[, canpop := fcase(can1 %in% 1:2, 1,
                      default = 0)]
 
-dt[, narkpop := fcase(Ans1 %in% 1:2, 1,
+dt[, narkpop := fcase(ans1 %in% 1:2, 1,
                       default = 0)]
 
 dt[canpop == 1 | narkpop == 1, anypop := 1][
   is.na(anypop), anypop := 0]
 
-## Exclude all missing and not answered Can1 or Ans1
+## Exclude all missing and not answered can1 or ans1
 ## Either age was not between 16-64 yrs
 dt <- dt[anypop == 1,]
 
@@ -45,55 +50,56 @@ dt <- dt[anypop == 1,]
 nrow(dt)
 
 ## Free text - Other types
-## Bør sjekke tekst fra Ans2sps
-ansTxt <- dt[, .N, keyby = Ans2sps][!grep("9999", Ans2sps)]
-ansTxt[, Ans2sps := cuci:::fix_encode(Ans2sps)]
+## Bør sjekke tekst fra ans2sps
+ansTxt <- dt[, .N, keyby = ans2sps][!grep("9999", ans2sps)]
+ansTxt[, ans2sps := cuci:::fix_encode(ans2sps)]
 
-dt[, Ans2sps := cuci:::fix_encode(Ans2sps)]
+dt[, ans2sps := cuci:::fix_encode(ans2sps)]
 
 
-dt[grep("lsd", Ans2sps, ignore.case = TRUE), "AndreLSD" := 1]
-dt[grep("hasj", Ans2sps, ignore.case = TRUE), "AndreCannabis" := 1]
-dt[grep("cb", Ans2sps, ignore.case = TRUE), "AndreNPS" := 1]
-dt[grep("psilocybin", Ans2sps, ignore.case = TRUE), "AndreSOPP" := 1]
-dt[str_detect(Ans2sps, regex("methamfethamin|metamfethamin", ignore_case = TRUE)), "AndreAmfetamin" := 1]
-dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
+dt[grep("lsd", ans2sps, ignore.case = TRUE), "AndreLSD" := 1]
+dt[grep("hasj", ans2sps, ignore.case = TRUE), "AndreCannabis" := 1]
+dt[grep("cb", ans2sps, ignore.case = TRUE), "AndreNPS" := 1]
+dt[grep("psilocybin", ans2sps, ignore.case = TRUE), "AndreSOPP" := 1]
+dt[stringr::str_detect(ans2sps, stringr::regex("methamfethamin|metamfethamin", ignore_case = TRUE)), "AndreAmfetamin" := 1]
+dt[grep("ketamin", ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 
-dt[, Can1_ny := Can1][AndreCannabis == 1, Can1_ny := 1]
-dt[, Ans2_c_ny := Ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
-dt[, Ans2_g_ny := Ans2_g][AndreLSD == 1, Ans2_g_ny := 1]
+dt[, can1_ny := can1][AndreCannabis == 1, can1_ny := 1]
+dt[, ans2_c_ny := ans2_c][AndreAmfetamin == 1, ans2_c_ny := 1]
+dt[, ans2_g_ny := ans2_g][AndreLSD == 1, ans2_g_ny := 1]
 
 ## Vekt is character - convert to numeric
 ## Create standardized weight variable like previous years
 ## ----------------------------------
-dt[, vekt := as.numeric(gsub(",", ".", vekt))]
+# dt[, vekt := as.numeric(gsub(",", ".", vekt))]
 # dt[, vekt := vekt2 / mean(vekt2, na.rm = TRUE)]
 
-## Kjonn variable
-## -------------
-dt[, gender := factor(Kjonn, levels = c(1, 2), labels = c("Menn", "Kvinner"))]
 
 ## ---------------------
 ## Lifetime  prevalence
 ## ---------------------
 
-dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
-dt[Ans1 == 1, ltp_other := 1]
+dt[can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs
+dt[ans1 == 1, ltp_other := 1]
 
 ## Any drug
-dt[, ltp_any := fcase(Ans1 == 1, 1,
+dt[, ltp_any := fcase(ans1 == 1, 1,
                       ltp_cannabis == 1, 1,
                       default = 0)]
 
-dt[Ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
-dt[Ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-dt[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
-dt[Ans2_d == 1, ltp_relevin := 1]
-dt[Ans2_e == 1, ltp_heroin := 1] #Heroin
-dt[Ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
-dt[Ans2_g_ny == 1, ltp_lsd := 1] #LSD
+dt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
+dt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
+dt[ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+dt[ans2_d == 1, ltp_relevin := 1]
+dt[ans2_e == 1, ltp_heroin := 1] #Heroin
+dt[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
+dt[ans2_g_ny == 1, ltp_lsd := 1] #LSD
 
-get_prev(dt, "ltp_any", "anypop", weight_var = "vekt") #Anyrug
+## Kjonn codebook
+## ------------
+kjonnKB <- data.table::data.table(v1 = 1:2, v2 = c("Male", "Female"))
+
+get_prev(dt, "ltp_any", "anypop") #Anyrug
 get_prev(dt, "ltp_cannabis", "canpop") #Cannabis-type drugs
 get_prev(dt, "ltp_heroin", "narkpop") #Heroin
 get_prev(dt, "ltp_cocaine", "narkpop") #Cocaine-type drugs
@@ -106,16 +112,16 @@ get_prev(dt, "ltp_lsd", "narkpop") #LSD
 ## --------------------
 
 dt[Can6 == 1, lyp_cannabis := 1]
-dt[Ans3_1 == 1, lyp_cocaine := 1]
-dt[Ans3_2 == 1, lyp_mdma := 1]
-dt[Ans3_3 == 1, lyp_amphetamines := 1]
-dt[Ans3_4 == 1, lyp_relevin := 1]
-dt[Ans3_5 == 1, lyp_heroin := 1]
-dt[Ans3_6 == 1, lyp_ghb := 1]
-dt[Ans3_7 == 1, lyp_lsd := 1]
-dt[Ans3_8 == 1, lyp_other := 1]
+dt[ans3_1 == 1, lyp_cocaine := 1]
+dt[ans3_2 == 1, lyp_mdma := 1]
+dt[ans3_3 == 1, lyp_amphetamines := 1]
+dt[ans3_4 == 1, lyp_relevin := 1]
+dt[ans3_5 == 1, lyp_heroin := 1]
+dt[ans3_6 == 1, lyp_ghb := 1]
+dt[ans3_7 == 1, lyp_lsd := 1]
+dt[ans3_8 == 1, lyp_other := 1]
 
-## ans_ans3 <- paste0("Ans3_", c(1:8, "x", "y"))
+## ans_ans3 <- paste0("ans3_", c(1:8, "x", "y"))
 ## dt[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
 
 anyCols <- grep("lyp_", names(dt), value = T)
@@ -136,7 +142,7 @@ get_prev(dt, "lyp_lsd", "narkpop") #LSD
 ## Last month prevalence
 ## -------------------------
 
-dt[Can10 == 1, lmp_cannabis := 1]
+dt[can10 == 1, lmp_cannabis := 1]
 
 get_prev(dt, "lmp_cannabis", "canpop")
 
@@ -155,8 +161,8 @@ setDT(d2023)
 setDT(d2024)
 
 ## Columnames for andre narkotiske stoffer
-grep("Ans|Can", names(d2023), value = T)
-grep("Ans|Can", names(d2024), value = T)
+grep("ans|Can", names(d2023), value = T)
+grep("ans|Can", names(d2024), value = T)
 
 ## need standardized weight and variablenames as in d2023
 meanX <- d2024[, mean(VEKT, na.rm = T)]
@@ -172,20 +178,20 @@ dtx <- data.table::rbindlist(list(d2023, d2024), ignore.attr = TRUE)
 ## -------------
 AgeBrk = c(16, 18, 25, Inf)
 AgeLbl = c("16-17", "18-24", "25+")
-dtx <- group_age(dtx, var = "Alder", breaks = AgeBrk, labels = AgeLbl, new_var = "agecat", copy = F)
+dtx <- group_age(dtx, var = "alder", breaks = AgeBrk, labels = AgeLbl, new_var = "agecat", copy = F)
 
 ## Denominator
 ## ------------
-dtx[, canpop := fcase(Can1 %in% 1:2, 1,
+dtx[, canpop := fcase(can1 %in% 1:2, 1,
                      default = 0)]
 
-dtx[, narkpop := fcase(Ans1 %in% 1:2, 1,
+dtx[, narkpop := fcase(ans1 %in% 1:2, 1,
                       default = 0)]
 
 dtx[canpop == 1 | narkpop == 1, anypop := 1][
   is.na(anypop), anypop := 0]
 
-## Exclude all missing and not answered Can1 or Ans1
+## Exclude all missing and not answered can1 or ans1
 ## Either age was not between 16-64 yrs
 dtx <- dtx[anypop == 1,]
 
@@ -194,16 +200,16 @@ dtx[, .N, keyby =  year]
 ## Last year prevalence
 ## --------------------
 dtx[Can6 == 1, lyp_cannabis := 1]
-dtx[Ans3_1 == 1, lyp_cocaine := 1]
-dtx[Ans3_2 == 1, lyp_mdma := 1]
-dtx[Ans3_3 == 1, lyp_amphetamines := 1]
-dtx[Ans3_4 == 1, lyp_relevin := 1]
-dtx[Ans3_5 == 1, lyp_heroin := 1]
-dtx[Ans3_6 == 1, lyp_ghb := 1]
-dtx[Ans3_7 == 1, lyp_lsd := 1]
+dtx[ans3_1 == 1, lyp_cocaine := 1]
+dtx[ans3_2 == 1, lyp_mdma := 1]
+dtx[ans3_3 == 1, lyp_amphetamines := 1]
+dtx[ans3_4 == 1, lyp_relevin := 1]
+dtx[ans3_5 == 1, lyp_heroin := 1]
+dtx[ans3_6 == 1, lyp_ghb := 1]
+dtx[ans3_7 == 1, lyp_lsd := 1]
 
-grep("Ans3_", names(dtx), value = T)
-ans_ans3 <- paste0("Ans3_", c(1:8))
+grep("ans3_", names(dtx), value = T)
+ans_ans3 <- paste0("ans3_", c(1:8))
 dtx[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
 
 calc_change(dtx, "lyp_any", "year", "anypop")
