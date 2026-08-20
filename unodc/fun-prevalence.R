@@ -1,8 +1,6 @@
 ## This function is used to match the reporting style from UNODC
 ## Function calc_percentage() from fun-weighted-unweighted.R
 
-kjonnKB <- data.table::data.table(v1 = 0:1, v2 = c("Male", "Female"))
-
 no = "ltp_cannabis"
 de = "canpop"
 weight_var = "VEKT"
