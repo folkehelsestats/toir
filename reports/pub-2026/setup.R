@@ -21,7 +21,7 @@ source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/ru
 source(here::here("reports/functions/fun-weighted-ci-total.R"))
 
 ## --------------------------------------------------
-ddt <- readRDS(file.path(Rususdata, "rusus_2012_2024.rds"))
+ddt <- readRDS(file.path(Rususdata, "Rusus_samlet", "rusus_2012_2024.rds"))
 
 ## Remove 2012 data for drug use questions due to error in filter from SSB
 ## See email from Elin https://github.com/folkehelsestats/toa/blob/main/misc/missing-etc.org
