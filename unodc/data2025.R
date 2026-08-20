@@ -5,7 +5,7 @@ library(cuci)
 
 source(file.path(here::here(), "setup.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
-source(file.path(here::here(), "unodc","fun-weighted-unweighted.R"))
+source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
 source(file.path(here::here(), "unodc","fun-prevalence.R"))
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 
@@ -60,6 +60,16 @@ dt[grep("ketamin", Ans2sps, ignore.case = TRUE), "AndreKetamin" := 1]
 dt[, Can1_ny := Can1][AndreCannabis == 1, Can1_ny := 1]
 dt[, Ans2_c_ny := Ans2_c][AndreAmfetamin == 1, Ans2_c_ny := 1]
 dt[, Ans2_g_ny := Ans2_g][AndreLSD == 1, Ans2_g_ny := 1]
+
+## Vekt is character - convert to numeric
+## Create standardized weight variable like previous years
+## ----------------------------------
+dt[, vekt := as.numeric(gsub(",", ".", vekt))]
+# dt[, vekt := vekt2 / mean(vekt2, na.rm = TRUE)]
+
+## Kjonn variable
+## -------------
+dt[, gender := factor(Kjonn, levels = c(1, 2), labels = c("Menn", "Kvinner"))]
 
 ## ---------------------
 ## Lifetime  prevalence
