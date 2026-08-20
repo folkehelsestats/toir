@@ -3,6 +3,8 @@
 # pak::pak("folkehelsestats/cuci")
 library(cuci)
 
+source("https://github.com/folkehelsestats/toir/blob/main/reports/pub-2026/setup.R")
+
 source(file.path(here::here(), "setup.R"))
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
