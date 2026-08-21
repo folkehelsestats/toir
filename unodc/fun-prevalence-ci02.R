@@ -14,6 +14,8 @@ get_prev <- function(dt, no, de,
                      kjonnkb = kjonnKB,
                      diagnostic = FALSE){
 
+ message(paste0("--- Weighted prevalence for ", toupper(no), " with denominator ", toupper(de), " ---"))
+
   tot <- calc_percentage_total_ci(dt=dt,
                                   outcome_var = no,
                                   weight_var = weight_var,

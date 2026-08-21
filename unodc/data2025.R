@@ -109,14 +109,14 @@ get_prev(dt, "ltp_cannabis", "canpop") #Cannabis-type drugs
 get_prev(dt, "ltp_heroin", "narkpop") #Heroin
 get_prev(dt, "ltp_cocaine", "narkpop") #Cocaine-type drugs
 get_prev(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
-get_prev(dt, "ltp_mdma", "narkpop") #"Ecstasy" type substances
+get_prev(dt, "ltp_mdma", "narkpop") # "Ecstasy" type substances
 get_prev(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
 get_prev(dt, "ltp_lsd", "narkpop") #LSD
 
 ## Last year prevalence
 ## --------------------
 
-dt[Can6 == 1, lyp_cannabis := 1]
+dt[can6 == 1, lyp_cannabis := 1]
 dt[ans3_1 == 1, lyp_cocaine := 1]
 dt[ans3_2 == 1, lyp_mdma := 1]
 dt[ans3_3 == 1, lyp_amphetamines := 1]
@@ -204,7 +204,7 @@ dtx[, .N, keyby =  year]
 
 ## Last year prevalence
 ## --------------------
-dtx[Can6 == 1, lyp_cannabis := 1]
+dtx[can6 == 1, lyp_cannabis := 1]
 dtx[ans3_1 == 1, lyp_cocaine := 1]
 dtx[ans3_2 == 1, lyp_mdma := 1]
 dtx[ans3_3 == 1, lyp_amphetamines := 1]
