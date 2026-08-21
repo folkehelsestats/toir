@@ -3,12 +3,15 @@
 # pak::pak("folkehelsestats/cuci")
 library(cuci)
 
-source("https://github.com/folkehelsestats/toir/blob/main/reports/pub-2026/setup.R")
+source("https://raw.githubusercontent.com/folkehelsestats/toir/refs/heads/main/reports/pub-2026/setup.R")
 
 source(file.path(here::here(), "setup.R"))
-source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
-source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
-source(file.path(here::here(), "unodc","fun-prevalence02.R"))
+
+# source(file.path(here::here(), "unodc","fun-weighted-unweighted02.R"))
+source(file.path(here::here(), "unodc","fun-weighted-percentage-total-ci03.R"))
+
+# source(file.path(here::here(), "unodc","fun-prevalence02.R"))
+source(file.path(here::here(), "unodc","fun-prevalence-ci02.R"))
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 
 
@@ -28,6 +31,7 @@ grep("ans", names(dt), value = T)
 
 ## Age groups
 ## -------------
+source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 dt <- group_age_standard(dt, var = "alder", type = "unodc",
                          new_var = "agecat")
 
@@ -44,9 +48,10 @@ dt[canpop == 1 | narkpop == 1, anypop := 1][
 
 ## Exclude all missing and not answered can1 or ans1
 ## Either age was not between 16-64 yrs
+nrow(dt)
 dt <- dt[anypop == 1,]
 
-## Sample size for 16-64
+## Sample size for 16-64 and exclude all missing and not answered can1 or ans1
 nrow(dt)
 
 ## Free text - Other types
