@@ -110,7 +110,7 @@ get_prev(dt, "ltp_heroin", "narkpop") #Heroin
 get_prev(dt, "ltp_cocaine", "narkpop") #Cocaine-type drugs
 get_prev(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
 get_prev(dt, "ltp_mdma", "narkpop") # "Ecstasy" type substances
-get_prev(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquilizers
+get_prev(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquillizers
 get_prev(dt, "ltp_lsd", "narkpop") #LSD
 
 ## Last year prevalence
@@ -141,7 +141,7 @@ get_prev(dt, "lyp_heroin", "narkpop", diagnostic = FALSE) #Heroin
 get_prev(dt, "lyp_cocaine", "narkpop") #Cocaine-type drugs
 get_prev(dt, "lyp_amphetamines", "narkpop") #Amphetamine-type stimulants
 get_prev(dt, "lyp_mdma", "narkpop") #"Ecstasy" type substances
-get_prev(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquilizers
+get_prev(dt, "lyp_ghb", "narkpop") #Other sedatives and tranquillizers
 get_prev(dt, "lyp_lsd", "narkpop") #LSD
 
 ## Last month prevalence
@@ -150,6 +150,13 @@ get_prev(dt, "lyp_lsd", "narkpop") #LSD
 dt[can10 == 1, lmp_cannabis := 1]
 
 get_prev(dt, "lmp_cannabis", "canpop")
+
+
+## Item 06b - Daily or nearly-daily use (use on 20 days or more past 30 days)
+## -----------------------------------------------------------------------------
+
+dt[can11 == 1, can20more := 1]
+get_prev(dt, "can20more", "canpop")
 
 ## ----------------------------
 ## Trend dvs. data 2023 og 2024
