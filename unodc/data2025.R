@@ -140,8 +140,6 @@ get_prev(dt, "lyp_lsd", "narkpop") #LSD
 ## Last month prevalence
 ## -------------------------
 
-dt[can10 == 1, lmp_cannabis := 1]
-
 get_prev(dt, "lmp_cannabis", "canpop")
 
 
@@ -194,69 +192,101 @@ AgeBrk = c(16, 18, 25, Inf)
 AgeLbl = c("16-17", "18-24", "25+")
 dtx <- torr::group_age(dtx, var = "alder", breaks = AgeBrk, labels = AgeLbl, new_var = "agecat", copy = F)
 
-## Denominator
-## ------------
-dtx[, canpop := fcase(can1 %in% 1:2, 1,
-                     default = 0)]
+### Populasjon
+### ----------
+# Create cannabis, narko and any drugs population ie. canpop, narkpop and anypop
+create_population <- function(dt) {
+  data <- data.table::copy(dt)
 
-dtx[, narkpop := fcase(ans1 %in% 1:2, 1,
-                      default = 0)]
+  data[, canpop := fifelse(can1 %in% 1:2, 1, 0)] #Cannabis
+  data[, narkpop := fifelse(ans1 %in% 1:2, 1, 0)] #Other illegal drugs
+  data[canpop == 1 | narkpop == 1, anypop := 1][
+    is.na(anypop), anypop := 0] # Any illegal drugs
 
-dtx[canpop == 1 | narkpop == 1, anypop := 1][
-  is.na(anypop), anypop := 0]
+  return(data)
+}
+
+dtt <- create_population(dtx)
+dtt[, .N, keyby = anypop]
+
+CanVars = c("can1", "can6", "can10")
+dtt <- torr::create_cann_pop(dtt, vars = CanVars ) #Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
+
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_a", "ans3_1"), val = "kokain") #ltpPop_kokain og lypPop_kokain
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_b", "ans3_2"), val = "mdma") #ltpPop_mdma og lypPop_mdma
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_e", "ans3_5"), val = "heroin")
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_f", "ans3_6"), val = "ghb")
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_g", "ans3_7"), val = "lsd")
+dtt <- torr::create_narko_pop(dtt, vars = c("ans2_h", "ans3_8"), val = "annet")
+
+## Illegal drugs variables
+## ----------------------------------
+dtt[can1 == 1, ltp_cannabis := 1] # Lifetime prevalence
+dtt[can6 == 1, lyp_cannabis := 1] # Last year prevalence
+dtt[can10 == 1, lmp_cannabis := 1] # Last month prevalence
+
+dtt[ans1 == 1, ltp_narko := 1] # Lifetime narkotiske stoffer
+dtt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
+dtt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
+dtt[ans2_c == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+dtt[ans2_e == 1, ltp_heroin := 1] #Heroin
+dtt[ans2_f == 1, ltp_ghb := 1] #Other sedatives and tranquillizers
+dtt[ans2_g == 1, ltp_lsd := 1] #LSD
+dtt[ans2_h == 1, ltp_other := 1] #Andre rusmidler noen gang
+
+dtt[ans3_1 == 1, lyp_cocaine := 1]
+dtt[ans3_2 == 1, lyp_mdma := 1]
+dtt[ans3_3 == 1, lyp_amphetamines := 1]
+dtt[ans3_5 == 1, lyp_heroin := 1]
+dtt[ans3_6 == 1, lyp_ghb := 1]
+dtt[ans3_7 == 1, lyp_lsd := 1]
+dtt[ans3_8 == 1, lyp_other := 1]
+
+## Any drugs lifetime
+anyltpCols <- grep("ltp_", names(dtt), value = T)
+dtt[, ltp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = anyltpCols]
+
+## Any drugs last year
+anyCols <- grep("lyp_", names(dtt), value = T)
+dtt[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = anyCols]
+
+dim(dtt)
+dtt[, .N, keyby = year]
 
 ## Exclude all missing and not answered can1 or ans1
 ## Either age was not between 16-64 yrs
-dtx <- dtx[anypop == 1,]
+dd <- dtt[anypop == 1,]
+dd[, .N, keyby =  year]
 
-dtx[, .N, keyby =  year]
-
+## --------------------
 ## Last year prevalence
 ## --------------------
-dtx[can6 == 1, lyp_cannabis := 1]
-dtx[ans3_1 == 1, lyp_cocaine := 1]
-dtx[ans3_2 == 1, lyp_mdma := 1]
-dtx[ans3_3 == 1, lyp_amphetamines := 1]
-dtx[ans3_4 == 1, lyp_relevin := 1]
-dtx[ans3_5 == 1, lyp_heroin := 1]
-dtx[ans3_6 == 1, lyp_ghb := 1]
-dtx[ans3_7 == 1, lyp_lsd := 1]
-
-# grep("ans3_", names(dtx), value = T)
-# ans_ans3 <- paste0("ans3_", c(1:8))
-# dtx[, lyp_any := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = ans_ans3]
-
-anyCols <- grep("lyp_", names(dtx), value = T)
-dtx[, anyLYP := as.numeric(rowSums(.SD == 1, na.rm = TRUE) > 0), .SDcols = anyCols]
-dtx[, lyp_any := fcase(anyLYP == 1, 1,
-                      lyp_cannabis == 1, 1,
-                      default = 0)]
 
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 
-
-calc_change(dtx, "lyp_any", "year", "anypop")
-calc_change(dtx, "lyp_cannabis", "year", "canpop")
-calc_change(dtx, "lyp_heroin", "year", "canpop")
-calc_change(dtx, "lyp_cocaine", "year", "canpop")
-calc_change(dtx, "lyp_amphetamines", "year", "canpop")
-calc_change(dtx, "lyp_mdma", "year", "canpop")
-calc_change(dtx, "lyp_ghb", "year", "canpop")
-calc_change(dtx, "lyp_lsd", "year", "canpop")
+calc_change(dtt, "lyp_any", "year", "anypop")
+calc_change(dtt, "lyp_cannabis", "year", "canpop")
+calc_change(dtt, "lyp_heroin", "year", "canpop")
+calc_change(dtt, "lyp_cocaine", "year", "canpop")
+calc_change(dtt, "lyp_amphetamines", "year", "canpop")
+calc_change(dtt, "lyp_mdma", "year", "canpop")
+calc_change(dtt, "lyp_ghb", "year", "canpop")
+calc_change(dtt, "lyp_lsd", "year", "canpop")
 
 grp <- c("year", "agecat")
-calc_change(dtx, "lyp_any", group_vars = grp, "anypop")
-calc_change(dtx, "lyp_cannabis", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_heroin", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_cocaine", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_amphetamines", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_mdma", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_ghb", group_vars = grp, "canpop")
-calc_change(dtx, "lyp_lsd", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_any", group_vars = grp, "anypop")
+calc_change(dtt, "lyp_cannabis", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_heroin", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_cocaine", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_amphetamines", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_mdma", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_ghb", group_vars = grp, "canpop")
+calc_change(dtt, "lyp_lsd", group_vars = grp, "canpop")
 
 
-calc_percentage(dtx, "lyp_any", "year", weight_var = "nyvekt2", denominator_var = "anypop", include_diagnostics = F, na_treatment =  "as_zero")
-calc_percentage(dtx, "lyp_cannabis", "year", weight_var = "nyvekt2", denominator_var = "canpop", include_diagnostics = F, na_treatment = "as_zero" )
+calc_percentage(dtt, "lyp_any", "year", weight_var = "nyvekt2", denominator_var = "anypop", include_diagnostics = F, na_treatment =  "as_zero")
+calc_percentage(dtt, "lyp_cannabis", "year", weight_var = "nyvekt2", denominator_var = "canpop", include_diagnostics = F, na_treatment = "as_zero" )
 
 
 
