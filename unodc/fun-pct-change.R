@@ -17,7 +17,16 @@ calc_change <- function(dt, outcome_var, group_vars, denominator, digits = 1, di
   pct <- (new - old)/old*100
   pct <- round(pct, digits = digits)
 
-  list(x, paste0("Pct change:", pct, "% from ", yr1 , " to ", yr2))
+  message("Percent change from ", yr1, " to ", yr2)
+
+  if (length(group_vars)>1){
+    age <- unique(dt[["agecat"]])
+    out <- paste0(age, ": ", pct, "%" )
+  } else {
+    out <- paste0(pct, "%")
+  }
+
+  list(x, out)
 }
 
 #Example
