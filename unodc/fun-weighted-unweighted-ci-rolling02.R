@@ -237,12 +237,54 @@ NULL
 }
 
 # -------------------------------------------------------------------------
+# Effective sample size helpers
+# -------------------------------------------------------------------------
+
+#' Kish's effective sample size
+#'
+#' Calculates Kish's effective sample size:
+#'
+#' \deqn{n_{eff} = \frac{(\sum w)^2}{\sum w^2}}
+#'
+#' The effective sample size quantifies how much information survives
+#' weighting: when all weights are equal, `n_eff` equals the raw sample
+#' size; as weight variability grows, `n_eff` shrinks below it. Using
+#' `n_eff` in place of the raw `n` in an ordinary (unweighted) confidence
+#' interval formula is the standard "design effect" approximation for
+#' weighted data when no full survey design (strata/clusters) is available.
+#'
+#' @param w_sum Numeric vector. Sum of weights per row.
+#' @param w2_sum Numeric vector. Sum of squared weights per row.
+#'
+#' @return Numeric vector of effective sample sizes.
+#' @keywords internal
+.kish_n_eff <- function(w_sum, w2_sum) {
+  w_sum^2 / w2_sum
+}
+
+#' Add effective sample size (Kish ESS) to a results table
+#'
+#' Adds an `n_eff` column computed from `denominator` (sum of weights) and
+#' `sum_weights_squared`. See [.kish_n_eff()] for the formula and rationale.
+#'
+#' @param results A data.table containing `denominator` and
+#'   `sum_weights_squared`.
+#'
+#' @return `results`, with an added `n_eff` column.
+#' @keywords internal
+.add_n_eff <- function(results) {
+  results[, n_eff := .kish_n_eff(denominator, sum_weights_squared)]
+  results
+}
+
+# -------------------------------------------------------------------------
 # Confidence interval helpers
 # -------------------------------------------------------------------------
 #
 # Each CI helper takes plain numeric vectors and returns a list(lower, upper)
 # already expressed as a percentage (0-100 scale), so callers only need to
-# round the result to the requested number of digits.
+# round the result to the requested number of digits. Both helpers work for
+# weighted data too: pass n_eff (see .add_n_eff()) instead of the raw n.
 
 #' Wilson score confidence interval
 #'
@@ -280,48 +322,37 @@ NULL
   )
 }
 
-#' Weighted (design-effect) confidence interval
-#'
-#' @param p Numeric vector. Proportion (0-1) per row.
-#' @param w_sum Numeric vector. Sum of weights per row.
-#' @param w2_sum Numeric vector. Sum of squared weights per row.
-#' @param z Numeric. Critical value of the standard normal distribution
-#'   (defaults to the 95\% two-sided value).
-#'
-#' @return A list with `lower` and `upper`, each a numeric vector on the
-#'   0-100 percentage scale.
-#' @keywords internal
-.weighted_ci <- function(p, w_sum, w2_sum, z = stats::qnorm(0.975)) {
-  se     <- sqrt(p * (1 - p) * w2_sum / (w_sum^2))
-  margin <- z * se
-  list(
-    lower = pmax(0, p - margin) * 100,
-    upper = pmin(1, p + margin) * 100
-  )
-}
-
 #' Add confidence interval columns to a results table
 #'
-#' Dispatches to the appropriate CI formula (weighted, Wilson, or normal
-#' approximation) and adds rounded `ci_lower` / `ci_upper` columns.
+#' Computes `ci_lower` / `ci_upper` using the requested `ci_method`
+#' (`"wilson"` or `"normal"`). For weighted data, the effective sample
+#' size ([.add_n_eff()]) is used in place of the raw denominator, so that
+#' weight variability is reflected in the interval width — see
+#' [.add_n_eff()] for the rationale. This means weighted data can use a
+#' Wilson interval too, not just the normal approximation.
 #'
 #' @param results A data.table containing `proportion`, `denominator`, and
 #'   (for weighted data) `sum_weights_squared`.
 #' @param weight_var Character or NULL. Name of the weight column; non-NULL
-#'   selects the weighted CI formula regardless of `ci_method`.
-#' @param ci_method Character. Either `"wilson"` or `"normal"` (used only
-#'   for unweighted data).
+#'   routes the CI through the effective-sample-size adjustment.
+#' @param ci_method Character. Either `"wilson"` or `"normal"`.
 #' @param round_digits Integer. Number of decimal digits to round to.
 #'
-#' @return `results`, with `ci_lower` and `ci_upper` columns added.
+#' @return `results`, with `ci_lower` and `ci_upper` columns added (and,
+#'   for weighted data, `n_eff`).
 #' @keywords internal
 .add_confidence_intervals <- function(results, weight_var, ci_method, round_digits) {
-  ci <- if (!is.null(weight_var)) {
-    .weighted_ci(results$proportion, results$denominator, results$sum_weights_squared)
-  } else if (ci_method == "wilson") {
-    .wilson_ci(results$denominator, results$proportion)
+  n <- if (!is.null(weight_var)) {
+    results <- .add_n_eff(results)
+    results$n_eff
   } else {
-    .normal_ci(results$denominator, results$proportion)
+    results$denominator
+  }
+
+  ci <- if (ci_method == "wilson") {
+    .wilson_ci(n, results$proportion)
+  } else {
+    .normal_ci(n, results$proportion)
   }
 
   results[, ci_lower := round(ci$lower, round_digits)]
@@ -375,8 +406,8 @@ NULL
 #' @param round_digits Integer. Number of decimal digits to round to.
 #'
 #' @return `results`, with `numerator_roll`, `denominator_roll`,
-#'   `percentage_roll` (and, if requested, `ci_lower_roll` / `ci_upper_roll`)
-#'   columns added.
+#'   `percentage_roll` (and, if requested, `ci_lower_roll` / `ci_upper_roll`,
+#'   plus `n_eff_roll` for weighted data) columns added.
 #' @keywords internal
 .roll_sum_then_ratio <- function(results, other_groups, rolling_n, rolling_align,
                                   weighted, ci_method, include_ci, round_digits) {
@@ -392,12 +423,17 @@ NULL
   results[, percentage_roll := round(proportion_roll * 100, round_digits)]
 
   if (include_ci) {
-    ci <- if (weighted) {
-      .weighted_ci(results$proportion_roll, results$denominator_roll, results$sum_weights_squared_roll)
-    } else if (ci_method == "wilson") {
-      .wilson_ci(results$denominator_roll, results$proportion_roll)
+    n <- if (weighted) {
+      results[, n_eff_roll := .kish_n_eff(denominator_roll, sum_weights_squared_roll)]
+      results$n_eff_roll
     } else {
-      .normal_ci(results$denominator_roll, results$proportion_roll)
+      results$denominator_roll
+    }
+
+    ci <- if (ci_method == "wilson") {
+      .wilson_ci(n, results$proportion_roll)
+    } else {
+      .normal_ci(n, results$proportion_roll)
     }
     results[, ci_lower_roll := round(ci$lower, round_digits)]
     results[, ci_upper_roll := round(ci$upper, round_digits)]

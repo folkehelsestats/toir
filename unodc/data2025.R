@@ -7,6 +7,9 @@ library(data.table)
 
 source("https://raw.githubusercontent.com/folkehelsestats/toir/refs/heads/main/reports/pub-2026/setup.R")
 
+# source("c:/Users/ykama/Git-hdir/toir/unodc/misc/fun-prevalence-roll-svy.R")
+source("C:\\Users\\ykama\\Git-hdir\\torr\\R\\prevalence.R") #same as fun-prevalence-roll-svy.R
+
 source(file.path(here::here(), "unodc","fun-weighted-percentage-total-ci03.R"))
 source(file.path(here::here(), "unodc","fun-prevalence-ci02.R"))
 
@@ -122,6 +125,27 @@ get_prev(dt, "ltp_amphetamines", "narkpop") #Amphetamine-type stimulants
 get_prev(dt, "ltp_mdma", "narkpop") # "Ecstasy" type substances
 get_prev(dt, "ltp_ghb", "narkpop") #Other sedatives and tranquillizers
 get_prev(dt, "ltp_lsd", "narkpop") #LSD
+
+
+calc_prevalence(dt, denominator = "anypop",
+                year_var = "year",
+                outcome_var = "ltp_any",
+                weight_var = "vekt2",
+                rolling_year = 1)
+
+calc_prevalence(dt, denominator = "anypop",
+                year_var = "year",
+                outcome_var = "ltp_any",
+                weight_var = "vekt2",
+                rolling_year = 1,
+                by = c("agecat"))
+
+calc_prevalence(dt, denominator = "anypop",
+                year_var = "year",
+                outcome_var = "ltp_any",
+                weight_var = "vekt2",
+                rolling_year = 1,
+                by = c("agecat", "kjonn"))
 
 ## --------------------
 ## Last year prevalence
