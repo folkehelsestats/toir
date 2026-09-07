@@ -1,43 +1,67 @@
 ## Gender and total prevalence
 ## ---------------------------
+## no - nomerator
+## de - denominator
+general_form <- function(dt, no, de, weight = "vekt2", ...){
+  
+  #d <- get_prev_ci(dt = dt, no = no, de = de, ...)
+  d <- torr::calc_prevalence(data = dt,
+                             denominator = de,
+                             year_var = "year",
+                             outcome_var = no,
+                             weight_var = weight)
 
-general_form <- function(dt, no, de, ...){
+  
+  dk <- torr::calc_prevalence(data = dt,
+                             denominator = de,
+                             year_var = "year",
+                             outcome_var = no,
+                             weight_var = weight,
+                             by = "kjonn")
 
-  d <- get_prev_ci(dt = dt, no = no, de = de, ...)
-
-  d$total[, gender := "Total"]
-  dx <- rbindlist(list(d$total, d$kjonn), use.names = TRUE, fill = TRUE)
-  dx[, Kjonn := NULL]
-  dx[, gender := factor(gender, levels = c("Male", "Female", "Total"))]
-  data.table::setcolorder(dx, "gender", before = "percentage")
-  dx <- dx[order(gender)]
-  return(dx)
+  d[, kjonn := 3] #total
+  dd <- data.table::rbindlist(list(d, dk), use.names = TRUE, fill = TRUE)
+  dd[.(kjonn = 1:3, to = c("Male", "Female", "Total")), on = "kjonn", gender := i.to]
+  data.table::setorder(dd, kjonn)
+  data.table::setcolorder(dd, "gender", after = "rolling_period")
+  return(dd[])
 }
 
 ## Form style - 2.3 Broad age group
 ## --------------------------------
 # make life easier to match the form style
 
-broad_form <- function(dt, no, de, ...){
+broad_form <- function(dt, no, de, weight = "vekt2", ...){
 
-  d <- get_prev_ci(dt = dt, no = no, de = de, ...)
+  #d <- get_prev_ci(dt = dt, no = no, de = de, ...)
 
-  d$alder[, gender := "Total"]
-  dx <- rbindlist(list(d$begge, d$alder), use.names = TRUE, fill = TRUE)
-  dx[, Kjonn := NULL]
-  dx <- dx[order(agecat)]
+  dk <- torr::calc_prevalence(data = dt,
+                             denominator = de,
+                             year_var = "year",
+                             outcome_var = no,
+                             weight_var = weight,
+                             by = c("kjonn", "agecat"))
 
-  age <- unique(dx$agecat)
+  da <- torr::calc_prevalence(data = dt,
+                             denominator = de,
+                             year_var = "year",
+                             outcome_var = no,
+                             weight_var = weight,
+                             by = "agecat")
 
-  dd <- vector(mode = "list", length = length(age))
+  
+  da[, kjonn := 3] #total
+  dd <- data.table::rbindlist(list(da, dk), use.names = TRUE, fill = TRUE)
+  dd[.(kjonn = 1:3, to = c("Male", "Female", "Total")), on = "kjonn", gender := i.to]
+  data.table::setorder(dd, agecat, kjonn)
+  data.table::setcolorder(dd, "gender", after = "rolling_period")
 
-  for (i in seq_len(length(age))){
-    x <- age[i]
-    dd[[i]] <- dx[agecat == x]
+  for (x in unique(dd$agecat)) {
+    cat("\nAge:", as.character(x), "\n")
+    print(dd[agecat == x])
   }
-
-  names(dd) <- paste0("Agegp: ", age)
-  return(dd)
+  
+  invisible(dd)
 }
 
 # tot - Dataset for total

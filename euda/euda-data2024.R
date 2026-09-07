@@ -6,7 +6,7 @@ source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/ru
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
 source(file.path(here::here(), "unodc","fun-weighted-unweighted-ci.R"))
 source(file.path(here::here(), "unodc","fun-weighted-unweighted-ci-flexible.R"))
-source(file.path(here::here(), "unodc","fun-prevalence-ci.R"))
+source(file.path(here::here(), "unodc","fun-prevalence-ci02.R"))
 source(file.path(here::here(), "unodc","fun-pct-change.R"))
 source(file.path(here::here(), "euda","fun-form-style.R"))
 
