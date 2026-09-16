@@ -131,9 +131,9 @@ dtx <- dtx[alder <= 64] #Only 16-64 years old included
 DD <- rbindlist(list(dtx[, ..commonCols], DT25[, ..commonCols]), use.names = TRUE) #, fill = TRUE
 
 DD <- torr::group_age_standard(DD,
-                                var = "alder",
-                                type = "rusund",
-                                new_var = "agecat")
+                               var = "alder",
+                               type = "rusund",
+                               new_var = "agecat")
 
 ## Kjonn variable
 ## -------------
