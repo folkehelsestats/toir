@@ -1,4 +1,4 @@
-source("euda/euda-setup2025.R")
+source("https://raw.githubusercontent.com/folkehelsestats/toir/refs/heads/main/euda/euda-setup2025.R")
 
 #### ---------------------------------------------------------------------------
 #### 2. Lifetime prevalence
@@ -20,12 +20,12 @@ general_form(dt, "ltp_steroid", "doppop")
 general_form(dt, "ltp_alcohol", "alkopop")
 general_form(dt, "ltp_tobacco", "tobpop")
 general_form(dt, "ltp_nps", "ltpPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 general_form(dt, "ltp_other", "ltpPop_narko") #other
 
 ## 2.2 EUDA age range Young Adults (16-34)
-dty <- dt[alder < 35]
+dty <- dt[alder < 35] #beholder bare de som er i denne aldersgruppe
 dty[, .(min = min(alder), max = max(alder))]
 
 general_form(dty, "ltp_any", "ltpPop_any") #Anydrug
@@ -41,7 +41,7 @@ general_form(dty, "ltp_steroid", "doppop")
 general_form(dty, "ltp_alcohol", "alkopop") 
 general_form(dty, "ltp_tobacco", "tobpop")
 general_form(dty, "ltp_nps", "ltpPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 general_form(dty, "ltp_other", "ltpPop_narko") #other
 
@@ -63,7 +63,7 @@ broad_form(dt, "ltp_steroid", "doppop")
 broad_form(dt, "ltp_alcohol", "alkopop")
 broad_form(dt, "ltp_tobacco", "tobpop")
 broad_form(dt, "ltp_nps", "ltpPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 broad_form(dt, "ltp_other", "ltpPop_narko") #other
 
@@ -86,7 +86,7 @@ general_form(dt, "lyp_ghb", "lypPop_ghb") #Other sedatives and tranquilizers
 general_form(dt, "lyp_steroid", "doppop")
 general_form(dt, "lyp_alcohol", "alkopop")
 general_form(dt, "lyp_nps", "lypPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 general_form(dt, "lyp_other", "lypPop_narko") #other
 
@@ -107,7 +107,7 @@ general_form(dty, "lyp_steroid", "doppop")
 general_form(dty, "lyp_alcohol", "alkopop")
 general_form(dty, "lyp_tobacco", "tobpop")
 general_form(dty, "lyp_nps", "lypPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 general_form(dty, "lyp_other", "lypPop_narko") #other
 
@@ -127,7 +127,7 @@ broad_form(dt, "lyp_ghb", "lypPop_ghb") #Other sedatives and tranquilizers
 broad_form(dt, "lyp_steroid", "doppop")
 broad_form(dt, "lyp_alcohol", "alkopop")
 broad_form(dt, "lyp_nps", "lypPop_nps") #NPS
-#Dette registreres ikke i skjema siden flere under other må først renses
+#Dette skal ikke registreres i skjema siden flere under other må først renses
 #fritekst fordi noen av dem kan være cannabis, mdma, lsd etc
 broad_form(dt, "lyp_other", "lypPop_narko") #other
 
@@ -161,10 +161,6 @@ broad_form(dt, "lmp_alcohol", "alkopop") #Cannabis-type drugs
 ### ----------------------------------------------------------------------------
 
 source("https://raw.githubusercontent.com/folkehelsestats/toir/refs/heads/main/unodc/fun-weighted-unweighted-ci-flexible.R")
-
-sp5 <- torr::calc_prevalence(dt, "lmpPop_cannabis",
-                      year_var = "year", outcome_var = "lmp_cannabis",
-                      weight_var = "vekt2")
 
 dt[, .N, keyby = .(kjonn, lmp_cannabis)]
 
