@@ -10,15 +10,15 @@ source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/
 ## source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-age.R")
 source("https://raw.githubusercontent.com/fyrtaarn/fyr/91dbf471b6454e08bdd783d0c04329b2a562e053/R/utils.R") #is_encode() and is_delete_index()
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-percent-weighted.R")
-source(here::here("unodc","fun-weighted-unweighted-ci.R"))
-source(here::here("unodc","fun-weighted-unweighted-ci-flexible.R"))
-source(here::here("unodc","fun-weighted-unweighted-ci-rolling.R"))
+#source(here::here("unodc","fun-weighted-unweighted-ci.R"))
+#source(here::here("unodc","fun-weighted-unweighted-ci-flexible.R"))
+#source(here::here("unodc","fun-weighted-unweighted-ci-rolling.R"))
 
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-ci-graph.R")
 source("https://raw.githubusercontent.com/folkehelsestats/toa/refs/heads/main/rusund/functions/fun-graph.R")
 
 ## similar like fun-weighted-unweighted-ci.R but this one has total in the output
-source(here::here("reports/functions/fun-weighted-ci-total.R"))
+#source(here::here("reports/functions/fun-weighted-ci-total.R"))
 
 ## --------------------------------------------------
 ddt <- readRDS(file.path(Rususdata, "Rusus_samlet", "rusus_2012_2024.rds"))
