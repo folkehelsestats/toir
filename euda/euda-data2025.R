@@ -138,7 +138,7 @@ broad_form(dt, "lyp_other", "lypPop_narko") #other
 ## 4.1 All adults - LMP
 ## -----------------------------------------------------------------------------
 
-general_form(dt, "lmp_cannabis", "lypPop_cannabis") #Cannabis-type drugs
+general_form(dt, "lmp_cannabis", "lmpPop_cannabis") #Cannabis-type drugs
 
 dt <- is_case(dt, "drukket3", "lmp_alcohol")
 general_form(dt, "lmp_alcohol", "alkopop") #Cannabis-type drugs
