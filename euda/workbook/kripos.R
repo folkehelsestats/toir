@@ -1,6 +1,8 @@
 ## Data hentet fra https://www.politiet.no/om-politiet/tall-og-fakta/narkotika/
 ## -------------------------------
 
+source("euda/workbook//setup.R")
+
 library(data.table)
 library(ggplot2)
 
@@ -10,10 +12,10 @@ library(ggplot2)
 ## Number of cannabis seizures
 ## Cannabis - antall beslag
 CanBeslag <- data.table(
-  year = c(2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024),
-  resin = c(9949, 9729, 10391, 8945, 10124, 9953, 8779, 8023, 10026, 5814, 5040, 4533, 5082, 5202),
-  begge = c(1182, 1373, 1501, 1616, 1269, 959, 1729, 1413, 1375, 938, 867, 728, 604, 737),
-  herbal = c(2829, 3482, 4337, 5287, 3480, 2447, 2831, 2738, 1647, 2796, 1938, 1420, 1306, 1608)
+  year = c(2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025),
+  resin = c(9949, 9729, 10391, 8945, 10124, 9953, 8779, 8023, 10026, 5814, 5040, 4533, 5082, 5202, 4534),
+  begge = c(1182, 1373, 1501, 1616, 1269, 959, 1729, 1413, 1375, 938, 867, 728, 604, 737, 630),
+  herbal = c(2829, 3482, 4337, 5287, 3480, 2447, 2831, 2738, 1647, 2796, 1938, 1420, 1306, 1608, 1841)
 )
 
 CanBeslag[, total := rowSums(.SD), by = year]
@@ -22,9 +24,9 @@ CanBeslag[, total := rowSums(.SD), by = year]
 ## Amount of cannabis seized (resin and herbal/plants) in kilograms, 2011-2024
 ## Cannabis - beslaglagt mengde (kg)
 CanKg <- data.table(
-  year = 2011:2024,
-  resin = c(2548, 1630, 2285, 1919, 2018, 3026, 2048, 2658, 2244, 1785, 1513, 3971, 3281, 2591),
-  herbal  = c(433, 454, 653, 829, 368, 683, 508, 354, 457, 819, 737, 1173, 533, 1087)
+  year = 2011:2025,
+  resin = c(2548, 1630, 2285, 1919, 2018, 3026, 2048, 2658, 2244, 1785, 1513, 3971, 3281, 2591, 3290),
+  herbal  = c(433, 454, 653, 829, 368, 683, 508, 354, 457, 819, 737, 1173, 533, 1087, 2144)
 )
 
 CanKg[, total := rowSums(.SD), by = year]
@@ -72,7 +74,7 @@ CanBesLine <- make_line_plot(data = CanBesW,
                              x = "year",
                              y = "antall",
                              color = "can",
-                             title = "Number of cannabis seizures (resin and herbal/plants), 2011-2024",
+                             title = "Number of cannabis seizures (resin and herbal/plants), 2011-2025",
                              caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
                              color_values = chc4,
                              label_col = "canlab",
@@ -85,7 +87,7 @@ CanKgLine <- make_line_plot(data = CanKgW,
                             x = "year",
                             y = "kg",
                             color = "can",
-                            title = "Number of cannabis seizures (resin and herbal/plants) in kilograms, 2011-2024",
+                            title = "Number of cannabis seizures (resin and herbal/plants) in kilograms, 2011-2025",
                             caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
                             y_break_interval = 500,
                             color_values = chc3,
