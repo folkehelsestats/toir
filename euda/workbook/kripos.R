@@ -1,7 +1,8 @@
 ## Data hentet fra https://www.politiet.no/om-politiet/tall-og-fakta/narkotika/
 ## -------------------------------
 
-source("euda/workbook//setup.R")
+root <- "c:/Users/ykama/Git-hdir/toir/euda/workbook"
+source(file.path(root, "setup.R"))
 
 library(data.table)
 library(ggplot2)
@@ -80,6 +81,7 @@ CanBesLine <- make_line_plot(data = CanBesW,
                              label_col = "canlab",
                              y_lab = NULL)
 
+ggplot2::ggsave(file.path(root, "figures/beslag2025.png"), CanBesLine)
 
 
 ## Cannabis KG
@@ -93,6 +95,9 @@ CanKgLine <- make_line_plot(data = CanKgW,
                             color_values = chc3,
                             label_col = "canlab",
                             y_lab = "kilograms (kg)")
+
+
+ggplot2::ggsave(file.path(root, "figures/beslagKg2025.png"), CanKgLine)
 
 ## Numbers
 ## KG
