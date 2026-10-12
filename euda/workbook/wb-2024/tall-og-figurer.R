@@ -124,7 +124,14 @@ dcan[can == "hasj", canlab := "Resin"]
 dcan[can == "marihuana", canlab := "Herbal/plants"]
 dcan[can == "canoil", canlab := "Cannabis oil"]
 
-chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
+
+chc4 <- c("#025169", "#0069E8",
+                "#7C145C", "#047FA4",
+                "#C68803", "#38A389",
+                "#6996CE", "#366558",
+                "#BF78DE", "#767676")
+
+# chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
 
 annotdf <- dcan[year == 2021]
 annotdf[, loc := fcase(can == "hasj", pro + 2 ,
