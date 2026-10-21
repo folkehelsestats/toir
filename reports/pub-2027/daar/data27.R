@@ -55,6 +55,7 @@ ratenor1625 <- pred_rate(ratenor1625)
 
 # Fit a linear trend model
 trend_model <- stats::lm(rate ~ year, data = ratenor1625)
+predict(trend_model, interval = "confidence") #for CI
 
 # Add fitted trend values
 ratenor[, trend := stats::predict(trend_model)]
