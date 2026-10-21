@@ -5,63 +5,82 @@ library(data.table)
 library(rio)
 library(highdir)
 
+path24 <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2024"
 path <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2025"
 
 
 ## Antall og rater
 ## ---------------
-filN <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, antall.csv" 
+filRate24 <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, rater norge fylke.csv"
+filN24 <- "antall2024.csv"
 filRate <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, rater.csv"
+filN <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, antall.csv"
 
+
+drate24 <- fread(file.path(path24, filRate24), encoding = "Latin-1")
+dnum24 <- setDT(rio::import(file.path(path24, filN24), encoding = "Latin-1"))
 drate <- fread(file.path(path, filRate), encoding = "Latin-1")
 dnum <- fread(file.path(path, filN), encoding = "Latin-1")
 
-ratenor <- drate[Bofylke == "Hele landet", c(1,4)]
-numnor <- dnum[Bofylke == "Hele landet", c(1,4)]
+keep_norway <- function(dt, col = c("rate", "n")) {
+  data.table::copy(dt)
+  dt <- dt[Bofylke == "Hele landet", c(1, 4)]
+  data.table::setnames(dt, c("year", col))
+  return(dt)
+}
 
-setnames(ratenor, names(ratenor), c("yr", "rate"))
-setnames(numnor, names(numnor), c("yr", "n"))
+ratenor24 <- keep_norway(drate24, "rate")
+numnor24  <- keep_norway(dnum24, "n")
+ratenor   <- keep_norway(drate, "rate")
+numnor    <- keep_norway(dnum, "n")
 
-## Annual percent change
-## ---------------------
-# log linear model for anual percent change
-model <- stats::lm(log(rate) ~ yr, data = ratenor)
 
-apc <- (exp(stats::coef(model)["yr"]) - 1) * 100
-apc
-# apc = 2.2 dvs. rate i gjennonsnitt øker 2.2% per år fra 216 til 2025
+## Beholder den nyeste data fra 2025
+yrmin <- ratenor[, min(year)]
+ratenor24 <- ratenor24[year < yrmin]
 
-# Annual change
-# Calculate annual absolute and percent change
-ratenor[, annual_change := rate - data.table::shift(rate)]
+ratenor <- rbindlist(list(ratenor24, ratenor), use.names = TRUE)
+ratenor1225 <- ratenor[year > 2011]
+ratenor1625 <- ratenor[year > 2015]
 
-ratenor[, annual_pct_change :=
-      (rate - data.table::shift(rate)) /
-      data.table::shift(rate) * 100]
+pred_rate <- function(dt){
+  data.table::copy(dt)
+  model <- stats::lm(rate ~ year, data = dt)
+  dt[, trend := stats::predict(model)]
+}
 
-# Calculate 3-year moving average
-ratenor[, ma3 := data.table::frollmean(
-  x = rate,
-  n = 3,
-  align = "right"
-)]
+ratenor <- pred_rate(ratenor)
+ratenor1225 <- pred_rate(ratenor1225)
+ratenor1625 <- pred_rate(ratenor1625)
 
-# Calculate absolute change in 3-year moving average
-ratenor[, ma3_change := ma3 - data.table::shift(ma3)]
+# Fit a linear trend model
+trend_model <- stats::lm(rate ~ year, data = ratenor1625)
 
-# Overall change
-r25 <- ratenor[yr == 2025, rate]
-r16 <- ratenor[yr == 2016, rate]
+# Add fitted trend values
+ratenor[, trend := stats::predict(trend_model)]
 
-(r25 - r16)/r16*100
+# View trend statistics
+summary(trend_model)
 
-# Fit linear trend
-model <- stats::lm(rate ~ yr, data = ratenor)
+# Figur
+make_fig <- function(dt, min, fig, mode = "dynamic"){
+  d <- dt[year >= min]
+  dtrate <- melt(d, id.vars = "year", measure.vars = c("rate", "trend"))
+  spec <- hd_spec(dtrate, x = "year", y = "value", group = "variable")
+  opts <- hd_opts(title = "Narkotikautløste dødsfall",
+                  subtitle = "Aldersstandardisert rate per 100 000 innbyggere",
+                  ylab = "Rate")
+  hd_make(spec, fig, opts, mode = mode)
+}
 
-# Annual change in rate per 100,000
-coef(model)["yr"]
-summary(model)
+make_fig(ratenor, "line")
+make_fig(ratenor, "line", "static")
 
+make_fig(ratenor, 2016, "line")
+make_fig(ratenor, 2012, "line")
+
+make_fig(ratenor1225, "line")
+make_fig(ratenor, "line", "static")
 
 ## ----------------------------------------------------------------------------
 ## Alder
