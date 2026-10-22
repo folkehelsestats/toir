@@ -85,6 +85,19 @@ dagecat <- fread(file.path(path, ageCat), encoding = "Latin-1")
 dagecat <- dagecat[, c(1,2,4)]
 setnames(dagecat, c("year", "alder", "antall"))
 
+legend_order <- c(
+  "0-29 år",
+  "30-49 år",
+  "50-69 år",
+  "70 år og over",
+  "Alle aldre"
+)
+
+dagecat[, alder := factor(alder, levels = legend_order)]
+
+setorder(dagecat, alder, year)
+
+
 spec <- hd_spec(dagecat, x = "year", y = "antall", group = "alder")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
                 subtitle = " Antall dødsfall fordelt på ulike aldersgrupper",
@@ -104,12 +117,13 @@ dmedian <- setDT(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
 dage <- cbind(dmean, dmedian[, 3])
 # dage[, ARGANG := factor(ARGANG, levels = sort(unique(ARGANG)))]
 
-spec <- hd_spec(dage, x = "ARGANG", y = "GJENNOMSNITT_ALDER", group = "KJONN")
-opts <- hd_opts(title = "Gjennomsnittsalder ved narkotikautløste dødsfall",
-                subtitle = "Total og etter kjønn, 2020-2024",
-                ylab = "Antall")
+## highdir need xint for tickInterval when numeric
+# spec <- hd_spec(dage, x = "ARGANG", y = "GJENNOMSNITT_ALDER", group = "KJONN")
+# opts <- hd_opts(title = "Gjennomsnittsalder ved narkotikautløste dødsfall",
+#                 subtitle = "Total og etter kjønn, 2020-2024",
+#                 ylab = "Antall")
 
-hd_make(spec, "line", opts)
+# hd_make(spec, "line", opts)
 
 library(highcharter)
 colors <- highdir::get_palette("hdir")
@@ -119,12 +133,34 @@ highcharter::highchart() |>
     data = dage,
     type = "spline",
     mapping = highcharter::hcaes(x = "ARGANG",
-                                  y = "GJENNOMSNITT_ALDER",
-                                  group = "KJONN")
+                                 y = "GJENNOMSNITT_ALDER",
+                                 group = "KJONN")
   ) |>
   highcharter::hc_colors(highdir::get_palette("hdir")) |>
   highcharter::hc_xAxis(
     title = list(text = "Årgang"),
     tickInterval = 1,
     allowDecimals = FALSE
+  ) |>
+  highcharter::hc_yAxis(
+    title = list(text = "Antall"),
+    min = 40
+  ) |>
+  highcharter::hc_exporting(
+    enabled = TRUE
+  ) |>
+  highcharter::hc_title(text = "Gjennomsnittalder ved narkotiskautløste dødsfall",
+                        align = "left") |>
+  highcharter::hc_subtitle(text = "Total og etter kjønn, 2021-2025",
+                           align = "left") |>
+#   highcharter::hc_theme(highcharter::hc_theme_smpl()) |>
+  highcharter::hc_chart(
+    backgroundColor = "#FFFFFF",
+    plotBackgroundColor = "#FFFFFF"
   )
+
+## Antall kjønn per alder
+## ---------------------
+
+kjonnAge <- "Kjønn og alder 1996-2025.xlsx"
+dkjonn <- setDT(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
