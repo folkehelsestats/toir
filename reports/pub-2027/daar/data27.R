@@ -112,13 +112,17 @@ opts <- hd_opts(title = "Gjennomsnittsalder ved narkotikautløste dødsfall",
 hd_make(spec, "line", opts)
 
 library(highcharter)
+colors <- highdir::get_palette("hdir")
 
 highcharter::highchart() |>
   highcharter::hc_add_series(
     data = dage,
     type = "spline",
-    hcaes(x = "ARGANG", y = "GJENNOMSNITT_ALDER", group = "KJONN")
+    mapping = highcharter::hcaes(x = "ARGANG",
+                                  y = "GJENNOMSNITT_ALDER",
+                                  group = "KJONN")
   ) |>
+  highcharter::hc_colors(highdir::get_palette("hdir")) |>
   highcharter::hc_xAxis(
     title = list(text = "Årgang"),
     tickInterval = 1,
