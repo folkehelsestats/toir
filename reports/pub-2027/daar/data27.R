@@ -45,27 +45,44 @@ pred_rate <- function(dt){
   data.table::copy(dt)
   model <- stats::lm(rate ~ year, data = dt)
   dt[, trend := stats::predict(model)]
+
+  dt[, c("lwr", "upr") :=
+         as.data.table(
+           stats::predict(
+             model,
+             newdata = .SD,
+             interval = "confidence"
+           )
+         )[, .(lwr, upr)]]
 }
 
 # Figur
 make_fig <- function(dt, min, fig, mode = "dynamic"){
   d <- dt[year >= min]
   d <- pred_rate(d)
-  dtrate <- melt(d, id.vars = "year", measure.vars = c("rate", "trend"))
+
+  vars <- c("rate", "trend")
+  d[, (vars) := lapply(.SD, function(x) round(x, 1)), .SDcols = vars]
+  
+  dtrate <- melt(d, id.vars = "year", measure.vars = vars)
   spec <- hd_spec(dtrate, x = "year", y = "value", group = "variable")
   opts <- hd_opts(title = "Narkotikautløste dødsfall",
                   subtitle = "Aldersstandardisert rate per 100 000 innbyggere",
                   ylab = "Rate")
+
   fig <- hd_make(spec, fig, opts, mode = mode)
+
   list(data = d, fig = fig)
 }
 
-d16 <- make_fig(ratenor, 2016, "line")
 d12 <- make_fig(ratenor, 2012, "line")
-d96 <- make_fig(ratenor, 1996, "line")
+
+# d16 <- make_fig(ratenor, 2016, "line")
+# d96 <- make_fig(ratenor, 1996, "line")
 
 # Fit a linear trend model
-trend_model <- stats::lm(rate ~ year, data = ratenor1625)
+ratenor[year >= 2012]
+trend_model <- stats::lm(rate ~ year, data = ratenor[year >= 2012])
 predict(trend_model, interval = "confidence") #for CI
 
 # Add fitted trend values
@@ -111,8 +128,8 @@ hd_make(spec, "line", opts)
 ageMean <- "Gjennomsnittsalder2021_2025.xlsx"
 ageMed <- "Median alder 2021-2025.xlsx"
 
-dmean <- setDT(rio::import(file.path(path, ageMean), encoding = "Latin-1"))
-dmedian <- setDT(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
+dmean <- setd(rio::import(file.path(path, ageMean), encoding = "Latin-1"))
+dmedian <- setd(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
 
 dage <- cbind(dmean, dmedian[, 3])
 # dage[, ARGANG := factor(ARGANG, levels = sort(unique(ARGANG)))]
@@ -163,4 +180,4 @@ highcharter::highchart() |>
 ## ---------------------
 
 kjonnAge <- "Kjønn og alder 1996-2025.xlsx"
-dkjonn <- setDT(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
+dkjonn <- setd(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
