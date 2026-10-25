@@ -128,8 +128,8 @@ hd_make(spec, "line", opts)
 ageMean <- "Gjennomsnittsalder2021_2025.xlsx"
 ageMed <- "Median alder 2021-2025.xlsx"
 
-dmean <- setd(rio::import(file.path(path, ageMean), encoding = "Latin-1"))
-dmedian <- setd(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
+dmean <- setDT(rio::import(file.path(path, ageMean), encoding = "Latin-1"))
+dmedian <- setDT(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
 
 dage <- cbind(dmean, dmedian[, 3])
 # dage[, ARGANG := factor(ARGANG, levels = sort(unique(ARGANG)))]
@@ -180,4 +180,4 @@ highcharter::highchart() |>
 ## ---------------------
 
 kjonnAge <- "Kjønn og alder 1996-2025.xlsx"
-dkjonn <- setd(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
+dkjonn <- setDT(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
