@@ -88,5 +88,5 @@ hc <- highchart() |>
   ) |>
   highcharter::hc_title(text = "Narkotikautløste dødsfall etter alderskategorier",
                         align = "left") |>
-  highcharter::hc_subtitle(text = "Antall dødsfall fordelt på ulike aldersgrupper, 2021-2025",
+  highcharter::hc_subtitle(text = "Antall dødsfall fordelt på ulike aldersgrupper, 2020-2025",
                            align = "left")

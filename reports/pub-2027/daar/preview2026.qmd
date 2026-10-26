@@ -184,7 +184,7 @@ setorder(dagecat, alder, year)
 
 spec <- hd_spec(dagecat, x = "year", y = "antall", group = "alder")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
-                subtitle = " Antall dødsfall fordelt på ulike aldersgrupper",
+                subtitle = " Antall dødsfall fordelt på ulike aldersgrupper, 2020-2025",
                 ylab = "Antall", yint = 50)
 
 hd_make(spec, "line", opts)
