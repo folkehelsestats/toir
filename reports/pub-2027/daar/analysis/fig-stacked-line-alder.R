@@ -7,7 +7,7 @@ dtcl <- dtc[, c("year", "Alle aldre")]
 setnames(dtcl, c("year", "total"))
 
 hc <- highchart() |>
-  hc_legend(enabled = FALSE) |>
+  hc_legend(enabled = TRUE) |>
   highcharter::hc_colors(highdir::get_palette("hdir")) |>
 #   highcharter::hc_theme(highcharter::hc_theme_smpl()) |>
   hc_chart(
