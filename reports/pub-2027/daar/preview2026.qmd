@@ -389,7 +389,7 @@ stoff25[, pros := round(n/313*100, 1)]
 
 spec <- hd_spec(stoff25, x = "stoff", y = "pros", n = "n")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter stoffer",
-                subtitle = "Antall dødsfall i 2025",
+                subtitle = "Antall og andel dødsfall i 2025",
                 flip = TRUE, ysuffix = "%", ylab = "Prosent")
 
 hd_make(spec, "ranked_bar", opts)
