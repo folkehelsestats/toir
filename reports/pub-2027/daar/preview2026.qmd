@@ -224,5 +224,33 @@ hd_make(spec, "column", opts)
 
 ```
 
+Kjønnforskjellen fra 2012 til 2025
+
+```{r}
+#| label: fig-kjonn-year
+
+dkj1225 <- dkjonn[year >= 2012]
+dkj1225 <- melt(dkj1225, id.vars = "year", measure.vars = c("menn", "kvinner"))
+dkj1225[, n := sum(value), keyby = .(year, variable)]
+
+dtkjall <- unique(dkj1225, by = c("year", "variable"))
+# dtkjall <- dkj1225[, .SD[1], by = .(year, variable)]
+
+dtkjall[, value := NULL]
+dtkjall[, tot := sum(n), keyby = year]
+dtkjall[, pros := round(n/tot*100, 1)]
+
+kjspec <- hd_spec(dtkjall, x = "year", y = "pros", group = "variable", n = "n")
+kjopts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
+                subtitle = "Fordelt på kjønn, 2012-2025",
+                ylab = "Prosent", ysuffix = "%")
+
+hd_make(kjspec, "line", kjopts) |>
+  hc_xAxis(
+    tickInterval = 1
+  )
+
+```
+
 ## Geografisk fordeling
 
