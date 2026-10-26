@@ -12,7 +12,7 @@ format:
     theme: [hdir.scss]
     toc: false
     toc-location: left
-    fig-cap-location: bottom
+    fig-cap-location: top
     fig-width: 9
     fig-height: 7
     fig-dpi: 144
