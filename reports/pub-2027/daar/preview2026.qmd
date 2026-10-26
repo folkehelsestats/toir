@@ -297,3 +297,36 @@ datatable(
 )
 
 ```
+
+Sammenliknet med de andre fylkene, hadde Agder og Finnmark den høyeste
+aldersstandardiserte raten for narkotikautløste dødsfall i Norge i 2025, med 8,9
+dødsfall per 100 000 innbyggere som vist i figur under. Den aldersstandardiserte
+raten for hele landet var 5,6 per 100 000 innbyggere. Møre og
+Romsdal hadde den laveste raten med 1,6 dødsfall per 100 000 innbyggere.
+
+```{r}
+#| label: fig-fylke-rate
+#| fig-width: 10
+#| fig-height: 9
+
+## Rate
+## -----
+geoRate <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, rater.csv"
+geoRT <- setDT(rio::import(file.path(path, geoRate), encoding = "Latin-1"))
+
+gcols <- names(geoRT)[c(1,2,4)]
+grt <- geoRT[, ..gcols]
+
+setnames(grt, c("year", "fylke", "n"))
+
+grt25 <- grt[year == 2025]
+grt25[, n := round(n, 1)]
+
+spec <- hd_spec(grt25, x = "fylke", y = "n")
+opts <- hd_opts(title = "Narkotikautløste dødsfall etter fylke",
+                subtitle = "Aldersstandardisert rate per 100 000 innbyggere, 2025",
+                flip = TRUE, yint = 2)
+
+hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
+
+```
