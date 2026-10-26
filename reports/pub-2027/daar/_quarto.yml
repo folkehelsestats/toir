@@ -1,5 +1,4 @@
 project:
-  type: website
   output-dir: ../../../docs/007hdir/x202610xdaar
 
 lang: nb
