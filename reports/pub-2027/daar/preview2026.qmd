@@ -201,3 +201,24 @@ hc
 
 ## Kjønnsforskjeller
 
+```{r}
+#| label: fig-alder-kjonn
+
+kjonnAge <- "Kjønn og alder 1996-2025.xlsx"
+dkjonn <- setDT(rio::import(file.path(path, kjonnAge), encoding = "Latin-1"))
+
+setnames(dkjonn, c("year", "age", "menn", "kvinner", "totalt"))
+
+dkj25 <- dkjonn[year == 2025]
+
+dkj25 <- melt(dkj25, id.vars = c("year", "age"), measure.vars = c("menn", "kvinner"))
+dkj25[, pros := round(value/313*100, digits = 1), keyby = .(variable, age)]
+
+spec <- hd_spec(dkj25, x = "age", y = "pros", group = "variable", n = "value")
+opts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
+                subtitle = "Totalt og etter kjønn fordelt på ulike aldersgrupper i 2025",
+                ysuffix = "%")
+hd_make(spec, "column", opts)
+
+```
+
