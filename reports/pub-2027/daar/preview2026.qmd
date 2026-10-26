@@ -161,18 +161,20 @@ hd_make(spec, "line", opts)
 #| label: fig-age-cat
 
 # Alderskategorier
-ageCat <- "Narkotikautløste dødsfall etter alder og dødsårsak, antall.csv"
-dagecat <- fread(file.path(path, ageCat), encoding = "Latin-1")
+ageCat <- "Narkotikadødsfall etter alder 2020-2025.xlsx"
+dagecat <- rio::import(file.path(path, ageCat), encoding = "Latin-1")
+setDT(dagecat)
 
-dagecat <- dagecat[, c(1,2,4)]
+# dagecat <- dagecat[, c(1,2,4)]
 setnames(dagecat, c("year", "alder", "antall"))
 
 legend_order <- c(
-  "0-29 år",
-  "30-49 år",
-  "50-69 år",
-  "70 år og over",
-  "Alle aldre"
+  "<30",
+  "30-39",
+  "40-49",
+  "50-59",
+  "60-69",
+  "70+"
 )
 
 dagecat[, alder := factor(alder, levels = legend_order)]
@@ -221,4 +223,6 @@ opts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
 hd_make(spec, "column", opts)
 
 ```
+
+## Geografisk fordeling
 

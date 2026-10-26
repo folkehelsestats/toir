@@ -3,8 +3,9 @@
 # --------------------
 
 dtc <- dcast(dagecat, year ~ alder, value.var = "antall")
-dtcl <- dtc[, c("year", "Alle aldre")]
-setnames(dtcl, c("year", "total"))
+cols <- names(dtc)[-1]
+dtc[, total := rowSums(.SD), .SDcols = cols]
+dtcl <- dtc[, c("year", "total")]
 
 hc <- highchart() |>
   hc_legend(enabled = TRUE) |>
@@ -46,25 +47,35 @@ hc <- highchart() |>
     fillOpacity = 0.5
   ) |>
   hc_add_series(
-    name = "30-49 år",
+    name = "30-39 år",
     data = dtc[[3]],
     fillOpacity = 0.5
   ) |>
   hc_add_series(
-    name = "50-69 år",
+    name = "40-49 år",
     data = dtc[[4]],
     fillOpacity = 0.5
   ) |>
   hc_add_series(
-    name = "70 år og over",
+    name = "50-59 år",
     data = dtc[[5]],
+    fillOpacity = 0.5
+  ) |>
+  hc_add_series(
+    name = "60-69 år",
+    data = dtc[[6]],
+    fillOpacity = 0.5
+  ) |>
+  hc_add_series(
+    name = "70 år og over",
+    data = dtc[[7]],
     fillOpacity = 0.5
   ) |>
   ## # Overlay line
   hc_add_series(
-  name = "Alle aldre",
+  name = "Total",
   type = "line",
-  data = dtc[["Alle aldre"]],
+  data = dtc[["total"]],
   color = "black",
   lineWidth = 4
 ) |>
