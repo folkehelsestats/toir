@@ -333,6 +333,8 @@ hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
 
 ## Registrerte dødsårsaker
 
+### Flere faktorer fører til overdosedød
+
 Flere faktorer fører til overdosedød Narkotikautløste dødsfall skyldes som regel
 en kombinasjon av flere faktorer. De som dør utgjør en heterogen gruppe med ulik
 alder, kjønn, helsetilstand og bruksmønster (Edvardsen et al. 20191). Det er
@@ -346,6 +348,50 @@ rehabilitering (LAR) (Edvardsen et al. 2019, Folkehelseinstituttet3).
 ```{r}
 #| label: fig-stoff-long
 
+## File
+stoffFil <- "Stofftype per år 2006-2025.xlsx"
+stoffDT <- setDT(rio::import(file.path(path, stoffFil), encoding = "Latin-1"))
+
+# Year columns to select only up to 2008 else will be to wide to be displayed
+year_cols <- as.character(2006:2025)
+
+# keep_cols <- c(names(stoffDT)[1], year_cols)
+# del_cols <- setdiff(names(stoffDT), keep_cols)
+# stoffDT[, (del_cols) := NULL]
+
+# # Total by year
+# totals <- stoffDT[, lapply(.SD, sum, na.rm = TRUE), .SDcols = year_cols]
+
+# Long format for easier plotting
+stoff_long <- data.table::melt(
+  stoffDT,
+  id.vars = "Stofftype",
+  measure.vars = year_cols,
+  variable.name = "year",
+  value.name = "antall"
+)
+
+stoff_long[, year := as.integer(as.character(year))]
+
 source("analysis/fig-stacked-line-stoff.R")
 figStoff
+```
+
+### Antall dødsfall etter stofftype i 2025
+
+```{r}
+#| label: fig-stoff-25
+
+stoff25 <- stoffDT[, .(Stofftype, `2025`)]
+setnames(stoff25, c("stoff", "n"))
+
+stoff25[, pros := round(n/313*100, 1)]
+
+spec <- hd_spec(stoff25, x = "stoff", y = "pros", n = "n")
+opts <- hd_opts(title = "Narkotikautløste dødsfall etter stoffer",
+                subtitle = "Antall dødsfall i 2025",
+                flip = TRUE, ysuffix = "%", ylab = "Prosent")
+
+hd_make(spec, "ranked_bar", opts)
+
 ```
