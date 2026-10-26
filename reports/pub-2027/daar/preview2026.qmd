@@ -330,3 +330,22 @@ opts <- hd_opts(title = "Narkotikautløste dødsfall etter fylke",
 hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
 
 ```
+
+## Registrerte dødsårsaker
+
+Flere faktorer fører til overdosedød Narkotikautløste dødsfall skyldes som regel
+en kombinasjon av flere faktorer. De som dør utgjør en heterogen gruppe med ulik
+alder, kjønn, helsetilstand og bruksmønster (Edvardsen et al. 20191). Det er
+sjeldent at narkotikautløste dødsfall skyldes inntak av kun ett enkelt stoff. En
+studie fra 2020 fant et gjennomsnitt av fire ulike stoffer i de toksikologiske
+prøvene etter dødsfallet (Simonsen et al. 20202). For opioidrelaterte dødsfall
+er det imidlertid uklart om opioidene var illegalt anskaffet, forskrevet som
+smertestillende eller gitt som substitusjonsmedikament i legemiddelassistert
+rehabilitering (LAR) (Edvardsen et al. 2019, Folkehelseinstituttet3).
+
+```{r}
+#| label: fig-stoff-long
+
+source("analysis/fig-stacked-line-stoff.R")
+figStoff
+```
