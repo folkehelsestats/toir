@@ -254,3 +254,46 @@ hd_make(kjspec, "line", kjopts) |>
 
 ## Geografisk fordeling
 
+```{r}
+#| label: tbl-fylker
+
+geoFile <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, antall.csv"
+geoDT <- setDT(rio::import(file.path(path, geoFile), encoding = "Latin-1"))
+
+gcols <- names(geoDT)[c(1,2,4)]
+geo <- geoDT[, ..gcols]
+
+setnames(geo, c("year", "fylke", "n"))
+
+geo2425 <- geo[year %in% c(2025, 2024)]
+geodiff <- dcast(geo2425, fylke ~ year, value.var = "n")
+
+geodiff[, diff := `2025` - `2024`]
+
+# Move "Hele landet" to the bottom
+geodiff <- geodiff[order(fylke == "Hele landet")]
+
+setnames(geodiff, "diff", "Endring")
+
+library(DT)
+
+datatable(
+  geodiff,
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align: left; font-size: 120%; font-weight: bold;",
+    "Antall narkotikautløste dødsfall og endringer per fylke i 2024 og 2025"
+  ),
+  extensions = "Buttons",
+  options = list(
+    dom = "Brtip",
+    buttons = c("copy", "csv", "excel"),
+    paging = FALSE,
+      columnDefs = list(
+    list(className = "dt-left", targets = 0),
+    list(className = "dt-right", targets = c(1, 2, 3))
+  )),
+  class = "stripe hover compact",
+  rownames = FALSE
+)
+
+```
