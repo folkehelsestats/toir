@@ -44,32 +44,32 @@ hc <- highchart() |>
   hc_add_series(
     name = "0-29 år",
     data = dtc[[2]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   hc_add_series(
     name = "30-39 år",
     data = dtc[[3]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   hc_add_series(
     name = "40-49 år",
     data = dtc[[4]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   hc_add_series(
     name = "50-59 år",
     data = dtc[[5]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   hc_add_series(
     name = "60-69 år",
     data = dtc[[6]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   hc_add_series(
     name = "70 år og over",
     data = dtc[[7]],
-    fillOpacity = 0.5
+    fillOpacity = 0.8
   ) |>
   ## # Overlay line
   hc_add_series(
