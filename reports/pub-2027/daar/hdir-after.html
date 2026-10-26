@@ -1,0 +1,31 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // 0. Quarto puts "include-before-body" inside <main>; lift header + breadcrumbs to the top of the page
+  var top = document.getElementById("hdir-top");
+  if (top) document.body.insertBefore(top, document.body.firstChild);
+
+  // 1. Move the left navigation into the page grid
+  var content = document.getElementById("quarto-content");
+  var nav = document.getElementById("hdir-sidenav");
+  if (content && nav) {
+    content.classList.add("hdir-grid");
+    content.insertBefore(nav, content.firstChild);
+  }
+
+  // 2. Build the "Innhold på siden" box from the level-2 headings
+  var heads = document.querySelectorAll("main.content section.level2 > h2");
+  var title = document.getElementById("title-block-header");
+  if (heads.length && title) {
+    var box = document.createElement("details");
+    box.className = "hdir-innhold";
+    box.open = true;
+    var html = "<summary>Innhold på siden</summary><ul>";
+    heads.forEach(function (h) {
+      var id = h.parentElement.id || h.id;
+      html += '<li><a href="#' + id + '">' + h.textContent.trim() + "</a></li>";
+    });
+    box.innerHTML = html + "</ul>";
+    title.insertAdjacentElement("afterend", box);
+  }
+});
+</script>

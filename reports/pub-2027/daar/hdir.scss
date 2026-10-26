@@ -1,0 +1,143 @@
+/*-- scss:defaults --*/
+$hdir-dark:   #04546c;
+$hdir-teal:   #027fa3;
+$hdir-bg:     #e6f1f8;
+$hdir-box:    #e5f0fb;
+$hdir-text:   #1c1c1c;
+
+$body-bg: #ffffff;
+$body-color: $hdir-text;
+$link-color: $hdir-dark;
+$link-hover-color: $hdir-teal;
+$headings-color: $hdir-text;
+$font-family-sans-serif: Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+$font-size-root: 18px;
+$headings-font-weight: 700;
+
+/*-- scss:rules --*/
+:root { --hdir-pad: clamp(1rem, 4vw, 4.4rem); }
+
+body { font-family: $font-family-sans-serif; }
+
+#quarto-margin-sidebar { display: none !important; }
+
+/* ---------- Header band ---------- */
+.hdir-header {
+  background: $hdir-bg;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3.2rem var(--hdir-pad);
+  min-height: 190px; box-sizing: border-box;
+}
+.hdir-header img.hdir-logo { height: 46px; width: auto; display: block; }
+.hdir-buttons { display: flex; gap: 1.2rem; }
+.hdir-btn {
+  border: 3px solid $hdir-dark; border-radius: 999px;
+  color: $hdir-dark; background: transparent;
+  font-size: 1.05rem; padding: .85rem 1.6rem; line-height: 1;
+  display: inline-flex; align-items: center; gap: .5rem;
+  text-decoration: none;
+}
+.hdir-btn:hover { background: #fff; color: $hdir-dark; }
+
+/* ---------- Breadcrumbs ---------- */
+.hdir-breadcrumbs {
+  padding: 1.4rem var(--hdir-pad) 1.1rem; font-size: 1.1rem;
+  display: flex; flex-wrap: wrap; gap: .9rem;
+}
+.hdir-breadcrumbs a {
+  color: $hdir-dark; text-decoration: none;
+  border-bottom: 2px solid $hdir-dark;
+}
+.hdir-breadcrumbs span.sep { color: $hdir-text; }
+
+/* ---------- Two-column page ---------- */
+#quarto-content.hdir-grid {
+  display: grid !important;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 0; padding: 0 var(--hdir-pad) 4rem; max-width: none;
+  align-items: start;
+}
+#quarto-content.hdir-grid > main.content {
+  grid-column: 2 !important; grid-row: 1;
+  padding: 1.5rem 0 0 4rem; max-width: 1100px; min-width: 0;
+}
+#quarto-content.hdir-grid > nav#hdir-sidenav { grid-column: 1; grid-row: 1; }
+.page-columns .content { padding-left: 0; }
+
+/* ---------- Left navigation ---------- */
+#hdir-sidenav {
+  border-right: 1px solid #cfd8dc; font-size: .93rem; margin-top: 1.4rem;
+}
+#hdir-sidenav .nav-title {
+  display: flex; align-items: center; gap: 1.1rem;
+  padding: 1.1rem .5rem 1.3rem; font-weight: 600; font-size: 1.2rem;
+}
+#hdir-sidenav .nav-title svg { width: 56px; height: 56px; flex: none; }
+#hdir-sidenav ul { list-style: none; margin: 0; padding: 0; }
+#hdir-sidenav li > a {
+  display: flex; gap: 1.4rem; padding: 1.05rem .8rem;
+  border-top: 1px solid #cfd8dc; color: $hdir-text; text-decoration: none;
+}
+#hdir-sidenav li > a .num { min-width: 1.6rem; }
+#hdir-sidenav li > a:hover { background: #f1f6fa; }
+#hdir-sidenav li.open > a { font-weight: 600; }
+#hdir-sidenav li.active > a { background: $hdir-box; font-weight: 600; }
+
+/* ---------- Title block ---------- */
+#title-block-header { margin-bottom: 1.4rem; }
+#title-block-header .quarto-title { display: flex; flex-direction: column; }
+#title-block-header .quarto-title .subtitle {
+  order: -1; font-size: 1.15rem; font-weight: 600; color: $hdir-text;
+  margin: 1.2rem 0 .3rem;
+}
+#title-block-header .quarto-title h1.title {
+  font-size: 2.7rem; font-weight: 700; margin: 0; line-height: 1.15;
+}
+
+/* ---------- "Innhold på siden" box ---------- */
+details.hdir-innhold {
+  background: $hdir-box; padding: 1.6rem 2.4rem 2.2rem; margin: 1.6rem 0 2rem;
+}
+details.hdir-innhold summary {
+  list-style: none; cursor: pointer; font-weight: 700; font-size: 1.25rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+details.hdir-innhold summary::-webkit-details-marker { display: none; }
+details.hdir-innhold summary::after {
+  content: ""; width: 22px; height: 22px; flex: none;
+  border-top: 3px solid $hdir-dark; border-left: 3px solid $hdir-dark;
+  transform: rotate(45deg) translate(6px, 6px); transition: transform .15s;
+}
+details.hdir-innhold:not([open]) summary::after { transform: rotate(225deg) translate(5px, 5px); }
+details.hdir-innhold ul { list-style: none; padding: 0; margin: 1.2rem 0 0; }
+details.hdir-innhold li { margin: .85rem 0; }
+details.hdir-innhold li a {
+  color: $hdir-text; text-decoration: none; display: inline-flex; gap: 1.1rem;
+}
+details.hdir-innhold li a::before { content: "\2192"; font-size: 1.1rem; }
+details.hdir-innhold li a:hover { text-decoration: underline; }
+
+/* ---------- Body ---------- */
+
+.nb-warning {
+  color: red;
+  font-weight: bold;
+}
+
+main.content p { line-height: 1.75; }
+main.content a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
+main.content h2 { font-size: 1.7rem; margin-top: 2.6rem; border: 0; }
+main.content h3 { font-size: 1.3rem; margin-top: 1.8rem; }
+figcaption, .figure-caption, .table-caption { font-size: .85rem; color: #4d4d4d; }
+.hdir-source { font-size: .85rem; color: #4d4d4d; }
+.cell-output-display img { max-width: 100%; height: auto; }
+
+@media (max-width: 991px) {
+  .hdir-header { padding: 1.6rem var(--hdir-pad); min-height: 0; }
+  .hdir-buttons { display: none; }
+  #quarto-content.hdir-grid { grid-template-columns: 1fr; }
+  #quarto-content.hdir-grid > main.content { grid-column: 1 !important; grid-row: 2; padding-left: 0; }
+  #hdir-sidenav { border-right: 0; }
+  #title-block-header .quarto-title h1.title { font-size: 2rem; }
+}
+@media print { .hdir-buttons, #hdir-sidenav { display: none; } }

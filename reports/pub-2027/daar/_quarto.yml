@@ -1,0 +1,40 @@
+project:
+  type: website
+  output-dir: ../../../docs/007hdir/x202610xdaar
+
+lang: nb
+language: _language-nb.yml
+
+report-title: "Tall om illegale rusmidler"
+report-label: "Rapport 18. mars 2026"
+title: "Narkotikautløste dødsfall i Norge"
+format:
+  html:
+    theme: [hdir.scss]
+    toc: false
+    toc-location: left
+    fig-cap-location: bottom
+    fig-width: 9
+    fig-height: 7
+    fig-dpi: 144
+    include-before-body: hdir-header.html
+    include-after-body: hdir-after.html
+  typst:
+    papersize: a4
+    margin: { x: 2.2cm, top: 3cm, bottom: 2.2cm }
+    fontsize: 10.5pt
+    mainfont: "Arial"
+    number-sections: true
+    section-numbering: "1."
+    shift-heading-level-by: -1
+    template-partials:
+      - typst-show.typ
+    include-in-header: hdir-typst.typ
+    include-before-body: hdir-cover.typ
+    fig-width: 7
+    fig-height: 3.8
+execute:
+  echo: false
+  warning: false
+params:
+  mode: NULL

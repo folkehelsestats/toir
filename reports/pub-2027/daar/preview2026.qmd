@@ -1,0 +1,226 @@
+---
+title: "Narkotikautløste dødsfall i Norge"
+params:
+  mode: null
+---
+
+**Sist oppdatert:** `r format(Sys.Date(), "%d. %B %Y")`
+
+<div class="nb-warning">
+**NB!** Resultatene som vises er midlertidige og kan endres. Vennligst ikke referer til disse før endelig publisering.
+</div>
+
+```{r}
+#| label: setup
+
+modeAuto <- params$mode %||% if (knitr::is_html_output()) "dynamic" else "static"
+
+library(data.table)
+library(highcharter)
+library(rio)
+library(highdir)
+
+
+path24 <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2024"
+path <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2025"
+
+
+## Antall og rater
+## ---------------
+filRate24 <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, rater norge fylke.csv"
+filN24 <- "antall2024.csv"
+filRate <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, rater.csv"
+filN <- "Narkotikautløste dødsfall etter bofylke og dødsårsak, antall.csv"
+
+
+drate24 <- fread(file.path(path24, filRate24), encoding = "Latin-1")
+dnum24 <- setDT(rio::import(file.path(path24, filN24), encoding = "Latin-1"))
+drate <- fread(file.path(path, filRate), encoding = "Latin-1")
+dnum <- fread(file.path(path, filN), encoding = "Latin-1")
+
+keep_norway <- function(dt, col = c("rate", "n")) {
+  data.table::copy(dt)
+  dt <- dt[Bofylke == "Hele landet", c(1, 4)]
+  data.table::setnames(dt, c("year", col))
+  return(dt)
+}
+
+ratenor24 <- keep_norway(drate24, "rate")
+numnor24  <- keep_norway(dnum24, "n")
+ratenor   <- keep_norway(drate, "rate")
+numnor    <- keep_norway(dnum, "n")
+
+
+## Beholder den nyeste data fra 2025
+yrmin <- ratenor[, min(year)]
+ratenor24 <- ratenor24[year < yrmin]
+
+ratenor <- rbindlist(list(ratenor24, ratenor), use.names = TRUE)
+
+pred_rate <- function(dt){
+  data.table::copy(dt)
+  model <- stats::lm(rate ~ year, data = dt)
+  dt[, trend := stats::predict(model)]
+
+  dt[, c("lwr", "upr") :=
+         as.data.table(
+           stats::predict(
+             model,
+             newdata = .SD,
+             interval = "confidence"
+           )
+         )[, .(lwr, upr)]]
+}
+
+# Figur
+make_fig <- function(dt, min, fig, mode = modeAuto){
+  d <- dt[year >= min]
+  d <- pred_rate(d)
+
+  vars <- c("rate", "trend")
+  d[, (vars) := lapply(.SD, function(x) round(x, 1)), .SDcols = vars]
+  
+  dtrate <- melt(d, id.vars = "year", measure.vars = vars)
+  spec <- hd_spec(dtrate, x = "year", y = "value", group = "variable")
+  opts <- hd_opts(title = "Narkotikautløste dødsfall",
+                  subtitle = "Aldersstandardisert rate per 100 000 innbyggere",
+                  ylab = "Rate", yint = 2)
+
+  fig <- hd_make(spec, fig, opts, mode = mode)
+
+  list(data = d, fig = fig)
+}
+
+d12 <- make_fig(ratenor, 2012, "line")
+
+```
+
+I 2025 ble det registrert 313 narkotikautløste (overdoser) dødsfall i Norge. Til
+tross for at det var færre narkotikautløste dødsfall i 2025 (n = 313) enn i
+2024 (n = 346) viser trenden en signifikant økning i antall narkotikautløste
+dødsfall per år, siden 2012.
+
+Aldersstandardisert rate for narkotikautløste dødsfall per 100 000 innbyggere i
+2025 var `r d12$data[year == 2025, rate]`. Til sammenlikning var den i 2024 
+`r d12$data[year == 2024, rate]` per 100 000 innbyggere. De aldersstandardiserte
+ratene fra 2012–2025 viser i likhet med antall døde per år også en stigende
+trend, vist i figur under.
+
+
+```{r}
+#| label: fig-rate
+#| fig-cap: ""
+
+d12$fig
+
+```
+
+2012 er brukt som referanseår. Det var da arbeidet knyttet til å utvikle en
+overdosestrategi begynte. Den første overdosestrategien ble iverksatt 2014, men
+arbeidet begynte 2012.
+
+Personer i denne gruppen av dødsfall er relativt sett en liten gruppe, selv om
+hvert eneste dødsfall i denne gruppen er et dødsfall for mye. Antallet vil
+naturlig variere noe fra år til år på grunn av tilfeldig variasjon. Utviklingen
+bør derfor vurderes over tid, og ikke baseres på enkeltår alene.
+
+Fra 2012 til 2025 har gjennomsnittlig antall dødsfall ligget på om lag 293 per
+år. Det høyeste antallet narkotikautløste dødsfall i Norge ble registrert i
+2001, med totalt 411 dødsfall.
+
+
+## Aldersfordeling
+
+```{r}
+#| label: fig-age-mean
+
+
+ageMean <- "Gjennomsnittsalder2021_2025.xlsx"
+ageMed <- "Median alder 2021-2025.xlsx"
+
+dmean <- setDT(rio::import(file.path(path, ageMean), encoding = "Latin-1"))
+dmedian <- setDT(rio::import(file.path(path, ageMed), encoding = "Latin-1"))
+
+dage <- cbind(dmean, dmedian[, 3])
+# dage[, ARGANG := factor(ARGANG, levels = sort(unique(ARGANG)))]
+
+# highdir need xint for tickInterval when numeric
+spec <- hd_spec(dage, x = "ARGANG", y = "GJENNOMSNITT_ALDER", group = "KJONN")
+opts <- hd_opts(title = "Gjennomsnittsalder ved narkotikautløste dødsfall",
+                subtitle = "Total og etter kjønn, 2020-2024",
+                ylab = "Antall", xlab = "")
+
+hd_make(spec, "line", opts)
+
+
+# library(highcharter)
+# colors <- highdir::get_palette("hdir")
+
+# highcharter::highchart() |>
+#   highcharter::hc_add_series(
+#     data = dage,
+#     type = "spline",
+#     mapping = highcharter::hcaes(x = "ARGANG",
+#                                  y = "GJENNOMSNITT_ALDER",
+#                                  group = "KJONN")
+#   ) |>
+#   highcharter::hc_colors(highdir::get_palette("hdir")) |>
+#   highcharter::hc_xAxis(
+#     title = list(text = "Årgang"),
+#     tickInterval = 1,
+#     allowDecimals = FALSE
+#   ) |>
+#   highcharter::hc_yAxis(
+#     title = list(text = "Antall"),
+#     min = 40
+#   ) |>
+#   highcharter::hc_exporting(
+#     enabled = TRUE
+#   ) |>
+#   highcharter::hc_title(text = "Gjennomsnittalder ved narkotiskautløste dødsfall",
+#                         align = "left") |>
+#   highcharter::hc_subtitle(text = "Total og etter kjønn, 2021-2025",
+#                            align = "left") |>
+# #   highcharter::hc_theme(highcharter::hc_theme_smpl()) |>
+#   highcharter::hc_chart(
+#     backgroundColor = "#FFFFFF",
+#     plotBackgroundColor = "#FFFFFF"
+#   )
+
+```
+
+
+```{r}
+#| label: fig-age-cat
+
+# Alderskategorier
+ageCat <- "Narkotikautløste dødsfall etter alder og dødsårsak, antall.csv"
+dagecat <- fread(file.path(path, ageCat), encoding = "Latin-1")
+
+dagecat <- dagecat[, c(1,2,4)]
+setnames(dagecat, c("year", "alder", "antall"))
+
+legend_order <- c(
+  "0-29 år",
+  "30-49 år",
+  "50-69 år",
+  "70 år og over",
+  "Alle aldre"
+)
+
+dagecat[, alder := factor(alder, levels = legend_order)]
+
+setorder(dagecat, alder, year)
+
+
+spec <- hd_spec(dagecat, x = "year", y = "antall", group = "alder")
+opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
+                subtitle = " Antall dødsfall fordelt på ulike aldersgrupper",
+                ylab = "Antall", yint = 50)
+
+hd_make(spec, "line", opts)
+
+```
+
+## Kjønnsforskjeller
+
