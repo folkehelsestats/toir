@@ -392,6 +392,36 @@ opts <- hd_opts(title = "Narkotikautløste dødsfall etter stoffer",
                 subtitle = "Antall og andel dødsfall i 2025",
                 flip = TRUE, ysuffix = "%", ylab = "Prosent")
 
-hd_make(spec, "ranked_bar", opts)
+figNark <- hd_make(spec, "ranked_bar", opts)|>
+  highcharter::hc_exporting(
+    enabled = TRUE
+  )
+
+figNark
+
+```
+
+### Dødsfall etter stofftype for Oslo, 
+
+
+```{r}
+#| label: fig-stoff-fylke
+
+stofylkFile <- "Stofftype per fylke 2025.xlsx"
+stofylkDT <- setDT(rio::import(file.path(path, stofylkFile), encoding = "Latin-1"))
+
+setnames(stofylkDT, c("stoff", "fylke", "n"))
+stofylkDT[fylke == "Annet fylke", fylke := "Øvrige fylker"]
+
+dxx <- data.table(stoff = "Syntetiske opioider", fylke = "Oslo", n = 0)
+stofylkDT <- rbindlist(list(stofylkDT, dxx))
+
+stofylkDT <- stofylkDT[order(stoff)]
+
+spec <- hd_spec(stofylkDT, x = "fylke", y = "n", group = "stoff")
+opts <- hd_opts(title = "Antall narkotikautløste dødsfall etter stofftype",
+                subtitle = "Fylkene i 2025", ylab = "Antall", flip = TRUE)
+
+hd_make(spec, "stacked_column", opts, stacking = "percent")
 
 ```
