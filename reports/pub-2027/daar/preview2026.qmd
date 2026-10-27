@@ -100,12 +100,50 @@ tross for at det var færre narkotikautløste dødsfall i 2025 (n = 313) enn i
 2024 (n = 346) viser trenden en signifikant økning i antall narkotikautløste
 dødsfall per år, siden 2012.
 
+```{r}
+#| label: fig-antal
+
+dodFil <- "Hovedkategorier 1996-2025.xlsx"
+dodDT <- rio::import(file.path(path, dodFil), encoding = "Latin-1")
+
+setnames(dodDT, names(dodDT), c("year", "narko", "psykisk", "uten", "med"))
+setDT(dodDT)
+
+DT <- dodDT[year >=2012, 1:2]
+
+dtn <- data.table::dcast(DT, . ~ year, value.var = "narko")
+yrcols <- as.character(2012:2025)
+
+dtn <- dtn[, ..yrcols]
+
+library(DT)
+
+datatable(
+  dtn,
+  caption = htmltools::tags$caption(
+    style = "caption-side: top; text-align: left; font-size: 120%; font-weight: bold;",
+    "Antall narkotikautløste dødsfall fra 2012 og 2025"
+  ),
+  extensions = "Buttons",
+  options = list(
+    dom = "Brtp",
+    buttons = c("copy", "csv", "excel"),
+    paging = FALSE,
+      columnDefs = list(
+    list(className = "dt-left", targets = 0),
+    list(className = "dt-right", targets = c(1, 2, 3))
+  )),
+  class = "stripe hover compact",
+  rownames = FALSE
+)
+
+```
+
 Aldersstandardisert rate for narkotikautløste dødsfall per 100 000 innbyggere i
 2025 var `r d12$data[year == 2025, rate]`. Til sammenlikning var den i 2024 
 `r d12$data[year == 2024, rate]` per 100 000 innbyggere. De aldersstandardiserte
 ratene fra 2012–2025 viser i likhet med antall døde per år også en stigende
 trend, vist i figur under.
-
 
 ```{r}
 #| label: fig-rate
@@ -285,7 +323,7 @@ datatable(
   ),
   extensions = "Buttons",
   options = list(
-    dom = "Brtip",
+    dom = "Brtp",
     buttons = c("copy", "csv", "excel"),
     paging = FALSE,
       columnDefs = list(
