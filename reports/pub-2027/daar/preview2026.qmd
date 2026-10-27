@@ -459,7 +459,7 @@ figNark
 
 ```
 
-### Dødsfall etter stofftype for Oslo, 
+### Dødsfall etter stofftype og fylker 
 
 
 ```{r}
