@@ -24,6 +24,7 @@ library(highdir)
 path24 <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2024"
 path <- "C:\\Users\\ykama\\OneDrive - Helsedirektoratet\\dataset\\daar\\data2025"
 
+caption = "Datakilde: Dødsårsaksregisteret, FHI"
 
 ## Antall og rater
 ## ---------------
@@ -186,7 +187,7 @@ dage <- cbind(dmean, dmedian[, 3])
 spec <- hd_spec(dage, x = "ARGANG", y = "GJENNOMSNITT_ALDER", group = "KJONN")
 opts <- hd_opts(title = "Gjennomsnittsalder ved narkotikautløste dødsfall",
                 subtitle = "Total og etter kjønn, 2020-2024",
-                ylab = "Antall", xlab = "")
+                ylab = "Antall", xlab = "", caption = caption)
 
 hd_make(spec, "line", opts)
 
@@ -223,7 +224,7 @@ setorder(dagecat, alder, year)
 spec <- hd_spec(dagecat, x = "year", y = "antall", group = "alder")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
                 subtitle = " Antall dødsfall fordelt på ulike aldersgrupper, 2020-2025",
-                ylab = "Antall", yint = 50)
+                ylab = "Antall", yint = 50, caption = caption)
 
 hd_make(spec, "line", opts)
 
@@ -245,11 +246,13 @@ Aldersfordeling for 2025
 #| label: fig-age-number
 
 dagen <- dagecat[year == 2025]
+dagen[, pros := round(antall/313*100, 1)]
 
-spec <- hd_spec(dagen, x = "alder", y = "antall")
+spec <- hd_spec(dagen, x = "alder", y = "pros", n = "antall")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
                 subtitle = " Antall dødsfall fordelt på ulike aldersgrupper, 2025",
-                ylab = "Antall", yint = 10, flip = TRUE)
+                ylab = "Prosent", yint = 10, flip = TRUE, ysuffix = "%",
+                caption = caption)
 
 hd_make(spec, "column", opts)
 
@@ -274,7 +277,7 @@ dkj25[, pros := round(value/313*100, digits = 1), keyby = .(variable, age)]
 spec <- hd_spec(dkj25, x = "age", y = "pros", group = "variable", n = "value")
 opts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
                 subtitle = "Totalt og etter kjønn fordelt på ulike aldersgrupper i 2025",
-                ysuffix = "%")
+                ysuffix = "%", caption = caption)
 hd_make(spec, "column", opts)
 
 ```
@@ -298,7 +301,7 @@ dtkjall[, pros := round(n/tot*100, 1)]
 kjspec <- hd_spec(dtkjall, x = "year", y = "pros", group = "variable", n = "n")
 kjopts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
                 subtitle = "Fordelt på kjønn, 2012-2025",
-                ylab = "Prosent", ysuffix = "%")
+                ylab = "Prosent", ysuffix = "%", caption = caption)
 
 hd_make(kjspec, "line", kjopts) |>
   hc_xAxis(
@@ -380,7 +383,7 @@ grt25[, n := round(n, 1)]
 spec <- hd_spec(grt25, x = "fylke", y = "n")
 opts <- hd_opts(title = "Narkotikautløste dødsfall etter fylke",
                 subtitle = "Aldersstandardisert rate per 100 000 innbyggere, 2025",
-                flip = TRUE, yint = 2)
+                flip = TRUE, yint = 2, caption = caption)
 
 hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
 
@@ -475,7 +478,8 @@ stofylkDT <- stofylkDT[order(stoff)]
 
 spec <- hd_spec(stofylkDT, x = "fylke", y = "n", group = "stoff")
 opts <- hd_opts(title = "Antall narkotikautløste dødsfall etter stofftype",
-                subtitle = "Fylkene i 2025", ylab = "Antall", flip = TRUE)
+                subtitle = "Fylkene i 2025", ylab = "Antall", flip = TRUE,
+                caption = caption)
 
 hd_make(spec, "stacked_column", opts, stacking = "percent")
 
