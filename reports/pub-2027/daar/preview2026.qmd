@@ -478,7 +478,7 @@ stofylkDT <- stofylkDT[order(stoff)]
 
 spec <- hd_spec(stofylkDT, x = "fylke", y = "n", group = "stoff")
 opts <- hd_opts(title = "Antall narkotikautløste dødsfall etter stofftype",
-                subtitle = "Fylkene i 2025", ylab = "Antall", flip = TRUE,
+                subtitle = "Fylkene i 2025", ylab = "", flip = TRUE,
                 caption = caption)
 
 hd_make(spec, "stacked_column", opts, stacking = "percent")
