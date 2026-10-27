@@ -472,13 +472,15 @@ setnames(stofylkDT, c("stoff", "fylke", "n"))
 stofylkDT[fylke == "Annet fylke", fylke := "Øvrige fylker"]
 
 dxx <- data.table(stoff = "Syntetiske opioider", fylke = "Oslo", n = 0)
-stofylkDT <- rbindlist(list(stofylkDT, dxx))
+dxt <- data.table(stoff = "Andre og uspesifiserte stoffer", fylke = "Trøndelag", n = 0)
+stofylkDT <- rbindlist(list(stofylkDT, dxx, dxt))
+
 
 stofylkDT <- stofylkDT[order(stoff)]
 
 spec <- hd_spec(stofylkDT, x = "fylke", y = "n", group = "stoff")
 opts <- hd_opts(title = "Antall narkotikautløste dødsfall etter stofftype",
-                subtitle = "Fylkene i 2025", ylab = "", flip = TRUE,
+                subtitle = "Fylkene i 2025", ylab = "Antall", flip = TRUE,
                 caption = caption)
 
 hd_make(spec, "stacked_column", opts, stacking = "percent")
