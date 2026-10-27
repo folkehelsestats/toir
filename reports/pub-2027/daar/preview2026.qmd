@@ -239,6 +239,23 @@ source("analysis/fig-stacked-line-alder.R")
 hc
 ```
 
+Aldersfordeling for 2025
+
+```{r}
+#| label: fig-age-number
+
+dagen <- dagecat[year == 2025]
+
+spec <- hd_spec(dagen, x = "alder", y = "antall")
+opts <- hd_opts(title = "Narkotikautløste dødsfall etter alderskategorier",
+                subtitle = " Antall dødsfall fordelt på ulike aldersgrupper, 2025",
+                ylab = "Antall", yint = 10, flip = TRUE)
+
+hd_make(spec, "column", opts)
+
+```
+
+
 ## Kjønnsforskjeller
 
 ```{r}
