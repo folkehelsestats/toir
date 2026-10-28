@@ -274,10 +274,10 @@ dkj25 <- dkjonn[year == 2025]
 dkj25 <- melt(dkj25, id.vars = c("year", "age"), measure.vars = c("menn", "kvinner"))
 dkj25[, pros := round(value/313*100, digits = 1), keyby = .(variable, age)]
 
-spec <- hd_spec(dkj25, x = "age", y = "pros", group = "variable", n = "value")
-opts <- hd_opts(title = "Antall og andel narkotikautløste dødsfall",
+spec <- hd_spec(dkj25, x = "age", y = "value", group = "variable")
+opts <- hd_opts(title = "Antall narkotikautløste dødsfall",
                 subtitle = "Totalt og etter kjønn fordelt på ulike aldersgrupper i 2025",
-                ysuffix = "%", caption = caption)
+                caption = caption, ylab = "Antall")
 hd_make(spec, "column", opts)
 
 ```
