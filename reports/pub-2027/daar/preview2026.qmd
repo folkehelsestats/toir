@@ -385,7 +385,13 @@ opts <- hd_opts(title = "Narkotikautløste dødsfall etter fylke",
                 subtitle = "Aldersstandardisert rate per 100 000 innbyggere, 2025",
                 flip = TRUE, yint = 2, caption = caption)
 
-hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
+figF <- hd_make(spec,"ranked_bar", opts, vs = "Hele landet")
+fig <- figF |>
+  highcharter::hc_exporting(
+    enabled = TRUE
+  )
+
+fig
 
 ```
 
@@ -450,12 +456,13 @@ opts <- hd_opts(title = "Narkotikautløste dødsfall etter stoffer",
                 subtitle = "Antall og andel dødsfall i 2025",
                 flip = TRUE, ysuffix = "%", ylab = "Prosent")
 
-figNark <- hd_make(spec, "ranked_bar", opts)|>
+figNark <- hd_make(spec, "ranked_bar", opts)
+fig <- figNark |>
   highcharter::hc_exporting(
     enabled = TRUE
   )
 
-figNark
+fig
 
 ```
 
