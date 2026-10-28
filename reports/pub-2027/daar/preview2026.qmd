@@ -441,6 +441,13 @@ source("analysis/fig-stacked-line-stoff.R")
 figStoff
 ```
 
+Statisk figur alternativ. Farge kan endres hvis ønskelig
+
+[Last ned figur](dodsfall_stoff.png){download="dodsfall_stoff.png"}
+
+![](dodsfall_stoff.png){.absolute width="850px"}
+
+
 ### Antall dødsfall etter stofftype i 2025
 
 ```{r}
