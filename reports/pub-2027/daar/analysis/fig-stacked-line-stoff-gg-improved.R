@@ -208,10 +208,11 @@ p <- ggplot(
       label = category
     ),
     inherit.aes = FALSE,
+    force = 2,
     nudge_x = 1.3,
     direction = "y",
     hjust = 0,
-    size = 4, #text size
+    size = 5.5, #text size
     colour = "#222222",
     segment.colour = "#555555",
     segment.size = 0.35,
@@ -236,7 +237,7 @@ p <- ggplot(
       max(stoff_long$year),
       by = 1
     ),
-    expand = expansion(mult = c(0.005, 0.25))
+    expand = expansion(mult = c(0.005, 0.35))
   ) +
   scale_y_continuous(
     limits = c(0, 400),
@@ -261,7 +262,7 @@ p <- ggplot(
   guides(fill = "none") +
   # A white background and light horizontal gridlines
   # improve readability in reports and print.
-  theme_minimal(base_size = 15) +
+  theme_minimal(base_size = 18) +
   theme(
     plot.title = element_text(
       face = "bold",
@@ -283,10 +284,10 @@ p <- ggplot(
     panel.grid.minor = element_blank(),
     legend.position = "none",
     plot.margin = margin(
-      t = 12, r = 180, b = 12, l = 12
+      t = 12, r = 120, b = 12, l = 12
     ),
     plot.caption = element_text(
-      size = 9,
+      size = 12,
       colour = "#333333",
       hjust = 1 #right align = 1 and left align = 0
     )
@@ -307,9 +308,9 @@ print(p)
 ggsave(
   filename = "dodsfall_stoff.png",
   plot = p,
-  width = 30,
-  height = 15,
+  width = 14,
+  height = 7,
   units = "in",
-  dpi = 450,
+  dpi = 300,
   bg = "white"
 )
