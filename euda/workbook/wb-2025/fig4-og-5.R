@@ -1,7 +1,5 @@
 
-
-
-make_gg <- function(long_dt, label_dt){
+make_gg <- function(long_dt, label_dt, grid_dt){
   ggplot(
     long_dt,
     aes(
@@ -11,6 +9,21 @@ make_gg <- function(long_dt, label_dt){
       group = measure
     )
   ) +
+    # Draw horizontal gridlines only within the plotting area.
+    # They stop at the final year and do not extend under labels.
+    geom_segment(
+      data = grid_dt,
+      aes(
+        x = x_start,
+        xend = x_end,
+        y = y,
+        yend = y
+      ),
+      inherit.aes = FALSE,
+      colour = "#D9D9D9",
+      linewidth = 0.4,
+      linetype = "dashed" #solid, dotted, dotdash, longdash, twodash
+    ) +
     # Lines
     geom_line(linewidth = 1) +
 
@@ -34,19 +47,27 @@ make_gg <- function(long_dt, label_dt){
 
   scale_colour_manual(values = cols) +
   scale_x_continuous(
-    breaks = 2012:2024,
+    breaks = seq(
+      min(long_dt$year),
+      max(long_dt$year),
+      by = 1
+    ),
     expand = expansion(mult = c(0.02, 0.15)) # add extra space around the plotted area
   ) +
-
   labs(
     title = "Cannabis use among adults (16–64), 2012–2024",
     subtitle = "Percentage reporting use",
     x = NULL,
     y = "%"
   ) +
-
   theme_minimal(base_size = 12) +
-  theme(legend.position = "none") +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.margin = margin(
+          t = 12, r = 120, b = 12, l = 12
+        )) +
   geom_text(
     data = label_dt,
     aes(x = x_lab, label = measure),
@@ -54,5 +75,7 @@ make_gg <- function(long_dt, label_dt){
     size = 5,
     colour = "#222222"
   ) +
+  # Preserve the original scale and allow labels outside
+  # the panel without clipping them.
   coord_cartesian(clip = "off")
 }

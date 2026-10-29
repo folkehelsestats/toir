@@ -232,6 +232,16 @@ long_dd64[, year := as.integer(year)]
 label_dt <- long_dd64[, .SD[which.max(year)], by = measure]
 label_dt[, x_lab := year + 0.4]
 
+# ---------------------------------------------------------
+# Create custom horizontal gridlines
+# ---------------------------------------------------------
+maxV <- max(long_dd64$value)
+grid_dt <- data.frame(
+  y = seq(0, maxV, by = 5),
+  x_start = min(long_dd64$year),
+  x_end = max(long_dd64$year)
+)
+
 # Colors matching the example
 cols <- c(
   "Lifetime" = "#025169",
@@ -239,7 +249,9 @@ cols <- c(
   "Past month" = "#7C145C"
 )
 
-gg64 <- make_gg(long_dd64, label_dt)
+source("c:/Users/ykama/Git-hdir/toir/euda/workbook/wb-2025/fig4-og-5.R")
+
+gg64 <- make_gg(long_dd64, label_dt, grid_dt)
 
 ggsave(
   filename = "cannabis64.png",
