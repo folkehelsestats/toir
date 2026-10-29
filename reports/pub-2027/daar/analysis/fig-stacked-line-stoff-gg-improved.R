@@ -156,6 +156,15 @@ label_data <- label_data[
 # Convert factor labels to character for geom_text_repel().
 label_data[, category := as.character(category)]
 
+# ---------------------------------------------------------
+# 4b. Create custom horizontal gridlines
+# ---------------------------------------------------------
+
+grid_df <- data.frame(
+  y = seq(0, 400, by = 50),
+  x_start = min(stoff_long$year),
+  x_end = latest_year
+)
 
 # ---------------------------------------------------------
 # 5. Draw the stacked area chart
@@ -170,12 +179,25 @@ p <- ggplot(
     group = category
   )
 ) +
-  geom_area(
-    position = position_stack(reverse = TRUE),
-    colour = "white",
-    linewidth = 0.3
+  # Draw horizontal gridlines only within the plotting area.
+  # They stop at the final year and do not extend under labels.
+  geom_segment(
+    data = grid_df,
+    aes(
+      x = x_start,
+      xend = x_end,
+      y = y,
+      yend = y
+    ),
+    inherit.aes = FALSE,
+    colour = "#D9D9D9",
+    linewidth = 0.4
   ) +
-
+  geom_area(
+    position = position_stack(reverse = TRUE)
+    #     colour = "white",
+#     linewidth = 0.3
+  ) +
   # Direct labels replace the conventional legend.
   # Leader lines connect labels to their respective areas.
   geom_text_repel(
@@ -189,17 +211,16 @@ p <- ggplot(
     nudge_x = 1.3,
     direction = "y",
     hjust = 0,
-    size = 3.5,
+    size = 4, #text size
     colour = "#222222",
     segment.colour = "#555555",
-    segment.linewidth = 0.35,
+    segment.size = 0.35,
     box.padding = 0.35,
     point.padding = 0.2,
     max.overlaps = Inf,
     min.segment.length = 0,
     seed = 123
   ) +
-
   # Apply the palette to the stacked areas.
   # drop = FALSE keeps the colour mapping stable even if
   # a category is absent in a particular subset of the data.
@@ -208,39 +229,39 @@ p <- ggplot(
     breaks = category_order,
     drop = FALSE
   ) +
-
   # Leave room on the right for the direct labels.
   scale_x_continuous(
     breaks = seq(
       min(stoff_long$year),
       max(stoff_long$year),
-      by = 2
+      by = 1
     ),
     expand = expansion(mult = c(0.005, 0.25))
   ) +
-
+  scale_y_continuous(
+    limits = c(0, 400),
+    breaks = seq(0, 400, by = 50),
+    expand = expansion(mult = c(0, 0.02))
+  ) +
   # Preserve the original scale and allow labels outside
   # the panel without clipping them.
   coord_cartesian(clip = "off") +
-
   # Clear axis labels and a restrained grid.
   labs(
-    title = "Development by substance category",
+    title = "",
     x = NULL,
-    y = "Number of cases",
+    y = "Antall narkotikautløste dødsfall",
     fill = NULL,
     caption = paste(
-      "Source: [insert source].",
-      "Categories are labelled directly at the final year."
+      "Datakilde:",
+      "Dødsårsaksregisteret, Folkehelseinstituttet"
     )
   ) +
-
   # Remove the legend because each area is labelled.
   guides(fill = "none") +
-
   # A white background and light horizontal gridlines
   # improve readability in reports and print.
-  theme_minimal(base_size = 12) +
+  theme_minimal(base_size = 15) +
   theme(
     plot.title = element_text(
       face = "bold",
@@ -252,22 +273,22 @@ p <- ggplot(
       margin = margin(r = 10)
     ),
     axis.text = element_text(
-      colour = "#444444"
+      colour = "#444444",
+      angle = 90,
+      hjust = 1,
+      vjust = 0.5
     ),
-    panel.grid.major.y = element_line(
-      colour = "#D9D9D9",
-      linewidth = 0.4
-    ),
+    panel.grid.major.y = element_blank(),
     panel.grid.major.x = element_blank(),
     panel.grid.minor = element_blank(),
     legend.position = "none",
     plot.margin = margin(
-      t = 12, r = 150, b = 12, l = 12
+      t = 12, r = 180, b = 12, l = 12
     ),
     plot.caption = element_text(
       size = 9,
-      colour = "#555555",
-      hjust = 0
+      colour = "#333333",
+      hjust = 1 #right align = 1 and left align = 0
     )
   )
 
@@ -284,11 +305,11 @@ print(p)
 # labels from being crowded or cut off.
 
 ggsave(
-  filename = "stacked_area_accessible.png",
+  filename = "dodsfall_stoff.png",
   plot = p,
-  width = 14,
-  height = 7,
+  width = 30,
+  height = 15,
   units = "in",
-  dpi = 300,
+  dpi = 450,
   bg = "white"
 )
