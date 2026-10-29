@@ -235,7 +235,7 @@ label_dt[, x_lab := year + 0.4]
 # ---------------------------------------------------------
 # Create custom horizontal gridlines
 # ---------------------------------------------------------
-maxV <- max(long_dd64$value)
+maxV <- max(long_dd64$value)+5
 grid_dt <- data.frame(
   y = seq(0, maxV, by = 5),
   x_start = min(long_dd64$year),
@@ -251,7 +251,9 @@ cols <- c(
 
 source("c:/Users/ykama/Git-hdir/toir/euda/workbook/wb-2025/fig4-og-5.R")
 
-gg64 <- make_gg(long_dd64, label_dt, grid_dt)
+gg64 <- make_gg(long_dd64, label_dt, grid_dt,
+                title = "Cannabis use all adults (16–64), 2012-2024",
+                subtitle = "")
 
 ggsave(
   filename = "cannabis64.png",

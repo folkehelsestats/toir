@@ -1,5 +1,5 @@
 
-make_gg <- function(long_dt, label_dt, grid_dt){
+make_gg <- function(long_dt, label_dt, grid_dt, title, subtitle){
   ggplot(
     long_dt,
     aes(
@@ -55,10 +55,10 @@ make_gg <- function(long_dt, label_dt, grid_dt){
     expand = expansion(mult = c(0.02, 0.15)) # add extra space around the plotted area
   ) +
   labs(
-    title = "Cannabis use among adults (16–64), 2012–2024",
-    subtitle = "Percentage reporting use",
+    title = title,
+    subtitle = subtitle,
     x = NULL,
-    y = "%"
+    y = "Percentage"
   ) +
   theme_minimal(base_size = 12) +
   theme(legend.position = "none",
