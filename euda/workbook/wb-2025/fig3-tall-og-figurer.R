@@ -1,3 +1,9 @@
+library(torr)
+library(data.table)
+library(highdir)
+library(ggplot2)
+library(ggrepel)
+
 ## Data source and setup
 ## --------------------------------------
 path25 <- here::here("euda", "workbook", "wb-2025")
@@ -62,33 +68,32 @@ create_tbl_grp <- function(dt, type, grp, filter = 2025, value = "pct_roll") {
 # clean labelled attributes coz it makes troubles
 DT[, (names(DT)) := lapply(.SD, \(x) { attributes(x) <- NULL; x })]
 
-DT[year %in% c(2022,2025), kjonn := fcase(kjonn == 1, 2, #Kvinne
-                                          kjonn == 0, 1)] #Mann
-
 ## Age groups
 ## -------------
-DT <- group_age_standard(DT, var = "alder", type = "rusund",
+DT <- torr::group_age_standard(DT, var = "alder", type = "rusund",
                          new_var = "agecat")
 
-## Relevin exclusion
-## ------------------
-## OBS! Exclude those that used Relevin Ans2_d == 1
+# ## Relevin exclusion
+# ## ------------------
+# ## OBS! Exclude those that used Relevin Ans2_d == 1
 
-ans2 <- grep("ans2_", names(DT), ignore.case = TRUE, value = TRUE)
-ansTmp <- paste0(ans2, "_tmp")
+# ans2 <- grep("ans2_", names(DT), ignore.case = TRUE, value = TRUE)
+# ansTmp <- paste0(ans2, "_tmp")
 
-DT[, (ansTmp) := lapply(.SD, function(x) {
-  fcase(
-    x == 1, 1,
-    x %in% c(2, 8, 9), NA,
-    default = NA
-  )
-}), .SDcols = ans2]
+# DT[, (ansTmp) := lapply(.SD, function(x) {
+#   fcase(
+#     x == 1, 1,
+#     x %in% c(2, 8, 9), NA,
+#     default = NA
+#   )
+# }), .SDcols = ans2]
 
-DT[, ansSum := rowSums(.SD, na.rm = TRUE), .SDcols = ansTmp]
-# Remove ONLY those who answered yes to all drugs including Relevin
-DT <- DT[ansSum != 8]
-DT[, (ansTmp) := NULL]
+# DT[, ansSum := rowSums(.SD, na.rm = TRUE), .SDcols = ansTmp]
+# # Remove ONLY those who answered yes to all drugs including Relevin
+# DT <- DT[ansSum != 8]
+# DT[, (ansTmp) := NULL]
+
+
 
 
 ## Exclude all missing and not answered Can1 or Ans1
@@ -99,10 +104,6 @@ DT[, narkpop := ifelse(ans1 %in% 1:2, 1, 0)]
 DT[canpop == 1 | narkpop == 1, anypop := 1][
   is.na(anypop), anypop := 0]
 
-
-## Dataset for 2022-2025 only
-## -------------------------
-dt <- DT[year %in% 2022:2025]
 
 ## ===========================
 ## Figure 3 - Cannabis use last 12 months all adults (16-64), 2012-2025
@@ -167,9 +168,101 @@ ggplot2::ggsave(filename = here::here(path25, "figures/cantypes.png"),
                 plot = can12types,
                 width = 6, height = 4, dpi = 300)
 
+## -----------------------------------------------------------------------------
+## Figure 4: Cannabis use all adults (16-64), 2012 - 2025
+## -----------------------------------------------------------------------------
+DD <- DT[alder < 65]
+
+## Denominator
+CanVars = c("can1", "can6", "can10")
+#Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
+DD <- torr::create_cann_pop(DD, vars = CanVars)
+
+## Cannabis
+## -----------------------------------------------------------------------------
+DD <- torr::is_case(DD, "can1", "ltp_cannabis")
+DD <- torr::is_case(DD, "can6", "lyp_cannabis")
+DD <- torr::is_case(DD, "can10", "lmp_cannabis")
+
+ltp1664 <- torr::calc_prevalence(DD, "ltpPop_cannabis", "year", "ltp_cannabis")
+lyp1664 <- torr::calc_prevalence(DD, "lypPop_cannabis", "year", "lyp_cannabis")
+lmp1664 <- torr::calc_prevalence(DD, "lmpPop_cannabis", "year", "lmp_cannabis")
+
+keep_it <- function(dt){
+ dt[, !c("ci_l", "ci_u"), with = FALSE]
+}
+
+ltp64 <- keep_it(ltp1664)
+lyp64 <- keep_it(lyp1664)
+lmp64 <- keep_it(lmp1664)
+
+# dd1664 <- ltp64[lyp64, on = "rolling_period"][lmp64, on = "rolling_period"]
+
+# Inner join: keep only IDs present in all tables
+dd1664 <- Reduce(
+  function(x, y) merge(x, y, by = "rolling_period"),
+  list(ltp64, lyp64, lmp64)
+)
+
+dd1664[, year := substring(rolling_period, 6)]
+dd1664[, rolling_period := NULL]
+data.table::setcolorder(dd1664, "year", before = "ltp_cannabis")
+
+# Convert to long format
+long_dd64 <- data.table::melt(
+  dd1664,
+  id.vars = "year",
+  variable.name = "measure",
+  value.name = "value"
+)
+
+# Define old-to-new labels
+labels <- c(
+  ltp_cannabis = "Lifetime",
+  lyp_cannabis = "Past year",
+  lmp_cannabis = "Past month"
+)
+
+# Replace values using the lookup vector
+long_dd64[, measure := labels[as.character(measure)]]
+
+long_dd64[, year := as.integer(year)]
+
+# Keep only the last point from each series
+label_dt <- long_dd64[, .SD[which.max(year)], by = measure]
+label_dt[, x_lab := year + 0.4]
+
+# Colors matching the example
+cols <- c(
+  "Lifetime" = "#025169",
+  "Past year" = "#ff7f0e",
+  "Past month" = "#7C145C"
+)
+
+gg64 <- make_gg(long_dd64, label_dt)
+
+ggsave(
+  filename = "cannabis64.png",
+  plot = gg64,
+  width = 14,
+  height = 7,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
+
+ltp1634 <- torr::calc_prevalence(DD[alder < 36], "ltpPop_cannabis", "year", "ltp_cannabis")
+lyp1634 <- torr::calc_prevalence(DD[alder < 36], "lypPop_cannabis", "year", "lyp_cannabis")
+lmp1634 <- torr::calc_prevalence(DD[alder < 36], "lmpPop_cannabis", "year", "lmp_cannabis")
+
 ## --------------------------------------------------
 ## Figure 6: Cannabis use all adults (16-64) and young adults (16-34), 2022-2025
 ## --------------------------------------------------
+
+## Dataset for 2022-2025 only
+## -------------------------
+dt <- DT[year %in% 2022:2025]
 
 ## includes free text answers to the new variables
 dt[grep("lsd", ans2sps, ignore.case = TRUE), "AndreLSD" := 1]
