@@ -51,14 +51,13 @@ create_plot <- function(data, x, y, fill, hdir_color,
                        vjust = -0.5, size = 3.5) +
     ggplot2::scale_fill_manual(values = hdir_color) +
     ggplot2::labs(x = xlab, y = ylab, fill = lglab, title = title) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(
-      panel.grid.major.x = ggplot2::element_blank(),
-      strip.text = ggplot2::element_text(face = "bold", size = 11),
-      strip.background = ggplot2::element_rect(fill = c("#E8F4F8", "#FFF4E6"),
-                                               color = "grey80", linewidth = 0.5),
-      panel.background = ggplot2::element_rect(fill = c("#E8F4F8", "#FFF4E6"),
-                                               color = NA),
+    # Theme
+    theme_minimal(base_size = 13) +
+    theme(
+      panel.grid.minor = element_blank(),
+      strip.text = element_text(face = "bold"),
+      plot.title = element_text(face = "bold"),
+      axis.title = element_text(face = "bold"),
       legend.position = if (show_legend) "bottom" else "none"
     ) +
     ggplot2::ylim(0, ylim_max)

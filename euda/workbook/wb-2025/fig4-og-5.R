@@ -1,5 +1,5 @@
 
-make_gg <- function(long_dt, label_dt, grid_dt, title, subtitle){
+make_gg <- function(long_dt, label_dt, grid_dt, title, subtitle, cols){
   ggplot(
     long_dt,
     aes(
@@ -32,8 +32,8 @@ make_gg <- function(long_dt, label_dt, grid_dt, title, subtitle){
     aes(colour = measure),
     fill = "white",
     shape = 21,
-    size = 10, # circle size
-    stroke = 1 #border tickness
+    size = 7, # circle size
+    stroke = 0.3 #border tickness
   ) +
 
   # Values centered inside the circles
@@ -48,8 +48,8 @@ make_gg <- function(long_dt, label_dt, grid_dt, title, subtitle){
   scale_colour_manual(values = cols) +
   scale_x_continuous(
     breaks = seq(
-      min(long_dt$year),
-      max(long_dt$year),
+      min(long_dt$year, na.rm = TRUE),
+      max(long_dt$year, na.rm = TRUE),
       by = 1
     ),
     expand = expansion(mult = c(0.02, 0.15)) # add extra space around the plotted area

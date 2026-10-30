@@ -1,3 +1,8 @@
+# ## if needed -------------------------------------------------------------------
+# pkgs <- c("ggplot2", "ggrepel")
+# install.packages(pkgs)
+# ## -----------------------------------------------------------------------------
+
 library(torr)
 library(data.table)
 library(highdir)
@@ -94,7 +99,9 @@ DT <- torr::group_age_standard(DT, var = "alder", type = "rusund",
 # DT[, (ansTmp) := NULL]
 
 
-
+## -----------------------------------------------------------------------------
+## Create dinominator variables
+## -----------------------------------------------------------------------------
 
 ## Exclude all missing and not answered Can1 or Ans1
 ## Denominator for Illigal rusmidler
@@ -103,6 +110,12 @@ DT[, canpop := ifelse(can1 %in% 1:2, 1, 0)]
 DT[, narkpop := ifelse(ans1 %in% 1:2, 1, 0)]
 DT[canpop == 1 | narkpop == 1, anypop := 1][
   is.na(anypop), anypop := 0]
+
+## using cuci package
+## -----------------
+CanVars = c("can1", "can6", "can10")
+#Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
+DT <- torr::create_cann_pop(DT, vars = CanVars)
 
 
 ## ===========================
@@ -166,7 +179,7 @@ can12types <- ggplot() +
 
 ggplot2::ggsave(filename = here::here(path25, "figures/cantypes.png"),
                 plot = can12types,
-                width = 6, height = 4, dpi = 300)
+                width = 8, height = 4, dpi = 300)
 
 ## -----------------------------------------------------------------------------
 ## Figure 4: Cannabis use all adults (16-64), 2012 - 2025
@@ -184,99 +197,80 @@ DD <- torr::is_case(DD, "can1", "ltp_cannabis")
 DD <- torr::is_case(DD, "can6", "lyp_cannabis")
 DD <- torr::is_case(DD, "can10", "lmp_cannabis")
 
-ltp1664 <- torr::calc_prevalence(DD, "ltpPop_cannabis", "year", "ltp_cannabis")
-lyp1664 <- torr::calc_prevalence(DD, "lypPop_cannabis", "year", "lyp_cannabis")
-lmp1664 <- torr::calc_prevalence(DD, "lmpPop_cannabis", "year", "lmp_cannabis")
+ltp64 <- torr::calc_prevalence(DD, "ltpPop_cannabis", "year", "ltp_cannabis", weight_var = "vekt2")
+lyp64 <- torr::calc_prevalence(DD, "lypPop_cannabis", "year", "lyp_cannabis", weight_var = "vekt2")
+lmp64 <- torr::calc_prevalence(DD, "lmpPop_cannabis", "year", "lmp_cannabis", weight_var = "vekt2")
 
-keep_it <- function(dt){
- dt[, !c("ci_l", "ci_u"), with = FALSE]
-}
-
-ltp64 <- keep_it(ltp1664)
-lyp64 <- keep_it(lyp1664)
-lmp64 <- keep_it(lmp1664)
-
-# dd1664 <- ltp64[lyp64, on = "rolling_period"][lmp64, on = "rolling_period"]
-
-# Inner join: keep only IDs present in all tables
-dd1664 <- Reduce(
-  function(x, y) merge(x, y, by = "rolling_period"),
-  list(ltp64, lyp64, lmp64)
-)
-
-dd1664[, year := substring(rolling_period, 6)]
-dd1664[, rolling_period := NULL]
-data.table::setcolorder(dd1664, "year", before = "ltp_cannabis")
-
-# Convert to long format
-long_dd64 <- data.table::melt(
-  dd1664,
-  id.vars = "year",
-  variable.name = "measure",
-  value.name = "value"
-)
-
-# Define old-to-new labels
-labels <- c(
-  ltp_cannabis = "Lifetime",
-  lyp_cannabis = "Past year",
-  lmp_cannabis = "Past month"
-)
-
-# Replace values using the lookup vector
-long_dd64[, measure := labels[as.character(measure)]]
-
-long_dd64[, year := as.integer(year)]
-
-# Keep only the last point from each series
-label_dt <- long_dd64[, .SD[which.max(year)], by = measure]
-label_dt[, x_lab := year + 0.4]
-
-# ---------------------------------------------------------
-# Create custom horizontal gridlines
-# ---------------------------------------------------------
-maxV <- max(long_dd64$value)+5
-grid_dt <- data.frame(
-  y = seq(0, maxV, by = 5),
-  x_start = min(long_dd64$year),
-  x_end = max(long_dd64$year)
-)
-
-# Colors matching the example
-cols <- c(
-  "Lifetime" = "#025169",
-  "Past year" = "#ff7f0e",
-  "Past month" = "#7C145C"
-)
+source(here::here("euda/workbook/wb-2025/fun-fig4-fig5.R"))
+fig4 <- create_dataset_fig4_fig5(ltp = ltp64, lyp = lyp64, lmp = lmp64)
 
 source("c:/Users/ykama/Git-hdir/toir/euda/workbook/wb-2025/fig4-og-5.R")
 
-gg64 <- make_gg(long_dd64, label_dt, grid_dt,
-                title = "Cannabis use all adults (16–64), 2012-2024",
-                subtitle = "")
+gg64 <- make_gg(fig4$long_dt, fig4$label_dt, fig4$grid_dt,
+                title = "Cannabis use all adults (16–64), 2012-2025",
+                subtitle = "", cols = fig4$cols)
 
 ggsave(
-  filename = "cannabis64.png",
+  filename = here::here(path25, "figures/can64.png"),
   plot = gg64,
-  width = 14,
-  height = 7,
+  width = 8,
+  height = 5,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
+## -----------------------------------------------------------------------------
+## Figure 5: Cannabis use young adults (16–34), 2012-2025
+## -----------------------------------------------------------------------------
+DU <- DT[alder < 35]
+
+## Denominator
+CanVars = c("can1", "can6", "can10")
+#Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
+DU <- torr::create_cann_pop(DU, vars = CanVars)
+
+## Cannabis
+## -----------------------------------------------------------------------------
+DU <- torr::is_case(DU, "can1", "ltp_cannabis")
+DU <- torr::is_case(DU, "can6", "lyp_cannabis")
+DU <- torr::is_case(DU, "can10", "lmp_cannabis")
+
+ltp34 <- torr::calc_prevalence(DU, "ltpPop_cannabis", "year", "ltp_cannabis", weight_var = "vekt2")
+lyp34 <- torr::calc_prevalence(DU, "lypPop_cannabis", "year", "lyp_cannabis", weight_var = "vekt2")
+lmp34 <- torr::calc_prevalence(DU, "lmpPop_cannabis", "year", "lmp_cannabis", weight_var = "vekt2")
+
+source(here::here("euda/workbook/wb-2025/fun-fig4-fig5.R"))
+fig5 <- create_dataset_fig4_fig5(ltp = ltp34, lyp = lyp34, lmp = lmp34)
+
+source("c:/Users/ykama/Git-hdir/toir/euda/workbook/wb-2025/fig4-og-5.R")
+
+gg34 <- make_gg(fig5$long_dt, fig5$label_dt, fig5$grid_dt,
+                title = "Cannabis use young adults (16–34), 2012-2025",
+                subtitle = "", cols = fig5$cols)
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/can34.png"),
+  plot = gg34,
+  width = 8,
+  height = 5,
   units = "in",
   dpi = 300,
   bg = "white"
 )
 
 
-ltp1634 <- torr::calc_prevalence(DD[alder < 36], "ltpPop_cannabis", "year", "ltp_cannabis")
-lyp1634 <- torr::calc_prevalence(DD[alder < 36], "lypPop_cannabis", "year", "lyp_cannabis")
-lmp1634 <- torr::calc_prevalence(DD[alder < 36], "lmpPop_cannabis", "year", "lmp_cannabis")
-
 ## --------------------------------------------------
 ## Figure 6: Cannabis use all adults (16-64) and young adults (16-34), 2022-2025
 ## --------------------------------------------------
 
-## Dataset for 2022-2025 only
+## Dataset for 2023-2025 only
 ## -------------------------
-dt <- DT[year %in% 2022:2025]
+dt <- DD[year %in% 2023:2025] #16-64
+
+# Fix norsk bokstaver
+source("https://raw.githubusercontent.com/folkehelsestats/rusus/refs/heads/main/encode.R")
+dt[, ans2sps := fix_encode(ans2sps)]
 
 ## includes free text answers to the new variables
 dt[grep("lsd", ans2sps, ignore.case = TRUE), "AndreLSD" := 1]
@@ -288,126 +282,119 @@ dt[, Can1_ny := can1][AndreCannabis == 1, Can1_ny := 1]
 ## Age group 16-34 and functions
 ## ----------------------------
 ## source(here::here("euda/workbook/fun-moving-percentage.R"))
-dty <- dt[agecat %chin% c("16-24", "25-34")] #16-34 yrs
+dty <- dt[alder < 35] #16-34 yrs
 
 ## Lifetime  prevalence
 ## ---------------------
+dt <- torr::is_case(dt, "Can1_ny", "ltp_cannabis")
+dty <- torr::is_case(dty, "Can1_ny", "ltp_cannabis")
 
-dt[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs all adults
-dty[Can1_ny == 1, ltp_cannabis := 1] #Cannabis-type drugs young adults
+source(here::here("euda/workbook/wb-2025/fun-prev-all.R"))
 
-dttKj <- calc_moving_prevalence(dt, "ltp_cannabis", "canpop", "kjonn")
-dttTot <- calc_moving_prevalence(dt, "ltp_cannabis", "canpop")
-dttTot[, kjonn := 0] #Total
-dtt <- rbindlist(list(dttKj, dttTot), use.names = TRUE)
+dlp64 <- create_prev_data(dt, denom = "ltpPop_cannabis",
+                         outcome = "ltp_cannabis",
+                         pop = "All Adults (16-64)",
+                         grp = "LTP")
 
-dtytKj <- calc_moving_prevalence(dty, "ltp_cannabis", "canpop", "kjonn")
-dtytTot <- calc_moving_prevalence(dty, "ltp_cannabis", "canpop")
-dtytTot[, kjonn := 0] #Total
-dtyt <- rbindlist(list(dtytKj, dtytTot), use.names = TRUE)
-
-tbLTP <- rbindlist(list(
-  create_tbl_grp(dtt, "LTP", "All Adults (16-64)"),
-  create_tbl_grp(dtyt, "LTP", "Young Adults (16-34)")
-))
+dlp34 <- create_prev_data(dty, denom = "ltpPop_cannabis",
+                         outcome = "ltp_cannabis",
+                         pop = "Young Adults (16-34)",
+                         grp = "LTP")
 
 ## Last year prevalence
 ## ---------------------
 
-dt[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs all adults
-dty[can6 == 1, lyp_cannabis := 1] #Cannabis-type drugs young adults
+dt  <- torr::is_case(dt, "can6", "lyp_cannabis")
+dty <- torr::is_case(dty, "can6", "lyp_cannabis")
 
-dtlypKjonn <- calc_moving_prevalence(dt, "lyp_cannabis", "canpop", "kjonn")
-dtlypTot <- calc_moving_prevalence(dt, "lyp_cannabis", "canpop")
-dtlypTot[, kjonn := 0] #Total
-dtlyp <- rbindlist(list(dtlypKjonn, dtlypTot), use.names = TRUE)
+dyp64 <- create_prev_data(dt, denom = "lypPop_cannabis",
+                          outcome = "lyp_cannabis",
+                          pop = "All Adults (16-64)",
+                          grp = "LYP")
 
-dtlypYngKjonn <- calc_moving_prevalence(dty, "lyp_cannabis", "canpop", "kjonn")
-dtlypYngTot <- calc_moving_prevalence(dty, "lyp_cannabis", "canpop")
-dtlypYngTot[, kjonn := 0] #Total
-dtlypYng <- rbindlist(list(dtlypYngKjonn, dtlypYngTot), use.names = TRUE)
-
-tbLYP <- rbindlist(list(
-  create_tbl_grp(dtlyp, "LYP", "All Adults (16-64)"),
-  create_tbl_grp(dtlypYng, "LYP", "Young Adults (16-34)")
-))
+dyp34 <- create_prev_data(dty, denom = "lypPop_cannabis",
+                          outcome = "lyp_cannabis",
+                          pop = "Young Adults (16-34)",
+                          grp = "LYP")
 
 ## Last month prevalence
 ## ---------------------
 
-dt[can10 == 1, lmp_cannabis := 1] #Cannabis-type drugs
-dty[can10 == 1, lmp_cannabis := 1] #Cannabis-type drugs
+dt  <- torr::is_case(dt, "can10", "lmp_cannabis")
+dty <- torr::is_case(dty, "can10", "lmp_cannabis")
 
-dtlmpKj <- calc_moving_prevalence(dt, "lmp_cannabis", "canpop", "kjonn")
-dtlmpTot <- calc_moving_prevalence(dt, "lmp_cannabis", "canpop")
-dtlmpTot[, kjonn := 0] #Total
-dtlmp <- rbindlist(list(dtlmpKj, dtlmpTot), use.names = TRUE)
+dmp64 <- create_prev_data(dt, denom = "lmpPop_cannabis",
+                          outcome = "lmp_cannabis",
+                          pop = "All Adults (16-64)",
+                          grp = "LMP")
 
-dtlmpYngKjonn <- calc_moving_prevalence(dty, "lmp_cannabis", "canpop", "kjonn")
-dtlmpYngTot <- calc_moving_prevalence(dty, "lmp_cannabis", "canpop")
-dtlmpYngTot[, kjonn := 0] #Total
-dtlmpYng <- rbindlist(list(dtlmpYngKjonn, dtlmpYngTot), use.names = TRUE)
+dmp34 <- create_prev_data(dty, denom = "lmpPop_cannabis",
+                          outcome = "lmp_cannabis",
+                          pop = "Young Adults (16-34)",
+                          grp = "LMP")
 
 
-tbLMP <- rbindlist(list(
-  create_tbl_grp(dtlmp, "LMP", "All Adults (16-64)"),
-  create_tbl_grp(dtlmpYng, "LMP", "Young Adults (16-34)")
-))
+DX <- data.table::rbindlist(list(dlp64, dlp34, dyp64, dyp34, dmp64, dmp34), use.names = TRUE)
+
+old <- c("years", "kjonn", "pros", "ci_l", "ci_u", "pop", "grp", "gender")
+new <- c("years", "kjonn", "Estimate", "LowerCI", "UpperCI", "Population", "Prevalence", "Group")
+data.table::setnames(DX, old,new)
 
 ## Plotting
 ## ---------------------
-tblCannabis <- rbindlist(list(tbLTP, tbLYP, tbLMP))
-
-# Set factor order for age_group
-tblCannabis[, gender := factor(kjonn, levels = c(2,1,0),
-                              labels = c("Women", "Men", "Total"))]
-tblCannabis[, type := factor(type, levels = c("LTP", "LYP", "LMP"))]
-
-## source(here::here("euda/workbook/fun-plot-facet.R"))
-fig6 <- create_plot(tblCannabis, x = "type", y = "value", fill = "gender",
-                    hdir_color = hdir_color, wrap = "grp",
-                    title = "Cumulative percentage of cannabis use (2022-2025)",
-                    xlab = "Prevalence Type", ylab = "Percentage (%)", lglab = "")
+fig6 <- create_fig_ci(DX)
 
 ggplot2::ggsave(
-  filename = here::here("euda/workbook/figures/figure6_cannabis_use_2022-2025.png"),
+  filename = here::here(path25, "figures/fig6.png"),
   plot = fig6,
-  width = 10,
+  width = 8,
   height = 6,
-  dpi = 300
+  units = "in",
+  dpi = 300,
+  bg = "white"
 )
+
 
 ## ----------------------------------
 ## Figure 7 - Cannabis use across age groups, 2022-2025
 ## ----------------------------------
 
-ltCanAge <- calc_prev_all(dt, "ltp_cannabis", "canpop", "agecat")
-lyCanAge <- calc_prev_all(dt, "lyp_cannabis", "canpop", "agecat")
-lmCanAge <- calc_prev_all(dt, "lmp_cannabis", "canpop", "agecat")
+ltCanAge <- torr::ca
+
+ltpCanAge <- torr::calc_prevalence(dt, "ltpPop_cannabis", "year", "ltp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
+lypCanAge <- torr::calc_prevalence(dt, "lypPop_cannabis", "year", "lyp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
+lmpCanAge <- torr::calc_prevalence(dt, "lmpPop_cannabis", "year", "lmp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
+
+ltpCanAge[, type := "LTP"][, value := ltp_cannabis][, ltp_cannabis := NULL]
+lypCanAge[, type := "LYP"][, value := lyp_cannabis][, lyp_cannabis := NULL]
+lmpCanAge[, type := "LMP"][, value := lmp_cannabis][, lmp_cannabis := NULL]
+
 
 tblCanAge <- rbindlist(list(
-  create_tbl_grp(ltCanAge, "LTP"),
-  create_tbl_grp(lyCanAge, "LYP"),
-  create_tbl_grp(lmCanAge, "LMP")
+  ltpCanAge,
+  lypCanAge,
+  lmpCanAge
 ))
 
-tblCanAge <- tblCanAge[!(agecat %chin% c("65-79", "Total"))]
 tblCanAge[, type := factor(type, levels = c("LTP", "LYP", "LMP"))]
 
 # Create the plot
 fig7 <- create_plot(tblCanAge,
                     x = "type", y = "value", fill = "agecat",
                     hdir_color = hdir_color, wrap = NULL,
-                    title = "Cumulative percentage of cannabis use across age groups (2022-2025)",
+                    title = "Cumulative percentage of cannabis use across age groups (2023-2025)",
                     xlab = "Prevalence Type", ylab = "Percentage (%)", lglab = "Age"
                     )
 
 ggplot2::ggsave(
-           filename = here::here("euda/workbook/figures/figure7_cannabis_use_agegroups_2022-2025.png"),
-           plot = fig7,
-           width = 10,
-           height = 6,
-           dpi = 300)
+  filename = here::here(path25, "figures/fig7.png"),
+  plot = fig7,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
 
 ## ---------------------
 ## Figure 8: Freq of cannabis use all adults (16-64), 2022-2025
@@ -429,22 +416,32 @@ dtCanUse[, can_lab := factor(freq_cannabis, levels = c(1,2,3,4,5),
 
 fig8 <- create_plot(dtCanUse, x = "can_lab", y = "pct", fill = "can_lab",
             hdir_color = hdir_color,
-            title = "Frequency of cannabis use among users (2022-2025)",
+            title = "Frequency of cannabis use among users (2023-2025)",
             xlab = "",
             ylab = "Cumulative Percentage (%)", lglab = "", show_legend = FALSE)
 
-ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure8_frequency_cannabis_use_2022-2025.png"),
-                plot = fig8,
-                width = 8,
-                height = 6,
-                dpi = 300)
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig8.png"),
+  plot = fig8,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
 
 ## ----------------------------------
 ## Figure 11 - Number of amphetamines seizures (methamphetamine and amphetamine), 2008-2025
 ## ----------------------------------
+## Data hentet fra https://www.politiet.no/om-politiet/tall-og-fakta/narkotika/
 
 ## source(file.path(here::here(), "euda/workbook/fun-line-plot.R"))
 ## source(file.path(here::here(), "euda/workbook/fun-prosent.R"))
+
+## Line plot with legend
+source(file.path(here::here(), "euda/workbook/fun-make_line_plot2.R"))
 
 amfi <- readxl::read_xlsx(here::here("euda/workbook/data/amphetamines-seizures.xlsx"),
                           sheet = "Ark1")
@@ -459,21 +456,28 @@ amfiW <- melt(amfiDT, id.vars = "year",
                 value.name = "antall",
                 variable.name = "amfi")
 
-amfiBesLine <- make_line_plot(data = amfiW,
-                             x = "year",
-                             y = "antall",
-                             color = "amfi",
-                             title = "Number of amphetamines seizures (methamphetamine and amphetamine), 2010-2025",
-                             caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
-                             color_values = chc3,
-                             label_col = "amfi",
-                             y_lab = NULL)
+fig11 <- make_line_plot2(data = amfiW,
+                        x = "year",
+                        y = "antall",
+                        color = "amfi",
+                        title = "Number of amphetamines seizures (methamphetamine and amphetamine), 2010-2025",
+                        caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
+                        color_values = chc3,
+                        label_col = "amfi",
+                        y_lab = NULL,
+                        legend = TRUE,
+                        legend_title = "")
 
-ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure11_amphetamines_seizures_2010-2025.png"),
-                plot = amfiBesLine,
-                width = 10,
-                height = 6,
-                dpi = 300)
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig11.png"),
+  plot = fig11,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
 
 ## ===========================
 ## Figure 11.1 - Amphetamines seizures in kg
@@ -490,7 +494,7 @@ amfiKgDT <- melt(amfiKg, id.vars = "year",
                 value.name = "kg",
                 variable.name = "amfi")
 
-amfiKgLine <- make_line_plot(data = amfiKgDT,
+amfiKgLine <- make_line_plot2(data = amfiKgDT,
                              x = "year",
                              y = "kg",
                              color = "amfi",
@@ -498,18 +502,24 @@ amfiKgLine <- make_line_plot(data = amfiKgDT,
                              caption = "Source: National Crime Investigation Service (Kripos/NCIS)",
                              color_values = chc4,
                              label_col = "amfi",
-                             y_lab = "Kilograms (kg)")
+                             y_lab = "Kilograms (kg)",
+                             legend = TRUE,
+                             legend_title = ""
+                             )
 
-ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure11_1_amphetamines_seizures_kg_2015-2025.png"),
-                plot = amfiKgLine,
-                width = 10,
-                height = 6,
-                dpi = 300)
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig11-1.png"),
+  plot = amfiKgLine,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
 
 ## ===========================
 ## Figure 12 - Cocaine, Amphetamines and MDMA/Ecstasy
 ## ===========================
-
 
 dt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
 dt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances

@@ -72,7 +72,8 @@ make_line_plot <- function(data,
                            show_grid = TRUE,
                            x_lab = "",
                            y_lab = "",
-                           hvjust = NULL) {
+                           hvjust = NULL
+                           ) {
   # Load required package
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package 'ggplot2' is required but not installed.")
@@ -110,23 +111,24 @@ make_line_plot <- function(data,
   if (!is.null(color_values)) {
     p <- p + scale_color_manual(values = color_values)
   }
-  # Add labels at the end of lines
+
   if (is.null(hvjust)){
-  p <- p + geom_text(
-    data = data_labels,
-    aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
-    hjust = -0.1 # -0.1 will place slightly to the right
-  )
+    p <- p + geom_text(
+      data = data_labels,
+      aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
+      hjust = -0.1 # -0.1 will place slightly to the right
+    )
   } else {
     hjust <- hvjust[1]
     vjust <- hvjust[2]
     p <- p + geom_text(
-               data = data_labels,
-               aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
-               hjust = hjust,
-               vjust = vjust
-             )
+      data = data_labels,
+      aes(x = .data[[x]], y = .data[[y]], label = .data[[label_col]]),
+      hjust = hjust,
+      vjust = vjust
+    )
   }
+  
   # Set x-axis scale
   if (is.null(x_limits)) {
     x_limits <- range(data[[x]], na.rm = TRUE)
