@@ -521,105 +521,209 @@ ggplot2::ggsave(
 ## Figure 12 - Cocaine, Amphetamines and MDMA/Ecstasy
 ## ===========================
 
-dt[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
-dt[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-dt[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+dt <- torr::create_narko_pop(dt, vars = c("ans2_a", "ans3_1"), val = "cocaine") #ltpPop_cocaine og lypPop_cocaine
+dt <- torr::create_narko_pop(dt, vars = c("ans2_b", "ans3_2"), val = "mdma") #ltpPop_mdma og lypPop_mdma
+dt <- torr::create_narko_pop(dt, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
 
-## Lifetime prevalence - all adults
-ltCocaine <- calc_prev_all(dt, "ltp_cocaine", "narkpop", "kjonn")
-ltAmphetamines <- calc_prev_all(dt, "ltp_amphetamines", "narkpop", "kjonn")
-ltMdma <- calc_prev_all(dt, "ltp_mdma", "narkpop", "kjonn")
+## Lifetime  prevalence
+## ---------------------
+dt <- torr::is_case(dt, "ans2_a", "ltp_cocaine") #Cocaine
+dt <- torr::is_case(dt, "ans2_b", "ltp_mdma") #Ecstasy
+dt <- torr::is_case(dt, "ans2_c", "ltp_amfetaminer") #Amphetamine
+
+source(here::here("euda/workbook/wb-2025/fun-prev-narko.R"))
+
+ltpCoc <- add_narko(
+  dt,
+  "ltpPop_cocaine",
+  "ltp_cocaine",
+  "Cocaine",
+  typ = "LTP"
+)
+
+ltpMdma <- add_narko(
+  dt,
+  "ltpPop_mdma",
+  "ltp_mdma",
+  "MDMA/Ecstasy",
+  typ = "LTP"
+)
+
+ltpAmf <- add_narko(
+  dt,
+  "ltpPop_amfetaminer",
+  "ltp_amfetaminer",
+  "Amphetamines",
+  typ = "LTP"
+)
 
 tbLTPDrugs <- rbindlist(list(
-  create_tbl_grp(ltCocaine, "LTP", "Cocaine"),
-  create_tbl_grp(ltAmphetamines, "LTP", "Amphetamines"),
-  create_tbl_grp(ltMdma, "LTP", "MDMA/Ecstasy")
+  ltpCoc, ltpMdma, ltpAmf
 ))
+
 
 ## Last year prevalence - all adults
-dt[ans3_1 == 1, lyp_cocaine := 1]
-dt[ans3_2 == 1, lyp_mdma := 1]
-dt[ans3_3 == 1, lyp_amphetamines := 1]
+## ---------------------
+dt <- torr::is_case(dt, "ans3_1", "lyp_cocaine") #Cocaine
+dt <- torr::is_case(dt, "ans3_2", "lyp_mdma") #Ecstasy
+dt <- torr::is_case(dt, "ans3_3", "lyp_amfetaminer") #Amphetamine
 
-lyCocaine <- calc_prev_all(dt, "lyp_cocaine", "narkpop", "kjonn")
-lyAmphetamines <- calc_prev_all(dt, "lyp_amphetamines", "narkpop", "kjonn")
-lyMdma <- calc_prev_all(dt, "lyp_mdma", "narkpop", "kjonn")
+lypCoc <- add_narko(
+  dt,
+  "lypPop_cocaine",
+  "lyp_cocaine",
+  "Cocaine",
+  typ = "LYP"
+)
 
-tblLYPDrugs <- rbindlist(list(
-  create_tbl_grp(lyCocaine, "LYP", "Cocaine"),
-  create_tbl_grp(lyAmphetamines, "LYP", "Amphetamines"),
-  create_tbl_grp(lyMdma, "LYP", "MDMA/Ecstasy")
+lypMdma <- add_narko(
+  dt,
+  "lypPop_mdma",
+  "lyp_mdma",
+  "MDMA/Ecstasy",
+  typ = "LYP"
+)
+
+lypAmf <- add_narko(
+  dt,
+  "lypPop_amfetaminer",
+  "lyp_amfetaminer",
+  "Amphetamines",
+  typ = "LYP"
+)
+
+tbLYPDrugs <- rbindlist(list(
+  lypCoc, lypMdma, lypAmf
 ))
 
-dtDrugs <- rbindlist(list(tbLTPDrugs, tblLYPDrugs))
+dtDrugs <- rbindlist(list(tbLTPDrugs, tbLYPDrugs))
 
-dtDrugs[, gender := factor(kjonn, levels = c("1", "2", "Total"), labels = c("Men", "Women", "Total"))]
-dtDrugs[, grp := factor(grp, levels = c("Cocaine", "Amphetamines", "MDMA/Ecstasy"))]
+dtDrugs[, gender := factor(kjonn, levels = 1:3, labels = c("Men", "Women", "Total"))]
+dtDrugs[, nark := factor(nark, levels = c("Cocaine", "Amphetamines", "MDMA/Ecstasy"))]
 
 fig12 <- create_plot(dtDrugs,
-                     x = "gender", y = "value", fill = "grp", wrap = "type",
+                     x = "gender", y = "value", fill = "nark", wrap = "type",
                      hdir_color = hdir_color, ylim_max = 15,
-                     title = "Use of stimulants (LTP and LYP) all adults (16–64), 2022-2025",
+                     title = "Use of stimulants (LTP and LYP) all adults (16–64), 2023-2025",
                      lglab = "", xlab = "", ylab = "Cumulative Percentage (%)"
                      )
 
-ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure12_stimulant_use_2022-2025.png"),
-                plot = fig12,
-                width = 10,
-                height = 6,
-                dpi = 300)
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig12.png"),
+  plot = fig12,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
 
 ## ===========================
 ## Figure 13 - Cocaine, Amphetamines and MDMA/Ecstasy across younger adults (16-34)
 ## ===========================
+dty <- torr::create_narko_pop(dty, vars = c("ans2_a", "ans3_1"), val = "cocaine") #ltpPop_cocaine og lypPop_cocaine
+dty <- torr::create_narko_pop(dty, vars = c("ans2_b", "ans3_2"), val = "mdma") #ltpPop_mdma og lypPop_mdma
+dty <- torr::create_narko_pop(dty, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
 
-dty[ans2_a == 1, ltp_cocaine := 1] #Cocaine-type drugs
-dty[ans2_b == 1, ltp_mdma := 1] #"Ecstasy" type substances
-dty[Ans2_c_ny == 1, ltp_amphetamines := 1] #Amphetamine-type stimulants
+source(here::here("euda/workbook/wb-2025/fun-prev-narko.R"))
 
-## Lifetime prevalence
-ltCocaine <- calc_prev_all(dty, "ltp_cocaine", "narkpop", "kjonn")
-ltAmphetamines <- calc_prev_all(dty, "ltp_amphetamines", "narkpop", "kjonn")
-ltMdma <- calc_prev_all(dty, "ltp_mdma", "narkpop", "kjonn")
 
-tbLTPDrugs <- rbindlist(list(
-  create_tbl_grp(ltCocaine, "LTP", "Cocaine"),
-  create_tbl_grp(ltAmphetamines, "LTP", "Amphetamines"),
-  create_tbl_grp(ltMdma, "LTP", "MDMA/Ecstasy")
+## Lifetime  prevalence
+## ---------------------
+dty <- torr::is_case(dty, "ans2_a", "ltp_cocaine") #Cocaine
+dty <- torr::is_case(dty, "ans2_b", "ltp_mdma") #Ecstasy
+dty <- torr::is_case(dty, "ans2_c", "ltp_amfetaminer") #Amphetamine
+
+ltpCoc_y <- add_narko(
+  dty,
+  "ltpPop_cocaine",
+  "ltp_cocaine",
+  "Cocaine",
+  typ = "LTP"
+)
+
+ltpMdma_y <- add_narko(
+  dty,
+  "ltpPop_mdma",
+  "ltp_mdma",
+  "MDMA/Ecstasy",
+  typ = "LTP"
+)
+
+ltpAmf_y <- add_narko(
+  dty,
+  "ltpPop_amfetaminer",
+  "ltp_amfetaminer",
+  "Amphetamines",
+  typ = "LTP"
+)
+
+tbLTPDrugs_y <- rbindlist(list(
+  ltpCoc_y, ltpMdma_y, ltpAmf_y
 ))
 
-## Last year prevalence
-dty[ans3_1 == 1, lyp_cocaine := 1]
-dty[ans3_2 == 1, lyp_mdma := 1]
-dty[ans3_3 == 1, lyp_amphetamines := 1]
 
-lyCocaine <- calc_prev_all(dty, "lyp_cocaine", "narkpop", "kjonn")
-lyAmphetamines <- calc_prev_all(dty, "lyp_amphetamines", "narkpop", "kjonn")
-lyMdma <- calc_prev_all(dty, "lyp_mdma", "narkpop", "kjonn")
+## Last year prevalence - all adults
+## ---------------------
+dty <- torr::is_case(dty, "ans3_1", "lyp_cocaine") #Cocaine
+dty <- torr::is_case(dty, "ans3_2", "lyp_mdma") #Ecstasy
+dty <- torr::is_case(dty, "ans3_3", "lyp_amfetaminer") #Amphetamine
 
-tblLYPDrugs <- rbindlist(list(
-  create_tbl_grp(lyCocaine, "LYP", "Cocaine"),
-  create_tbl_grp(lyAmphetamines, "LYP", "Amphetamines"),
-  create_tbl_grp(lyMdma, "LYP", "MDMA/Ecstasy")
+lypCoc_y <- add_narko(
+  dty,
+  "lypPop_cocaine",
+  "lyp_cocaine",
+  "Cocaine",
+  typ = "LYP"
+)
+
+lypMdma_y <- add_narko(
+  dty,
+  "lypPop_mdma",
+  "lyp_mdma",
+  "MDMA/Ecstasy",
+  typ = "LYP"
+)
+
+lypAmf_y <- add_narko(
+  dty,
+  "lypPop_amfetaminer",
+  "lyp_amfetaminer",
+  "Amphetamines",
+  typ = "LYP"
+)
+
+tbLYPDrugs_y <- rbindlist(list(
+  lypCoc_y, lypMdma_y, lypAmf_y
 ))
 
-dtyDrugs <- rbindlist(list(tbLTPDrugs, tblLYPDrugs))
+dtyDrugs <- rbindlist(list(tbLTPDrugs_y, tbLYPDrugs_y))
 
-dtyDrugs[, gender := factor(kjonn, levels = c("1", "2", "Total"), labels = c("Men", "Women", "Total"))]
-dtyDrugs[, grp := factor(grp, levels = c("Cocaine", "Amphetamines", "MDMA/Ecstasy"))]
+dtyDrugs[, gender := factor(kjonn, levels = 1:3, labels = c("Men", "Women", "Total"))]
+dtyDrugs[, nark := factor(nark, levels = c("Cocaine", "Amphetamines", "MDMA/Ecstasy"))]
 
 fig13 <- create_plot(dtyDrugs,
-                     x = "gender", y = "value", fill = "grp", wrap = "type",
+                     x = "gender", y = "value", fill = "nark", wrap = "type",
                      hdir_color = hdir_color, ylim_max = 15,
-                     title = "Use of stimulants (LTP and LYP) young adults (16–34), 2022-2025",
+                     title = "Use of stimulants (LTP and LYP) young adults (16–34), 2023-2025",
                      lglab = "", xlab = "", ylab = "Cumulative Percentage (%)"
                      )
 
-ggplot2::ggsave(filename = here::here("euda/workbook/figures/figure13_stimulant_use_young_2022-2025.png"),
-                plot = fig13,
-                width = 10,
-                height = 6,
-                dpi = 300)
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig13.png"),
+  plot = fig13,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
+
+
 
 ## ===========================
 ## Figure 14 - Use of stimulants last 12 months in young adults (16-34), 2013-2025
