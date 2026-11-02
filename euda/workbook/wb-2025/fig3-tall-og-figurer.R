@@ -117,6 +117,31 @@ CanVars = c("can1", "can6", "can10")
 #Dette lager ltpPop_cannabis, lypPop_cannabis, lmpPop_cannabis
 DT <- torr::create_cann_pop(DT, vars = CanVars)
 
+DT <- torr::create_narko_pop(DT, vars = c("ans2_a", "ans3_1"), val = "cocaine") #ltpPop_cocaine og lypPop_cocaine
+DT <- torr::create_narko_pop(DT, vars = c("ans2_b", "ans3_2"), val = "mdma") #ltpPop_mdma og lypPop_mdma
+DT <- torr::create_narko_pop(DT, vars = c("ans2_c", "ans3_3"), val = "amfetaminer")
+
+## -----------------------------------------------------------------------------
+## Create nominator
+## -----------------------------------------------------------------------------
+
+## Cannabis
+## -----------------------------------------------------------------------------
+DT <- torr::is_case(DT, "can1", "ltp_cannabis")
+DT <- torr::is_case(DT, "can6", "lyp_cannabis")
+DT <- torr::is_case(DT, "can10", "lmp_cannabis")
+
+## Lifetime  prevalence
+## ---------------------
+DT <- torr::is_case(DT, "ans2_a", "ltp_cocaine") #Cocaine
+DT <- torr::is_case(DT, "ans2_b", "ltp_mdma") #Ecstasy
+DT <- torr::is_case(DT, "ans2_c", "ltp_amfetaminer") #Amphetamine
+
+## Last year prevalence
+## ---------------------
+DT <- torr::is_case(DT, "ans3_1", "lyp_cocaine") #Cocaine
+DT <- torr::is_case(DT, "ans3_2", "lyp_mdma") #Ecstasy
+DT <- torr::is_case(DT, "ans3_3", "lyp_amfetaminer") #Amphetamine
 
 ## ===========================
 ## Figure 3 - Cannabis use last 12 months all adults (16-64), 2012-2025
@@ -531,6 +556,7 @@ dt <- torr::is_case(dt, "ans2_a", "ltp_cocaine") #Cocaine
 dt <- torr::is_case(dt, "ans2_b", "ltp_mdma") #Ecstasy
 dt <- torr::is_case(dt, "ans2_c", "ltp_amfetaminer") #Amphetamine
 
+## For function add_narko() - rolling 3 year, gender and total
 source(here::here("euda/workbook/wb-2025/fun-prev-narko.R"))
 
 ltpCoc <- add_narko(
@@ -665,7 +691,7 @@ tbLTPDrugs_y <- rbindlist(list(
 ))
 
 
-## Last year prevalence - all adults
+## Last year prevalence - young adults
 ## ---------------------
 dty <- torr::is_case(dty, "ans3_1", "lyp_cocaine") #Cocaine
 dty <- torr::is_case(dty, "ans3_2", "lyp_mdma") #Ecstasy
@@ -729,7 +755,108 @@ ggplot2::ggsave(
 ## Figure 14 - Use of stimulants last 12 months in young adults (16-34), 2013-2025
 ## ===========================
 
+## For function add_narko() - rolling 3 year, gender and total
+source(here::here("euda/workbook/wb-2025/fun-prev-narko.R"))
+
+dtu <- DT[year %in% 2013:2025][alder < 35]
+
+## Last year prevalence - young adults
+## ---------------------
+lypCoc_u <- add_narko(
+  dtu,
+  "lypPop_cocaine",
+  "lyp_cocaine",
+  "Cocaine",
+  typ = "LYP"
+)
+
+lypMdma_u <- add_narko(
+  dtu,
+  "lypPop_mdma",
+  "lyp_mdma",
+  "MDMA/Ecstasy",
+  typ = "LYP"
+)
+
+lypAmf_u <- add_narko(
+  dtu,
+  "lypPop_amfetaminer",
+  "lyp_amfetaminer",
+  "Amphetamines",
+  typ = "LYP"
+)
+
+dtuLypDrugs <- rbindlist(list(
+  lypCoc_u, lypMdma_u, lypAmf_u
+))
+
+dtuLypDrugs[, gender := factor(kjonn, levels = 1:3, labels = c("Men", "Women", "Total"))]
+dtuLypDrugs[, nark := factor(nark, levels = c("Cocaine", "Amphetamines", "MDMA/Ecstasy"))]
+dtuLypDrugs[, year := as.integer(substr(rolling_period, nchar(rolling_period)- 3, nchar(rolling_period)))]
+
+tblMovDrugU <- dtuLypDrugs[kjonn == 3, c("type", "value", "nark", "year")]
+
+make_line_plot(data = tblMovDrugU,
+               x = "year",
+               y = "value",
+               color = "nark",
+               title = "3-year moving average of percentage for stimulants use last 12 months (16-34 yrs old), 2013-2025",
+               caption = "",
+               color_values = chc4,
+               label_col = "nark",
+               y_break_interval = 0.5,
+               y_limit = c(0, 5),
+               y_lab = "Cumulative Percentage (%)"
+               )
+
+
+## Alternative
+## -----------
+# chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
+
+txt_df <- tblMovDrugU[year == 2022]
+txt_df[, loc := fcase(nark == "Cocaine", value - 0.3 ,
+                      nark == "MDMA/Ecstasy", value + 0.1,
+                      nark == "Amphetamines", value + 0.1)]
+
+library(ggplot2)
+## Linje diagram
+fig14 <- ggplot() +
+  geom_line(data = tblMovDrugU, aes(x = year, y = value, color = nark), linewidth = 1.5) +
+  scale_color_manual(values = chc4) +
+  ## geom_text(data = tblMovDrugU[year == 2025], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
+  scale_x_continuous(
+    limits = c(2015, 2025),
+    breaks = seq(2015, 2025, 1)
+    ## expand = expansion(mult = c(0.03, 0.25)) # Add 10% space to the right
+  ) +
+  scale_y_continuous(breaks = seq(0, max(tblMovDrugU$value) + 1, 0.5)) +
+  theme_classic() +
+  labs(title = "3-year moving average of percentage for stimulants use last 12 months (16-34 yrs old), 2013-2025",
+       y = "", x = "") +
+  theme(
+    panel.grid.major.y = element_line(color = "grey80", linewidth = 0.5, linetype = "dashed")
+  ) +
+  guides(color = "none") +
+  ## annotate("text", x = rep(2021, 3), y = c(4, 53, 75), label = c("canoil", "mari", "hasj"))
+  geom_text(data = txt_df, aes(x = year, y = loc, label = nark))
+
+
+ggplot2::ggsave(
+  filename = here::here(path25, "figures/fig14.png"),
+  plot = fig14,
+  width = 10,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+
+
+#### Older codes
+#### ---------------------------------------------------------------------------
 ## Last year prevalence
+tx <- copy(DT)
 DT[ans3_1 == 1, lyp_cocaine := 1]
 DT[ans3_2 == 1, lyp_mdma := 1]
 DT[ans3_3 == 1, lyp_amphetamines := 1]
@@ -811,7 +938,7 @@ library(ggplot2)
 pwidPlot <- ggplot() +
   geom_line(data = pwid, aes(x = year, y = n, color = item), linewidth = 1.5) +
   scale_color_manual(values = chc4) +
-  ## geom_text(data = dcan[year == 2025], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
+  ## geom_text(data = tblMovDrugU[year == 2025], aes(x = year, y = pro, label = canlab), hjust = -0.1) + #hjust -0.1 nudges label slightly to the right
   scale_x_continuous(
     limits = c(2019, 2025),
     breaks = seq(2019, 2025, 1)
