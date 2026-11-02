@@ -206,6 +206,13 @@ ggplot2::ggsave(filename = here::here(path25, "figures/cantypes.png"),
                 plot = can12types,
                 width = 8, height = 4, dpi = 300)
 
+## Reporting
+## ---------
+
+
+
+
+
 ## -----------------------------------------------------------------------------
 ## Figure 4: Cannabis use all adults (16-64), 2012 - 2025
 ## -----------------------------------------------------------------------------
@@ -244,6 +251,137 @@ ggsave(
   dpi = 300,
   bg = "white"
 )
+
+## Reporting
+## ---------
+
+data.table::setDT(DT)
+
+library(survey)
+
+DT[, period := data.table::fifelse(
+  year %in% 2020:2022, "2020-2022",
+  data.table::fifelse(
+    year %in% 2023:2025, "2023-2025",
+    NA_character_
+  )
+)]
+
+design <- survey::svydesign(
+  ids = ~1,
+  weights = ~vekt2,
+  data = DT[!is.na(period)]
+)
+
+
+## LTP cannabis
+## ............
+model_ltp <- survey::svyglm(
+  ltp_cannabis ~ period,
+  design = design,
+  family = quasibinomial()
+)
+
+# OR = 1.13 (95% CI: 1.04-1.22) #significant increase
+summary(model_ltp) #Chech the significant level
+exp(stats::coef(model_ltp))
+exp(stats::confint(model_ltp))
+
+# Weighted prevalence estimates in the given period
+# 2020-2022 = 21.3%
+# 2023-2025 = 23.4%
+survey::svyby(
+  ~ltp_cannabis,
+  ~period,
+  design,
+  survey::svymean,
+  vartype = c("ci")
+)
+
+## LYP cannabis
+## ............
+model_lyp <- survey::svyglm(
+  lyp_cannabis ~ period,
+  design = design,
+  family = quasibinomial()
+)
+
+# OR = 1.27 (95% CI: 1.09-1.47)
+summary(model_lyp) #Chech the significant level
+exp(stats::coef(model_lyp))
+exp(stats::confint(model_lyp))
+
+# Weighted prevalence estimates in the given period
+# 2019-2021 = 3.4%
+# 2022-2025 = 4.9%
+survey::svyby(
+  ~lyp_cannabis,
+  ~period,
+  design,
+  survey::svymean,
+  vartype = c("ci")
+)
+
+
+
+## Additional calculation
+## -------------------------
+## Adjusting for age and gender
+model_adj <- survey::svyglm(
+  lyp_cannabis ~ period + agecat + kjonn,
+  design = design,
+  family = quasibinomial()
+)
+
+summary(model_adj)
+
+## Specify age 16-34 
+## .................
+## Survey design object
+young_design <- subset(design, alder >= 16 & alder <= 34)
+
+## prevalence compare three years period
+young_period <- survey::svyglm(
+  lyp_cannabis ~ period,
+  design = young_design,
+  family = quasibinomial()
+)
+
+summary(young_period)
+
+# 2020-2022: 9.9%
+# 2023-2025
+exp(stats::coef(young_period))
+exp(stats::confint(young_period))
+
+survey::svyby(
+  ~lyp_cannabis,
+  ~period,
+  young_design,
+  survey::svymean,
+  vartype = c("ci")
+)
+
+## prevalence across years
+## -----------------------
+model_year <- survey::svyglm(
+  lyp_cannabis ~ factor(year),
+  design = young_design,
+  family = quasibinomial()
+)
+
+survey::regTermTest(model_year, ~factor(year))
+
+## Trend over time
+model_trend <- survey::svyglm(
+  lyp_cannabis ~ year,
+  design = young_design,
+  family = quasibinomial()
+)
+
+summary(model_trend)
+
+
 
 ## -----------------------------------------------------------------------------
 ## Figure 5: Cannabis use young adults (16–34), 2012-2025

@@ -13,7 +13,7 @@ library(ggplot2)
 ## Number of cannabis seizures
 ## Cannabis - antall beslag
 CanBeslag <- data.table(
-  year = c(2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025),
+  year = 2011:2025,
   resin = c(9949, 9729, 10391, 8945, 10124, 9953, 8779, 8023, 10026, 5814, 5040, 4533, 5082, 5202, 4534),
   begge = c(1182, 1373, 1501, 1616, 1269, 959, 1729, 1413, 1375, 938, 867, 728, 604, 737, 630),
   herbal = c(2829, 3482, 4337, 5287, 3480, 2447, 2831, 2738, 1647, 2796, 1938, 1420, 1306, 1608, 1841)
@@ -100,10 +100,19 @@ CanKgLine <- make_line_plot(data = CanKgW,
 
 ggplot2::ggsave(file.path(root, "figures/beslagKg2025.png"), CanKgLine)
 
-## Numbers
-## KG
-kg2024 <- CanKgW[year == 2024 & can == "total", kg]
-kg2025 <- CanKgW[year == 2025 & can == "total", kg]
+## Amount seized
+## -------------
+## Change in total seized from last year 2024 vs 2025
+tot25 <- CanBeslag[year == 2025, total]
+tot24 <- CanBeslag[year == 2024, total]
+round((tot25 - tot24)/tot24*100, digits = 1)
+
+
+## Total KG change from 2024 to 2025
+kg2024 <- CanKg[year == 2024, total]
+kg2025 <- CanKg[year == 2025, total]
+round((kg2025 - kg2024)/kg2024*100, digits = 1)
+
 
 ## Resin
 resin2019 <- CanBesW[year == 2019 & can == "resin", antall]
@@ -124,3 +133,6 @@ herbal2025pro <- round(herbal2025/tot2025*100, digits = 1)
 
 herbal2024 <- CanKgW[year == 2024 & can == "herbal", kg]
 herbal2024pro <- round(herbal2024/tot2024*100, digits = 1)
+
+her25 <- CanKg[year == 2025, herbal]
+round(her25/kg2025*100, digits = 1)
