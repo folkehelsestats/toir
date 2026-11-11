@@ -100,13 +100,17 @@ CanKgLine <- make_line_plot(data = CanKgW,
 
 ggplot2::ggsave(file.path(root, "figures/beslagKg2025.png"), CanKgLine)
 
+
+## -----------------------------------------------------------------------------
 ## Amount seized
-## -------------
+## -----------------------------------------------------------------------------
+## CanBes / CanBesW - Beslag data long/wide format
+## CanKg / CanKgW - Amount i kg long/wide format
+
 ## Change in total seized from last year 2024 vs 2025
 tot25 <- CanBeslag[year == 2025, total]
 tot24 <- CanBeslag[year == 2024, total]
 round((tot25 - tot24)/tot24*100, digits = 1)
-
 
 ## Total KG change from 2024 to 2025
 kg2024 <- CanKg[year == 2024, total]
@@ -117,9 +121,12 @@ round((kg2025 - kg2024)/kg2024*100, digits = 1)
 ## Resin
 resin2019 <- CanBesW[year == 2019 & can == "resin", antall]
 resin2025 <- CanBesW[year == 2025 & can == "resin", antall]
-nedResin2019_2025 <- round((resin2019 - resin2025)/resin2019*100, digits = 1)
+round((resin2019 - resin2025)/resin2019*100, digits = 1)
 
-## Total
+res25 <- CanKg[year == 2025, resin]
+round(res25/kg2025*100, digits = 1)
+
+## Total kg
 tot2024 <- CanKgW[year == 2024 & can == "total", kg]
 tot2025 <- CanKgW[year == 2025 & can == "total", kg]
 
@@ -127,12 +134,15 @@ totKG2024_2025 <- tot2025-tot2024
 sts <- totKG2024_2025 < 0 # check if it's decreasing or increasing
 kgStatus2024_2025 <- round(abs(totKG2024_2025)/tot2024*100, digits = 1)
 
-## Herbal
+## Herbal kg
 herbal2025 <- CanKgW[year == 2025 & can == "herbal", kg]
-herbal2025pro <- round(herbal2025/tot2025*100, digits = 1)
+round(herbal2025/tot2025*100, digits = 1)
 
 herbal2024 <- CanKgW[year == 2024 & can == "herbal", kg]
-herbal2024pro <- round(herbal2024/tot2024*100, digits = 1)
+round(herbal2024/tot2024*100, digits = 1)
+
+her24 <- CanKg[year == 2024, herbal]
+round(her24/kg2024*100, digits = 1)
 
 her25 <- CanKg[year == 2025, herbal]
 round(her25/kg2025*100, digits = 1)

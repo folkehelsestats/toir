@@ -26,6 +26,12 @@ source(here::here("euda/workbook/fun-plot-facet.R"))
 source(file.path(here::here(), "euda/workbook/fun-line-plot.R"))
 source(file.path(here::here(), "euda/workbook/fun-prosent.R"))
 
+## function calc_prevalence2 with testing
+source(file.path(here::here(),"euda/workbook/wb-2025/fun-calc-prevalence-update3.R"))
+source(file.path(here::here(),"euda/workbook/wb-2025/fun-calc-prevalence-update4.R")) #has periods argument
+source(file.path(here::here(),"euda/workbook/wb-2025/fun-calc-prevalence-update5.R")) #has periods and fitted arguments
+source(file.path(here::here(),"euda/workbook/wb-2025/fun-calc-prevalence-update6.R")) #with helper functions
+
 hdir_color <- c("#025169", "#0069E8",
                 "#7C145C", "#047FA4",
                 "#C68803", "#38A389",
@@ -252,14 +258,13 @@ ggsave(
   bg = "white"
 )
 
-## Reporting
-## ---------
-
-data.table::setDT(DT)
+## Reporting 3-years groupping
+## ---------------------------
+data.table::setDT(DD)
 
 library(survey)
 
-DT[, period := data.table::fifelse(
+DD[, period := data.table::fifelse(
   year %in% 2020:2022, "2020-2022",
   data.table::fifelse(
     year %in% 2023:2025, "2023-2025",
@@ -270,7 +275,7 @@ DT[, period := data.table::fifelse(
 design <- survey::svydesign(
   ids = ~1,
   weights = ~vekt2,
-  data = DT[!is.na(period)]
+  data = DD[!is.na(period)]
 )
 
 
@@ -282,14 +287,14 @@ model_ltp <- survey::svyglm(
   family = quasibinomial()
 )
 
-# OR = 1.13 (95% CI: 1.04-1.22) #significant increase
+# OR = 1.12 (95% CI: 1.03-1.21) #significant increase
 summary(model_ltp) #Chech the significant level
 exp(stats::coef(model_ltp))
 exp(stats::confint(model_ltp))
 
 # Weighted prevalence estimates in the given period
-# 2020-2022 = 21.3%
-# 2023-2025 = 23.4%
+# 2020-2022 = 25.8%
+# 2023-2025 = 28.0%
 survey::svyby(
   ~ltp_cannabis,
   ~period,
@@ -306,14 +311,14 @@ model_lyp <- survey::svyglm(
   family = quasibinomial()
 )
 
-# OR = 1.27 (95% CI: 1.09-1.47)
+# OR = 1.28 (95% CI: 1.10-1.49)
 summary(model_lyp) #Chech the significant level
 exp(stats::coef(model_lyp))
 exp(stats::confint(model_lyp))
 
 # Weighted prevalence estimates in the given period
-# 2019-2021 = 3.4%
-# 2022-2025 = 4.9%
+# 2019-2021 = 4.7%
+# 2022-2025 = 6.0%
 survey::svyby(
   ~lyp_cannabis,
   ~period,
@@ -335,32 +340,6 @@ model_adj <- survey::svyglm(
 
 summary(model_adj)
 
-## Specify age 16-34 
-## .................
-## Survey design object
-young_design <- subset(design, alder >= 16 & alder <= 34)
-
-## prevalence compare three years period
-young_period <- survey::svyglm(
-  lyp_cannabis ~ period,
-  design = young_design,
-  family = quasibinomial()
-)
-
-summary(young_period)
-
-# 2020-2022: 9.9%
-# 2023-2025
-exp(stats::coef(young_period))
-exp(stats::confint(young_period))
-
-survey::svyby(
-  ~lyp_cannabis,
-  ~period,
-  young_design,
-  survey::svymean,
-  vartype = c("ci")
-)
 
 ## prevalence across years
 ## -----------------------
@@ -381,6 +360,26 @@ model_trend <- survey::svyglm(
 
 summary(model_trend)
 
+## Trend
+pred_trend <- function(dt, formula = "rate ~ year"){
+  data.table::copy(dt)
+  model <- stats::lm(formula = stats::as.formula(formula), data = dt)
+  dt[, trend := stats::predict(model)]
+
+  dt[, c("lwr", "upr") :=
+         as.data.table(
+           stats::predict(
+             model,
+             newdata = .SD,
+             interval = "confidence"
+           )
+         )[, .(lwr, upr)]]
+}
+
+ltp64[, year := as.integer(substr(rolling_period, nchar(rolling_period)- 3, nchar(rolling_period)))]
+summary(ltp64mod)
+
+ltp64Trend <- pred_trend(ltp64, "ltp_cannabis ~ year")
 
 
 ## -----------------------------------------------------------------------------
@@ -421,6 +420,63 @@ ggplot2::ggsave(
   dpi = 300,
   bg = "white"
 )
+
+## Reporting
+## ---------
+## Specify age 16-34
+## .................
+## Survey design object based on the design 16-64
+young_design <- subset(design, alder >= 16 & alder <= 34)
+
+
+## LTP
+## prevalence compare three years period
+young_ltp <- survey::svyglm(
+  ltp_cannabis ~ period,
+  design = young_design,
+  family = quasibinomial()
+)
+
+summary(young_ltp)
+
+# OR = 1.10 CI 95% 0.98 - 1.23
+exp(stats::coef(young_ltp))
+exp(stats::confint(young_ltp))
+
+# 2020-2022: 31%
+# 2023-2025: 33%
+survey::svyby(
+  ~ltp_cannabis,
+  ~period,
+  young_design,
+  survey::svymean,
+  vartype = c("ci")
+)
+
+## LYP
+## prevalence compare three years period
+young_period <- survey::svyglm(
+  lyp_cannabis ~ period,
+  design = young_design,
+  family = quasibinomial()
+)
+
+summary(young_period)
+
+# OR = 1.08 CI 95% 0.9 - 1.28
+exp(stats::coef(young_period))
+exp(stats::confint(young_period))
+
+# 2020-2022: 10.1%
+# 2023-2025: 10.8%
+survey::svyby(
+  ~lyp_cannabis,
+  ~period,
+  young_design,
+  survey::svymean,
+  vartype = c("ci")
+)
+
 
 
 ## --------------------------------------------------
@@ -522,8 +578,6 @@ ggplot2::ggsave(
 ## Figure 7 - Cannabis use across age groups, 2022-2025
 ## ----------------------------------
 
-ltCanAge <- torr::ca
-
 ltpCanAge <- torr::calc_prevalence(dt, "ltpPop_cannabis", "year", "ltp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
 lypCanAge <- torr::calc_prevalence(dt, "lypPop_cannabis", "year", "lyp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
 lmpCanAge <- torr::calc_prevalence(dt, "lmpPop_cannabis", "year", "lmp_cannabis", weight_var = "vekt2", by = "agecat", rolling_year = 3)
@@ -562,6 +616,7 @@ ggplot2::ggsave(
 ## ---------------------
 ## Figure 8: Freq of cannabis use all adults (16-64), 2022-2025
 ## ---------------------
+dt <- DT[alder < 65]
 dt[, .N, keyby = can2]
 dt[can2 %in% 1:5, freq_cannabis := can2]
 
@@ -934,6 +989,8 @@ dtuLypDrugs[, year := as.integer(substr(rolling_period, nchar(rolling_period)- 3
 
 tblMovDrugU <- dtuLypDrugs[kjonn == 3, c("type", "value", "nark", "year")]
 
+## Previous fig style < 2024
+## ------------------
 make_line_plot(data = tblMovDrugU,
                x = "year",
                y = "value",
@@ -948,8 +1005,8 @@ make_line_plot(data = tblMovDrugU,
                )
 
 
-## Alternative
-## -----------
+## Figure style in 2025
+## -------------------
 # chc4 <- c("#5F9EA0", "#E1B378", "#BB7BDA", "#7C145C")
 
 txt_df <- tblMovDrugU[year == 2022]
@@ -990,6 +1047,138 @@ ggplot2::ggsave(
   bg = "white"
 )
 
+
+## Discussion
+## ----------
+
+lyp_coc <- calc_prevalence6(
+  dtu,
+  denominator = "lypPop_cocaine",
+  year = "year",
+  outcome_var = "lyp_cocaine",
+  weight_var = "vekt2",
+  periods = list("2020-2022" = 2020:2022,
+                 "2023-2025" = 2023:2025),
+  trend = FALSE
+)
+
+lyp_mdma <- calc_prevalence6(
+  dtu,
+  denominator = "lypPop_mdma",
+  year = "year",
+  outcome_var = "lyp_mdma",
+  weight_var = "vekt2",
+  periods = list("2020-2022" = 2020:2022,
+                 "2023-2025" = 2023:2025),
+  trend = FALSE
+)
+
+
+lyp_amfi <- calc_prevalence6(
+  dtu,
+  denominator = "lypPop_amfetaminer",
+  year = "year",
+  outcome_var = "lyp_amfetaminer",
+  weight_var = "vekt2",
+  periods = list("2020-2022" = 2020:2022,
+                 "2023-2025" = 2023:2025),
+  trend = FALSE
+)
+
+## Try and error
+## ------------
+lyp_kjo <- torr::calc_prevalence(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  by = "kjonn",
+  rolling_year = 3
+)
+
+
+lyp_kjo2 <- calc_prevalence2(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  by = "kjonn",
+  rolling_year = 3
+)
+
+lyp_kjo6 <- calc_prevalence6(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  by = "kjonn",
+  rolling_year = 3
+)
+
+lyp_coc6 <- calc_prevalence6(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  rolling_year = 3
+)
+
+lyp_mdma6 <- calc_prevalence6(
+  dtu,
+  "lypPop_mdma",
+  "year",
+  "lyp_mdma",
+  weight_var = "vekt2",
+  rolling_year = 3
+)
+
+lyp_amf6 <- calc_prevalence6(
+  dtu,
+  "lypPop_amfetaminer",
+  "year",
+  "lyp_amfetaminer",
+  weight_var = "vekt2",
+  rolling_year = 3
+)
+
+
+lyp_kjo2 <- calc_prevalence3(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  by = "kjonn",
+  rolling_year = 1
+)
+
+lyp_kjo4 <- calc_prevalence4(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  periods = list("2013-2015" = 2013:2015,
+                 "2016-2025" = 2016:2025),
+  by = "kjonn",
+  trend = FALSE
+)
+
+lyp_kjo5 <- calc_prevalence5(
+  dtu,
+  "lypPop_cocaine",
+  "year",
+  "lyp_cocaine",
+  weight_var = "vekt2",
+  periods = list("2013-2015" = 2013:2015,
+                 "2016-2025" = 2016:2025),
+  by = "kjonn",
+  trend = FALSE
+)
 
 #### Older codes
 #### ---------------------------------------------------------------------------
